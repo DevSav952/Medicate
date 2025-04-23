@@ -11,6 +11,11 @@ const config: Config = {
       fontFamily: {
         primary: 'var(--primary-font)',
         secondary: 'var(--secondary-font)'
+      },
+      colors: {
+        primary: '#1E2428',
+        secondary: '#42474C',
+        accent: '#616262'
       }
     }
   },
