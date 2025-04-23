@@ -1,9 +1,23 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Roboto, Jost } from 'next/font/google'
 import './globals.css'
 import { SITE_NAME } from '@/constants/seo'
 
-const inter = Inter({ subsets: ['latin'] })
+const roboto = Roboto({
+  subsets: ['cyrillic', 'latin'],
+  weight: ['300', '400', '500', '700'],
+  display: 'swap',
+  variable: '--primary-font',
+  style: ['normal']
+})
+
+const jost = Jost({
+  subsets: ['cyrillic', 'latin'],
+  weight: ['300', '400', '500', '700'],
+  display: 'swap',
+  variable: '--secondary-font',
+  style: ['normal']
+})
 
 export const metadata: Metadata = {
   title: {
@@ -21,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='en'>
-      <body className={inter.className}>
+      <body className={`${roboto.variable} ${jost.variable}`}>
         <main>{children}</main>
       </body>
     </html>
