@@ -20,6 +20,12 @@ const config: Config = {
         secondary: '#42474C',
         accent: '#616262',
         'blue-100': '#2a93c9'
+      },
+      screens: {
+        sm: '576px',
+        md: '768px',
+        lg: '992px',
+        xl: '1200px'
       }
     }
   },
