@@ -8,7 +8,7 @@ type TypographyProps = {
 
 export const H1 = forwardRef<HTMLHeadingElement, TypographyProps>(({ children, className }, ref) => {
   return (
-    <h1 ref={ref} className={twMerge('font-bold font-primary text-[46px] text-primary', className)}>
+    <h1 ref={ref} className={twMerge('font-bold font-primary text-[22px] text-primary xl:text-[36px]', className)}>
       {children}
     </h1>
   )

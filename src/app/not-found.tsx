@@ -9,7 +9,7 @@ export default function NotFoundPage() {
       <PageHeading title='404 Not Found' />
       <Container>
         <div className='max-w-[770px] mx-auto text-center'>
-          <H1 className='text-[22px] xl:text-[36px]'>Упс! Цю сторінку неможливо знайти.</H1>
+          <H1>Упс! Цю сторінку неможливо знайти.</H1>
           <div>
             <P className='my-3'>Схоже, за вказаною адресою нічого не знайдено.</P>
 

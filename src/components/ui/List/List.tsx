@@ -29,16 +29,18 @@ export const Ol = forwardRef<HTMLOListElement, ListProps>(({ children, className
 Ol.displayName = 'Ol'
 
 export const UlItem = forwardRef<HTMLLIElement, ListItemProps>(({ children, className }, ref) => (
-  <li className={twMerge('flex items-center', className)} ref={ref}>
-    <FaCheck fill='#56B0D2' className='mr-2.5' />
-    <span className='text-secondary text-lg'>{children}</span>
+  <li className={twMerge('flex', className)} ref={ref}>
+    <FaCheck fill='#56B0D2' className='mr-2.5 mt-2' />
+    <span className='text-secondary text-lg font-primary'>{children}</span>
   </li>
 ))
 
 UlItem.displayName = 'UlItem'
 
 export const OlItem = forwardRef<HTMLLIElement, ListItemProps>(({ children, className }, ref) => (
-  <li className={twMerge('marker:font-bold marker:text-accent text-lg text-accent font-light', className)} ref={ref}>
+  <li
+    className={twMerge('marker:font-bold marker:text-accent text-lg text-accent font-light font-primary', className)}
+    ref={ref}>
     {children}
   </li>
 ))
