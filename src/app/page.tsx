@@ -1,6 +1,7 @@
 import { H1, H2, H3, H4, H5, H6, P } from '@/components/ui/Typography/Typography'
 import { Ul, Ol, UlItem, OlItem } from '@/components/ui/List/List'
 import { StyledLink } from '@/components/ui/StyledLink/StyledLink'
+import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 
 export default function Home() {
   return (
@@ -26,7 +27,19 @@ export default function Home() {
         <OlItem>Ultimate Font Collection</OlItem>
         <OlItem>Theme</OlItem>
       </Ol>
-      <StyledLink href='#'>Styled Link</StyledLink>
+      <div>
+        <StyledLink href='#'>Styled Link</StyledLink>
+      </div>
+      <div className='p-2 bg-black'>
+        <StyledLinkButton variant='outline' href='#'>
+          Styled Link
+        </StyledLinkButton>
+      </div>
+      <div className='p-2 bg-black'>
+        <StyledLinkButton variant='normal' href='#'>
+          Styled Link
+        </StyledLinkButton>
+      </div>
     </>
   )
 }

@@ -9,9 +9,9 @@ type StyledLinkProps = {
 }
 
 export const StyledLink = forwardRef<HTMLAnchorElement, StyledLinkProps>(({ children, className, href }, ref) => (
-  <a href={href} className={twMerge('text-[#0674d1]', className)} ref={ref}>
+  <Link href={href} className={twMerge('flex font-primary text-[#0674d1]', className)} ref={ref}>
     {children}
-  </a>
+  </Link>
 ))
 
 StyledLink.displayName = 'StyledLink'
