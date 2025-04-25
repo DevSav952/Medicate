@@ -30,7 +30,7 @@ const contactsItems: ContactsItem[] = [
     icon: addressImage,
     type: 'address',
     title: 'Адреса',
-    info: '121 Wallstreet, NY, USA'
+    info: 'вулиця Соборна, 51а'
   }
 ]
 
@@ -58,12 +58,12 @@ const advantageItems: AdvantageItem[] = [
 const officeItems: OfficeItem[] = [
   {
     address: 'вулиця Соборна, 51а',
-    email: 'info@medicate.com',
+    email: 'info@beclinic.com',
     phone: '800 1234 56 78'
   },
   {
     address: 'вулиця Келецька, 41',
-    email: 'info@medicate.com',
+    email: 'info@beclinic.com',
     phone: '800 1234 56 78'
   }
 ]

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Roboto, Jost } from 'next/font/google'
 import './globals.css'
 import { SITE_NAME } from '@/constants/seo'
+import Footer from '@/components/Footer/Footer'
 
 const roboto = Roboto({
   subsets: ['cyrillic', 'latin'],
@@ -37,6 +38,7 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${roboto.variable} ${jost.variable}`}>
         <main>{children}</main>
+        <Footer />
       </body>
     </html>
   )
