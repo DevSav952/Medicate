@@ -9,7 +9,8 @@ const config: Config = {
   theme: {
     extend: {
       backgroundImage: {
-        hero: 'url("/images/header_bg.jpg")'
+        hero: 'url("/images/header_bg.jpg")',
+        contacts: 'url("/images/contacts-img1.jpg")'
       },
       fontFamily: {
         primary: 'var(--primary-font)',

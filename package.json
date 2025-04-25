@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "3.4",
+    "@googlemaps/js-api-loader": "^1.16.2",
     "@radix-ui/react-dialog": "^1.1.11",
     "bcrypt": "^5.1.1",
     "iron-session": "^8.0.2",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/google.maps": "^3.54.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
