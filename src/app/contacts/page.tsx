@@ -199,7 +199,7 @@ export default function ContactsPage() {
       </div>
       <div className='lg:grid lg:grid-cols-2'>
         <Map />
-        <div className='pt-[54px] md:py-10 md:pl-[50px] md:grid md:grid-cols-2 xl:w-[600px] xl:mr-auto'>
+        <div className='pt-[54px] md:py-8 md:pl-[50px] md:grid md:grid-cols-2 xl:w-[600px] xl:mr-auto'>
           <div className='flex flex-col'>
             {officeItems.map((item, i) => (
               <OfficeItem key={i} item={item} count={i} />
