@@ -173,7 +173,7 @@ const WorkingHoursItem = ({ item }: { item: WorkingHoursItem }) => {
 export default function ContactsPage() {
   return (
     <>
-      <PageHeading title='Contacts' />
+      <PageHeading title='Контакти' />
       <div className='md:grid md:grid-cols-2'>
         <div className='bg-contacts bg-cover bg-no-repeat w-full h-[240px] bg-center md:h-[580px] md:col-start-2 md:col-end-3 md:row-start-1 md:row-end-2' />
         <div className='py-[60px] px-4 lg:max-w-[600px] lg:ml-auto'>

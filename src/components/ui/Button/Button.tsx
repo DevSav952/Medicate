@@ -1,0 +1,23 @@
+import React, { forwardRef } from 'react'
+import { twMerge } from 'tailwind-merge'
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  allowedAction?: () => void
+  className?: string
+}
+
+export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ children, allowedAction, type = 'button', className }, ref) => {
+    return (
+      <button
+        ref={ref}
+        type={type}
+        className={twMerge('flex items-center justify-center bg-[#0674d1] py-2.5 px-5 rounded text-white', className)}
+        onClick={allowedAction && allowedAction}>
+        {children}
+      </button>
+    )
+  }
+)
+
+Button.displayName = 'Button'
