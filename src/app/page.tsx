@@ -74,7 +74,6 @@ export default function Home() {
         <HeroSlider />
       </div>
       <Container className='my-0 pb-0'>
-        {/* relative */}
         <div className='mt-[-55px] mb-[34px] bg-[#fff] md:grid md:grid-cols-3 z-[10] relative'>
           <div className='py-5 px-4 border-b-[7px] border-solid border-[#6cc8df]'>
             <H3 className='mb-5 text-blue-100 font-normal text-[26px]'>Графік роботи</H3>

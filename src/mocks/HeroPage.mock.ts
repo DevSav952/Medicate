@@ -145,7 +145,7 @@ export const mockedDepartmentsTwo: IDepartment[] = [
 
 export const mockedDoctors: Doctor[] = [
   {
-    doctorName: 'Шевченко Олександр ',
+    doctorName: 'Шевченко Олександра',
     position: 'Офтальмолог',
     image: doctorImage,
     description: '',
