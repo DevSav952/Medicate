@@ -2,6 +2,9 @@ import PageHeading from '@/components/PageHeading/PageHeading'
 import Image from 'next/image'
 import { H1, H5, P } from '@/components/ui/Typography/Typography'
 import Link from 'next/link'
+import { twMerge } from 'tailwind-merge'
+import Map from '@/components/Map/Map'
+import { StyledLink } from '@/components/ui/StyledLink/StyledLink'
 
 import phoneImage from '@/assets/contacts-icon-1.webp'
 import emailImage from '@/assets/contacts-icon-2.webp'
@@ -9,9 +12,6 @@ import addressImage from '@/assets/contacts-icon-3.webp'
 import doctorImage from '@/assets/icon-img-17.webp'
 import treatmentImage from '@/assets/icon-img-18.webp'
 import serviceImage from '@/assets/icon-img-19.webp'
-import { twMerge } from 'tailwind-merge'
-import Map from '@/components/Map/Map'
-import { StyledLink } from '@/components/ui/StyledLink/StyledLink'
 
 const contactsItems: ContactsItem[] = [
   {

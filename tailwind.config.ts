@@ -10,7 +10,8 @@ const config: Config = {
     extend: {
       backgroundImage: {
         hero: 'url("/images/header_bg.jpg")',
-        contacts: 'url("/images/contacts-img1.jpg")'
+        contacts: 'url("/images/contacts-img1.jpg")',
+        welcome: 'url("/images/fullwidth-img-1.jpg")'
       },
       fontFamily: {
         primary: 'var(--primary-font)',
@@ -21,6 +22,9 @@ const config: Config = {
         secondary: '#42474C',
         accent: '#616262',
         'blue-100': '#2a93c9'
+      },
+      boxShadow: {
+        'doctor-card': '5px 5px 50px 0px rgba(6, 30, 52, 0.11)'
       },
       screens: {
         sm: '576px',

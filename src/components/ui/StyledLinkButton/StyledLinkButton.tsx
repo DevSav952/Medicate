@@ -9,7 +9,8 @@ type StyledLinkButtonProps = {
   href: string
 }
 
-const base = 'inline-block text-xs font-bold font-primary uppercase tracking-[2px] px-5 py-3 rounded'
+const base =
+  'inline-block text-xs font-bold font-primary uppercase tracking-[2px] px-5 py-3 rounded transition-all duration-300 ease-in-out'
 
 const variants = {
   normal: 'text-blue-100 bg-white',
