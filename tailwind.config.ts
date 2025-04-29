@@ -11,7 +11,10 @@ const config: Config = {
       backgroundImage: {
         hero: 'url("/images/header_bg.jpg")',
         contacts: 'url("/images/contacts-img1.jpg")',
-        welcome: 'url("/images/fullwidth-img-1.jpg")'
+        welcome: 'url("/images/fullwidth-img-1.jpg")',
+        'hero-bg-one': 'url("/images/main-slider-img-1.jpg")',
+        'hero-bg-two': 'url("/images/main-slider-img-2.jpg")',
+        'hero-bg-three': 'url("/images/main-slider-img-3.jpg")'
       },
       fontFamily: {
         primary: 'var(--primary-font)',

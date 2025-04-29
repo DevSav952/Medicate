@@ -12,6 +12,7 @@ import {
   mockedServicesData
 } from '@/mocks/HeroPage.mock'
 import { IService, IDepartment } from '@/interfaces/HeroPage.interface'
+import HeroSlider from '@/components/HeroSlider/HeroSlider'
 
 import telephone from '@/assets/contacts-icon-1.webp'
 import { FaCalendarAlt } from 'react-icons/fa'
@@ -69,8 +70,12 @@ const Departments = () => {
 export default function Home() {
   return (
     <>
-      <Container className='mb-0 pb-0'>
-        <div className='mt-[-55px] mb-[34px] bg-[#fff] md:grid md:grid-cols-3'>
+      <div>
+        <HeroSlider />
+      </div>
+      <Container className='my-0 pb-0'>
+        {/* relative */}
+        <div className='mt-[-55px] mb-[34px] bg-[#fff] md:grid md:grid-cols-3 z-[10] relative'>
           <div className='py-5 px-4 border-b-[7px] border-solid border-[#6cc8df]'>
             <H3 className='mb-5 text-blue-100 font-normal text-[26px]'>Графік роботи</H3>
             <div className='mb-5 py-3 border-b border-solid border-[#edeff1]'>

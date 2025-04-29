@@ -6,6 +6,10 @@
   box-sizing: border-box;
 }
 
+.hero-slider-bullet {
+  background-color: #fff !important;
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

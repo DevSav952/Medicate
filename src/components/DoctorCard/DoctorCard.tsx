@@ -28,7 +28,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
               {doctor.phone}
             </Link>
           </li>
-          <li>
+          <li className='flex items-center'>
             <Link
               href={`mailto:${doctor.email}`}
               className='flex items-center text-[#b5b9bb] fill-[##b5b9bb] font-primary font-light text-sm transition-all duration-300 ease-in-out hover:text-[#0674d1] hover:[&_svg]:fill-[#0674d1]'>
