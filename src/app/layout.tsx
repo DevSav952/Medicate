@@ -3,6 +3,7 @@ import { Roboto, Jost } from 'next/font/google'
 import './globals.css'
 import { SITE_NAME } from '@/constants/seo'
 import Footer from '@/components/Footer/Footer'
+import Header from '@/components/Header/Header'
 
 const roboto = Roboto({
   subsets: ['cyrillic', 'latin'],
@@ -37,6 +38,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${roboto.variable} ${jost.variable}`}>
+        <Header />
         <main>{children}</main>
         <Footer />
       </body>

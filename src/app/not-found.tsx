@@ -6,7 +6,7 @@ import PageHeading from '@/components/PageHeading/PageHeading'
 export default function NotFoundPage() {
   return (
     <>
-      <PageHeading title='404 Not Found' />
+      <PageHeading title='404 Сторінка не знайдена' />
       <Container>
         <div className='max-w-[770px] mx-auto text-center'>
           <H1>Упс! Цю сторінку неможливо знайти.</H1>

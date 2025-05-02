@@ -154,7 +154,7 @@ const BlogFilters = ({ length }: BlogItemProps) => {
       )}
       <div
         className={twMerge(
-          'bg-slate-300 fixed top-0 left-[-100%] h-[100dvh] w-[290px] px-2.5 z-[20] flex justify-between flex-col transition-all ease-in-out duration-300',
+          'bg-white fixed top-0 left-[-100%] h-[100dvh] w-[290px] px-2.5 z-[20] flex justify-between flex-col transition-all ease-in-out duration-300',
           isOpenFilters && 'py-2.5 px-5 left-0'
         )}>
         <div className='pt-6'>
