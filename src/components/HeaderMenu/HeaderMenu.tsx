@@ -14,6 +14,10 @@ const links = [
     label: 'Головна'
   },
   {
+    href: '/doctors',
+    label: 'Лікарі'
+  },
+  {
     href: '/blog',
     label: 'Блог'
   },

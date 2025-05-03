@@ -16,7 +16,12 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
       <Image src={doctor.image} alt='doctor' />
       <div className='pt-5 px-4 mb-3.5'>
         <P className='text-[#B5B9BB] text-[10px] uppercase tracking-[1px]'>{doctor.position}</P>
-        <H6 className='font-normal text-[16px]'>{doctor.doctorName}</H6>
+
+        <H6 className='font-normal text-[16px]'>
+          <Link href={`doctors/${doctor._id}`} className='transition-all duration-300 ease-in-out hover:text-blue-100'>
+            {doctor.doctorName}
+          </Link>
+        </H6>
       </div>
       <div className='ml-4 pb-[30px]'>
         <ul>

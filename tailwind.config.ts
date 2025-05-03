@@ -14,7 +14,8 @@ const config: Config = {
         welcome: 'url("/images/fullwidth-img-1.jpg")',
         'hero-bg-one': 'url("/images/main-slider-img-1.jpg")',
         'hero-bg-two': 'url("/images/main-slider-img-2.jpg")',
-        'hero-bg-three': 'url("/images/main-slider-img-3.jpg")'
+        'hero-bg-three': 'url("/images/main-slider-img-3.jpg")',
+        'doctor-hero': 'url("/images/department-single-img5.jpg")'
       },
       fontFamily: {
         primary: 'var(--primary-font)',

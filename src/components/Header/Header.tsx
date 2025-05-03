@@ -52,6 +52,16 @@ const Header = () => {
             <ul className='flex items-center gap-5'>
               <li className='p-2.5 flex'>
                 <StyledLink
+                  href='/doctors'
+                  className={twMerge(
+                    'text-white text-lg hover:text-[#89E3FF] transition-all duration-300 ease-in-out',
+                    path === '/blog' && 'text-[#89E3FF]'
+                  )}>
+                  Лікарі
+                </StyledLink>
+              </li>
+              <li className='p-2.5 flex'>
+                <StyledLink
                   href='/blog'
                   className={twMerge(
                     'text-white text-lg hover:text-[#89E3FF] transition-all duration-300 ease-in-out',

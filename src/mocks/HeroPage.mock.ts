@@ -15,10 +15,6 @@ import dental from '@/assets/icon-img-12.webp'
 import pregnancy from '@/assets/icon-img-14.webp'
 import diasbled from '@/assets/icon-img-15.webp'
 import nmr from '@/assets/icon-img-16.webp'
-import doctorImage from '@/assets/team-1.jpg'
-import doctorImageSecond from '@/assets/team-2.jpg'
-import doctorImageThird from '@/assets/team-3.jpg'
-import doctorImageFourth from '@/assets/team-4.jpg'
 
 export const mockedServicesData: IService[] = [
   {
@@ -140,40 +136,5 @@ export const mockedDepartmentsTwo: IDepartment[] = [
     icon: nmr,
     title: 'Томографія',
     description: 'Лікування ідеально відповідає вашим цілям.'
-  }
-]
-
-export const mockedDoctors: Doctor[] = [
-  {
-    doctorName: 'Шевченко Олександра',
-    position: 'Офтальмолог',
-    image: doctorImage,
-    description: '',
-    phone: '+ 800 123 45 67',
-    email: 'info@beclinic.com'
-  },
-  {
-    doctorName: 'Петренко Олександр',
-    position: 'Стоматолог',
-    image: doctorImageSecond,
-    description: '',
-    phone: '+ 800 123 45 67',
-    email: 'info@beclinic.com'
-  },
-  {
-    doctorName: 'Ковальчук Наталія',
-    position: 'Педіатр',
-    image: doctorImageThird,
-    description: '',
-    phone: '+ 800 123 45 67',
-    email: 'info@beclinic.com'
-  },
-  {
-    doctorName: 'Бондар Андрій',
-    position: 'Кардіолог',
-    image: doctorImageFourth,
-    description: '',
-    phone: '+ 800 123 45 67',
-    email: 'info@beclinic.com'
   }
 ]

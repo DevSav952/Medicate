@@ -8,11 +8,11 @@ import {
   mockedDepartments,
   mockedDepartmentsTwo,
   mockedDepartmentsOne,
-  mockedDoctors,
   mockedServicesData
 } from '@/mocks/HeroPage.mock'
 import { IService, IDepartment } from '@/interfaces/HeroPage.interface'
 import HeroSlider from '@/components/HeroSlider/HeroSlider'
+import { mockedDoctors } from '@/mocks/Doctors.mock'
 
 import telephone from '@/assets/contacts-icon-1.webp'
 import { FaCalendarAlt } from 'react-icons/fa'
@@ -179,7 +179,7 @@ export default function Home() {
 
         <div className='flex flex-col gap-10 md:grid md:grid-cols-4 md:gap-0 pt-5'>
           {mockedDoctors.map((item, i) => (
-            <DoctorCard key={i} doctor={item} />
+            <DoctorCard key={item._id} doctor={item} />
           ))}
         </div>
 
