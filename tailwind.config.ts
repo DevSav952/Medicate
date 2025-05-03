@@ -24,7 +24,8 @@ const config: Config = {
         primary: '#1E2428',
         secondary: '#42474C',
         accent: '#616262',
-        'blue-100': '#2a93c9'
+        'blue-100': '#2a93c9',
+        red: '#e74c3c'
       },
       boxShadow: {
         'doctor-card': '5px 5px 50px 0px rgba(6, 30, 52, 0.11)'

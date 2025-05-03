@@ -85,7 +85,7 @@ const HeroSlider = () => {
         </SwiperSlide>
       </Swiper>
 
-      <div className='mt-[-100px] z-[10] relative bg-red mb-[85px]'>
+      <div className='mt-[-100px] z-[10] relative mb-[85px]'>
         <div className='custom-pagination flex gap-2 justify-center h-[20px]' />
       </div>
     </div>
