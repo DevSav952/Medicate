@@ -55,7 +55,7 @@ const Header = () => {
                   href='/doctors'
                   className={twMerge(
                     'text-white text-lg hover:text-[#89E3FF] transition-all duration-300 ease-in-out',
-                    path === '/blog' && 'text-[#89E3FF]'
+                    path === '/doctors' && 'text-[#89E3FF]'
                   )}>
                   Лікарі
                 </StyledLink>
