@@ -34,7 +34,7 @@ const AccordionItem = ({ isSelected, index, item, allowedAction }: AccordionItem
         ref={contentRef}
         className={twMerge('max-h-[0px] overflow-hidden transition-all duration-300 ease-in-out')}
         style={{
-          maxHeight: isSelected ? contentRef.current.scrollHeight : 0
+          maxHeight: isSelected && contentRef.current ? contentRef.current.scrollHeight : 0
         }}>
         {item.content}
       </div>

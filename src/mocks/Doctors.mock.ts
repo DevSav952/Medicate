@@ -1,8 +1,8 @@
 import { Doctor } from '@/interfaces/Doctor.interface'
 
 import doctorImage from '@/assets/team-1.jpg'
-import doctorImageSecond from '@/assets/team-2.jpg'
-import doctorImageThird from '@/assets/team-3.jpg'
+import doctorImageSecond from '@/assets/team-2.webp'
+import doctorImageThird from '@/assets/team-3.webp'
 import doctorImageFourth from '@/assets/team-4.jpg'
 
 export const mockedDoctors: Doctor[] = [

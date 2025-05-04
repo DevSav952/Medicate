@@ -78,10 +78,10 @@ const CheckboxGroup = ({
           render={({ field }) => {
             const isChecked = field.value?.includes(option.value)
 
-            const handleChange = (e) => {
+            const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               const newValue = e.target.value
               if (isChecked) {
-                field.onChange(field.value.filter((v) => v !== newValue))
+                field.onChange(field.value.filter((v: string) => v !== newValue))
               } else {
                 field.onChange([...(field.value || []), newValue])
               }
