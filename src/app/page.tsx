@@ -104,9 +104,9 @@ export default function Home() {
             </P>
             <StyledLinkButton
               variant='outline'
-              href='/doctors'
-              className='flex items-center justify-center w-[180px] text-blue-100 [&_svg]:fill-[#2a93c9] border-solid border-blue-100 hover:bg-blue-100 hover:text-white  hover:[&_svg]:fill-white'>
-              <FaCalendarAlt className='mr-2.5' /> До розкладу
+              href='/'
+              className='flex items-center justify-center text-blue-100 [&_svg]:fill-[#2a93c9] border-solid border-blue-100 hover:bg-blue-100 hover:text-white  hover:[&_svg]:fill-white'>
+              Записатись на прийом
             </StyledLinkButton>
           </div>
 
