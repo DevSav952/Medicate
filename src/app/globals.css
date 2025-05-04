@@ -10,6 +10,10 @@
   background-color: #fff !important;
 }
 
+.review-slider-bullet {
+  background-color: #56b0cf !important;
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

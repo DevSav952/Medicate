@@ -26,6 +26,7 @@ const config: Config = {
         secondary: '#42474C',
         accent: '#616262',
         'blue-100': '#2a93c9',
+        'blue-200': '#56b0cf',
         red: '#e74c3c'
       },
       boxShadow: {
@@ -39,6 +40,6 @@ const config: Config = {
       }
     }
   },
-  plugins: []
+  plugins: [require('@tailwindcss/line-clamp')]
 }
 export default config
