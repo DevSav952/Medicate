@@ -3,14 +3,15 @@
 import PageHeading from '@/components/PageHeading/PageHeading'
 import { Container } from '@/components/ui/Container/Container'
 import { H2, H4, H6, P } from '@/components/ui/Typography/Typography'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Tabs from '@/components/ui/Tabs/Tabs'
 import Image from 'next/image'
 import { mockedAppointments } from '@/mocks/Appointments.mock'
 import dayjs from 'dayjs'
 import AppointmentCard from '@/components/AppointmentCard/AppointmentCard'
+import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 
-import { FaUser } from 'react-icons/fa'
+import { FaUser, FaPlus } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
 
 const TABS_ENUM = {
@@ -21,28 +22,55 @@ const TABS_ENUM = {
 }
 
 const AppointmentTab = () => {
+  const futureAppointments = useMemo(
+    () => mockedAppointments.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())),
+    [mockedAppointments]
+  )
+
+  const pastAppointments = useMemo(
+    () => mockedAppointments.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())),
+    [mockedAppointments]
+  )
+
   return (
-    <div className='mt-7'>
-      <H6>Записи на прийом</H6>
-      <div className='grid grid-cols-1 gap-4 mt-4'>
-        {mockedAppointments
-          .filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs()))
-          .map((appointment) => (
-            <AppointmentCard key={appointment._id} appointment={appointment} isIncoming />
-          ))}
+    <>
+      <div className='mt-6 flex justify-between'>
+        <H6>Записатися на прийом</H6>
+        <StyledLinkButton href='/' className='bg-blue-100'>
+          <FaPlus fill='#fff' />
+        </StyledLinkButton>
       </div>
 
-      <div className='mt-6'>
-        <H6>Попередні прийоми</H6>
-        <div className='grid grid-cols-1 gap-4 mt-4'>
-          {mockedAppointments
-            .filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs()))
-            .map((appointment) => (
-              <AppointmentCard key={appointment._id} appointment={appointment} />
-            ))}
+      {futureAppointments.length === 0 && pastAppointments.length === 0 && <P>Немає записів на прийом</P>}
+
+      {pastAppointments.length > 0 && (
+        <div className='mt-6'>
+          <H6>Записи на прийом</H6>
+
+          {futureAppointments.length > 0 && (
+            <div className='grid grid-cols-1 gap-4 mt-4'>
+              {futureAppointments.map((appointment) => (
+                <AppointmentCard key={appointment._id} appointment={appointment} isIncoming />
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-    </div>
+      )}
+
+      {pastAppointments.length > 0 && (
+        <div className='mt-6'>
+          <H6>Попередні прийоми</H6>
+
+          {pastAppointments.length > 0 && (
+            <div className='grid grid-cols-1 gap-4 mt-4'>
+              {pastAppointments.map((appointment) => (
+                <AppointmentCard key={appointment._id} appointment={appointment} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </>
   )
 }
 
