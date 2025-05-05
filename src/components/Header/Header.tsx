@@ -32,8 +32,6 @@ const Header = () => {
   }, [])
 
   const handleOpenAuthModal = () => {
-    console.log('called')
-
     setOpenAuthModal(true)
   }
   const handleCloseAuthModal = () => setOpenAuthModal(false)
