@@ -19,3 +19,11 @@ export interface ISignUp {
   userName: string
   confirmPassword: string
 }
+
+export interface IDoctorSignUp {
+  email: string
+  password: string
+  verificationCode: string
+  userName: string
+  confirmPassword: string
+}
