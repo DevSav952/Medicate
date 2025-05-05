@@ -87,7 +87,7 @@ const SignUpForm = ({ handleClose }: SignUpFormProps) => {
       </div>
       {errors?.password && <P className='text-red text-sm my-1'>{errors.password.message}</P>}
 
-      <div className='relative flex flex-col !mt-1.5'>
+      <div className='relative flex flex-col mt-1.5'>
         <Input
           type={showConfirmPassword ? 'text' : 'password'}
           name='confirmPassword'
@@ -101,7 +101,7 @@ const SignUpForm = ({ handleClose }: SignUpFormProps) => {
         </Input>
         <span
           onClick={() => setShowConfirmPassword((state) => !state)}
-          className='absolute top-[43px] right-2.5 cursor-pointer'>
+          className='absolute top-[43px] right-3.5 cursor-pointer'>
           {showConfirmPassword ? (
             <FaEye
               size={16}
