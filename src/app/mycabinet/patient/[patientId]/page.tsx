@@ -10,6 +10,10 @@ import { mockedAppointments } from '@/mocks/Appointments.mock'
 import dayjs from 'dayjs'
 import AppointmentCard from '@/components/AppointmentCard/AppointmentCard'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
+import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
+import { mockedAnalyzes } from '@/mocks/Analyses.mock'
+import { mockedPayments } from '@/mocks/Payment.mock'
+import PaymentCard from '@/components/PaymentCard/PaymentCard'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -43,7 +47,7 @@ const AppointmentTab = () => {
 
       {futureAppointments.length === 0 && pastAppointments.length === 0 && <P>Немає записів на прийом</P>}
 
-      {pastAppointments.length > 0 && (
+      {futureAppointments.length > 0 && (
         <div className='mt-6'>
           <H6>Записи на прийом</H6>
 
@@ -79,11 +83,71 @@ const TreatmentTab = () => {
 }
 
 const AnalyzesTab = () => {
-  return <P>Аналізи</P>
+  return (
+    <>
+      <div className='mt-6 flex justify-between'>
+        <H6>Додати аналіз</H6>
+        <StyledLinkButton href='/' className='bg-blue-100'>
+          <FaPlus fill='#fff' />
+        </StyledLinkButton>
+      </div>
+
+      {mockedAnalyzes.length === 0 && <P>Аналізи відсутні</P>}
+
+      {mockedAnalyzes.length > 0 && (
+        <div className='mt-6'>
+          <H6>Аналізи</H6>
+
+          {mockedAnalyzes.length > 0 && (
+            <div className='grid grid-cols-1 gap-4 mt-4'>
+              {mockedAnalyzes.map((analysis) => (
+                <AnalysesCard key={analysis._id} analysis={analysis} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  )
 }
 
 const BillingTab = () => {
-  return <P>Оплата послуг</P>
+  const unPayedServices = useMemo(() => mockedPayments.filter((payment) => !payment.paymentMethod), [mockedPayments])
+  const payedServices = useMemo(() => mockedPayments.filter((payment) => !!payment.paymentMethod), [mockedPayments])
+
+  return (
+    <>
+      {unPayedServices.length === 0 && payedServices.length === 0 && <P>Немає записів на прийом</P>}
+
+      {unPayedServices.length > 0 && (
+        <div className='mt-6'>
+          <H6>Неоплачені послуги</H6>
+
+          {unPayedServices.length > 0 && (
+            <div className='grid grid-cols-1 gap-4 mt-4'>
+              {unPayedServices.map((payment) => (
+                <PaymentCard key={payment._id} payment={payment} isUnPayed />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {payedServices.length > 0 && (
+        <div className='mt-6'>
+          <H6>Історія оплат</H6>
+
+          {payedServices.length > 0 && (
+            <div className='grid grid-cols-1 gap-4 mt-4'>
+              {payedServices.map((payment) => (
+                <PaymentCard key={payment._id} payment={payment} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  )
 }
 
 const tabs = [
