@@ -9,11 +9,12 @@ import { twMerge } from 'tailwind-merge'
 interface AccordionItemProps {
   item: { title: string; content: ReactNode }
   isSelected: boolean
+  isLast: boolean
   index: number
   allowedAction: (index: number | null) => void
 }
 
-const AccordionItem = ({ isSelected, index, item, allowedAction }: AccordionItemProps) => {
+const AccordionItem = ({ isSelected, index, item, allowedAction, isLast }: AccordionItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null)
 
   const handleClick = () => {
@@ -24,7 +25,10 @@ const AccordionItem = ({ isSelected, index, item, allowedAction }: AccordionItem
     <>
       <div
         onClick={handleClick}
-        className='group flex justify-between p-5 bg-[#c5cbcf1a] border-b border-solid border-[#e8e8f6] cursor-pointer'>
+        className={twMerge(
+          'group flex justify-between p-5 bg-white shadow-custom-right border-b border-solid border-[#e8e8f6] cursor-pointer',
+          isLast && !isSelected && 'border-none'
+        )}>
         <P className='text-lg text-[#42474C] group-hover:text-blue-200 transition-all duration-300 ease-in-out'>
           {item.title}
         </P>
@@ -32,7 +36,10 @@ const AccordionItem = ({ isSelected, index, item, allowedAction }: AccordionItem
       </div>
       <div
         ref={contentRef}
-        className={twMerge('max-h-[0px] overflow-hidden transition-all duration-300 ease-in-out')}
+        className={twMerge(
+          'max-h-[0px] overflow-hidden transition-all duration-300 ease-in-out bg-white shadow-custom-right',
+          !isLast && isSelected && 'border-b border-solid border-[#e8e8f6]'
+        )}
         style={{
           maxHeight: isSelected && contentRef.current ? contentRef.current.scrollHeight : 0
         }}>
@@ -52,7 +59,14 @@ const Accordion = ({ items }: AccordionProps) => {
   return (
     <div>
       {items.map((item, i) => (
-        <AccordionItem key={i} isSelected={selectedItem === i} index={i} item={item} allowedAction={setSelectedItem} />
+        <AccordionItem
+          key={i}
+          isSelected={selectedItem === i}
+          index={i}
+          item={item}
+          allowedAction={setSelectedItem}
+          isLast={i === items.length - 1}
+        />
       ))}
     </div>
   )

@@ -30,7 +30,8 @@ const config: Config = {
         red: '#e74c3c'
       },
       boxShadow: {
-        'doctor-card': '5px 5px 50px 0px rgba(6, 30, 52, 0.11)'
+        'doctor-card': '5px 5px 50px 0px rgba(6, 30, 52, 0.11)',
+        'custom-right': '4px 0 8px -4px rgba(100, 114, 125, 0.18)'
       },
       screens: {
         sm: '576px',

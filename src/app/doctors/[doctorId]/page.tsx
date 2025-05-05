@@ -13,42 +13,42 @@ import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkBut
 
 const DoctorInfo = () => {
   return (
-    <div className='bg-[#24466f] px-4 py-[30px]'>
-      <H3 className='text-[#cde4ff] text-[26px] mb-5'>Про лікаря</H3>
+    <div className='bg-white shadow-custom-right px-4 py-[30px]'>
+      <H3 className='text-black text-[26px] mb-5'>Про лікаря</H3>
       <ul>
-        <li className='py-3 border-b border-solid border-[#4f6885]'>
-          <P className='flex items-center justify-between text-white'>
+        <li className='py-3 border-b border-solid border-[#e1e5e3]'>
+          <P className='flex items-center justify-between text-[#64727d]'>
             <span>Ім'я:</span>
             <span>Dr. Greg House</span>
           </P>
         </li>
-        <li className='py-3 border-b border-solid border-[#4f6885]'>
-          <P className='flex items-center justify-between text-white'>
+        <li className='py-3 border-b border-solid border-[#e1e5e3]'>
+          <P className='flex items-center justify-between text-[#64727d]'>
             <span>Спеціальність</span>
             <span>Dr. Greg House</span>
           </P>
         </li>
-        <li className='py-3 border-b border-solid border-[#4f6885]'>
-          <P className='flex items-center justify-between text-white'>
+        <li className='py-3 border-b border-solid border-[#e1e5e3]'>
+          <P className='flex items-center justify-between text-[#64727d]'>
             <span>Спеціалізація</span>
             <span>Dr. Greg House</span>
           </P>
         </li>
-        <li className='py-3 border-b border-solid border-[#4f6885]'>
-          <P className='flex items-center justify-between text-white'>
+        <li className='py-3 border-b border-solid border-[#e1e5e3]'>
+          <P className='flex items-center justify-between text-[#64727d]'>
             <span>Освіта</span>
             <span>Dr. Greg House</span>
           </P>
         </li>
         <li className='py-3'>
-          <P className='flex items-center justify-between text-white'>
+          <P className='flex items-center justify-between text-[#64727d]'>
             <span>Стаж роботи</span>
             <span>Dr. Greg House</span>
           </P>
         </li>
       </ul>
       <div className='mt-[55px]'>
-        <StyledLinkButton href='/' className='w-full text-center'>
+        <StyledLinkButton href='/' className='w-full text-center bg-blue-100 text-white'>
           Записатися на прийом
         </StyledLinkButton>
       </div>
