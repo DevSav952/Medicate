@@ -93,7 +93,7 @@ const Header = () => {
             </ul>
           </div>
 
-          <div className='flex items-center gap-4'>
+          <div className='flex items-center gap-4 ml-4'>
             <AuthModal
               isOpen={openAuthModal}
               handleOpenAuthModal={handleOpenAuthModal}
