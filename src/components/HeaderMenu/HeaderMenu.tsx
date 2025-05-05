@@ -50,7 +50,7 @@ const HeaderMenu = () => {
       )}
       <div
         className={twMerge(
-          'bg-white fixed top-0 left-[-100%] h-[100dvh] w-[290px] px-2.5 z-[20] flex flex-col transition-all ease-in-out duration-300',
+          'bg-white fixed top-0 left-[-200%] h-[100dvh] w-[290px] px-2.5 z-[20] flex flex-col transition-all ease-in-out duration-300',
           isBurgerShow && 'p-5 left-0'
         )}>
         <div className='flex justify-end'>
