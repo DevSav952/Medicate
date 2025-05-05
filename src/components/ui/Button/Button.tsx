@@ -12,7 +12,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         type={type}
-        className={twMerge('flex items-center justify-center bg-[#0674d1] py-2.5 px-5 rounded text-white', className)}
+        className={twMerge(
+          'flex items-center justify-center bg-[#0674d1] py-2.5 px-5 rounded text-white cursor-pointer',
+          className
+        )}
         onClick={allowedAction && allowedAction}>
         {children}
       </button>
