@@ -10,6 +10,8 @@ import AuthModal from '@/components/modals/AuthModal/AuthModal'
 
 import logo from '@/assets/logo.png'
 import { twMerge } from 'tailwind-merge'
+import { FaUser } from 'react-icons/fa'
+import userAvatar from '@/assets/about-img5.jpg'
 
 const HEADER_ANIMATION_HEIGHT = 270
 const HEADER_ANIMATION_HEIGHT_HERO = 550
@@ -17,6 +19,7 @@ const HEADER_ANIMATION_HEIGHT_HERO = 550
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)
   const [openAuthModal, setOpenAuthModal] = useState(false)
+  const [isAuth, setIsAuth] = useState(true)
   const path = usePathname()
 
   useEffect(() => {
@@ -95,11 +98,25 @@ const Header = () => {
           </div>
 
           <div className='flex items-center gap-4 ml-4'>
-            <AuthModal
-              isOpen={openAuthModal}
-              handleOpenAuthModal={handleOpenAuthModal}
-              handleCloseAuthModal={handleCloseAuthModal}
-            />
+            {isAuth ? (
+              <>
+                <Link href='/mycabinet/patient/1'>
+                  <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
+                    <FaUser className='fill-blue-100' />
+                  </div>
+                </Link>
+                <Link href='/mycabinet/doctor/1'>
+                  <Image src={userAvatar} alt='user avatar' className='w-10 h-10 rounded-full' width={40} height={40} />
+                </Link>
+              </>
+            ) : (
+              <AuthModal
+                isOpen={openAuthModal}
+                handleOpenAuthModal={handleOpenAuthModal}
+                handleCloseAuthModal={handleCloseAuthModal}
+              />
+            )}
+
             <div className='lg:hidden'>
               <HeaderMenu />
             </div>
