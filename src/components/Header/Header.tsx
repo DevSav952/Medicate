@@ -11,7 +11,8 @@ import AuthModal from '@/components/modals/AuthModal/AuthModal'
 import logo from '@/assets/logo.png'
 import { twMerge } from 'tailwind-merge'
 
-const HEADER_ANIMATION_HEIGHT = 500
+const HEADER_ANIMATION_HEIGHT = 270
+const HEADER_ANIMATION_HEIGHT_HERO = 550
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)
@@ -20,7 +21,7 @@ const Header = () => {
 
   useEffect(() => {
     const onScroll = () => {
-      setScrolled(window.scrollY > HEADER_ANIMATION_HEIGHT)
+      setScrolled(window.scrollY > (path === '/' ? HEADER_ANIMATION_HEIGHT_HERO : HEADER_ANIMATION_HEIGHT))
     }
 
     window.addEventListener('scroll', onScroll)
