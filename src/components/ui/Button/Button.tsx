@@ -7,7 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ children, allowedAction, type = 'button', className }, ref) => {
+  ({ children, allowedAction, onClick, type = 'button', className, ...props }, ref) => {
     return (
       <button
         ref={ref}
@@ -16,7 +16,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           'flex items-center justify-center bg-[#0674d1] py-2.5 px-5 rounded text-white cursor-pointer',
           className
         )}
-        onClick={allowedAction && allowedAction}>
+        onClick={allowedAction ? allowedAction : onClick}
+        {...props}>
         {children}
       </button>
     )
