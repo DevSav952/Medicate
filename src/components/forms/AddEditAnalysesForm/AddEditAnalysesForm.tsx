@@ -7,7 +7,13 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/Textarea/Textarea'
 import { P } from '@/components/ui/Typography/Typography'
 
-const AddEditAnalysesForm = () => {
+interface FormProps {
+  analyses?: Analyses
+}
+
+type AnalysesValues = Omit<Analyses, '_id' | 'userId' | 'createdAt' | 'updatedAt'>
+
+const AddEditAnalysesForm = ({ analyses }: FormProps) => {
   const [isFileUploaded, setFileUploaded] = useState(false)
   const [fileName, setFileName] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -16,11 +22,15 @@ const AddEditAnalysesForm = () => {
     register,
     formState: { errors },
     handleSubmit
-  } = useForm<Analyses>({
-    mode: 'onSubmit'
+  } = useForm<AnalysesValues>({
+    mode: 'onSubmit',
+    defaultValues: {
+      analysisName: analyses?.analysisName || '',
+      description: analyses?.description || ''
+    }
   })
 
-  const onSubmit: SubmitHandler<Analyses> = async (values) => {
+  const onSubmit: SubmitHandler<AnalysesValues> = async (values) => {
     // login(values)
     console.log('values', values)
     // handleClose()
