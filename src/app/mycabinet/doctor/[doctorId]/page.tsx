@@ -7,11 +7,12 @@ import { useMemo, useState } from 'react'
 import Tabs from '@/components/ui/Tabs/Tabs'
 import Image from 'next/image'
 import { mockedAppointments } from '@/mocks/Appointments.mock'
+import DoctorAppointmentCard from '@/components/doctor/DoctorAppointmentCard/DoctorAppointmentCard'
+import dayjs from 'dayjs'
+import EditDoctorModal from '@/components/modals/EditDoctorModal/EditDoctorModal'
 
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
-import DoctorAppointmentCard from '@/components/doctor/DoctorAppointmentCard/DoctorAppointmentCard'
-import dayjs from 'dayjs'
 
 const TABS_ENUM = {
   APPOINTMENTS: 'appointments',
@@ -78,7 +79,9 @@ const DoctorProfile = () => {
 
   return (
     <div className='shadow-custom-right bg-white py-[30px] px-4'>
-      <div className='mt-12 flex flex-col items-center justify-center lg:mt-6'>
+      <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
+        <EditDoctorModal />
+
         {isAuth ? (
           <Image src={userAvatar} width={80} height={80} alt='User avatar' className='w-[80px] h-[80px] rounded-full' />
         ) : (
