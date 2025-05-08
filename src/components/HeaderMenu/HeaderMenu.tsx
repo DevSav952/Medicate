@@ -45,7 +45,7 @@ const HeaderMenu = () => {
       {isBurgerShow && (
         <div
           onClick={() => setBurgerShow(false)}
-          className='fixed top-0 left-0 w-full h-screen z-10 bg-neutral-800 opacity-50'
+          className='fixed top-0 left-0 w-full h-screen z-101 bg-neutral-800 opacity-50'
         />
       )}
       <div
