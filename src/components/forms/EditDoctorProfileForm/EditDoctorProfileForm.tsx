@@ -48,7 +48,7 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
             obj={register('doctorName', {
               required: { value: true, message: "Поле обов'язкове" },
               minLength: { value: 2, message: "Ім'я має мінімум 2 символів" },
-              maxLength: { value: 20, message: "Ім'я має максимум 20 символів" }
+              maxLength: { value: 50, message: "Ім'я має максимум 20 символів" }
             })}>
             Ім'я
           </Input>
