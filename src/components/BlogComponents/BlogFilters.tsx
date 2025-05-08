@@ -143,7 +143,7 @@ const BlogFilters = ({ length }: BlogItemProps) => {
               </option>
             ))}
           </select>
-          <IconButton icon={<FaFilter fill='#fff' />} allowedAction={() => setOpenFilters(!isOpenFilters)} />
+          <IconButton icon={<FaFilter fill='#fff' />} onClick={() => setOpenFilters(!isOpenFilters)} />
         </div>
       </div>
       {isOpenFilters && (

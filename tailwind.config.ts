@@ -27,6 +27,7 @@ const config: Config = {
         accent: '#616262',
         'blue-100': '#2a93c9',
         'blue-200': '#56b0cf',
+        'blue-300': '#0674d1',
         red: '#e74c3c'
       },
       boxShadow: {

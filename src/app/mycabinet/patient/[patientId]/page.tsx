@@ -14,6 +14,7 @@ import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
 import { mockedAnalyzes } from '@/mocks/Analyses.mock'
 import { mockedPayments } from '@/mocks/Payment.mock'
 import PaymentCard from '@/components/PaymentCard/PaymentCard'
+import EditProfileModal from '@/components/modals/EditProfileModal/EditProfileModal'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -162,7 +163,8 @@ const PatientProfile = () => {
 
   return (
     <div className='shadow-custom-right bg-white py-[30px] px-4'>
-      <div className='mt-12 flex flex-col items-center justify-center lg:mt-6'>
+      <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
+        <EditProfileModal />
         {isAuth ? (
           <Image src={userAvatar} width={80} height={80} alt='User avatar' className='w-[80px] h-[80px] rounded-full' />
         ) : (

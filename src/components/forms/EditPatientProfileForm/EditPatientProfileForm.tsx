@@ -1,0 +1,231 @@
+'use client'
+
+import { Input } from '@/components/ui/Input/Input'
+import { useState } from 'react'
+import { Button } from '@/components/ui/Button/Button'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { Patient } from '@/interfaces/Patient.interface'
+import { P } from '@/components/ui/Typography/Typography'
+
+interface EditPatientProfileFormProps {
+  patient: Patient
+  handleClose: () => void
+}
+
+type PatientValues = Omit<Patient, '_id'>
+
+const bloodOptions = [
+  {
+    label: 'O (I)',
+    value: 'O (I)'
+  },
+  {
+    label: 'A (II)',
+    value: 'A (II)'
+  },
+  {
+    label: 'B (III)',
+    value: 'B (III)'
+  },
+  {
+    label: 'AB (IV)',
+    value: 'AB (IV)'
+  }
+]
+
+const rhOptions = [
+  {
+    label: 'Rh +',
+    value: 'Rh +'
+  },
+  {
+    label: 'Rh -',
+    value: 'Rh -'
+  }
+]
+
+const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileFormProps) => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    watch
+  } = useForm<PatientValues>({
+    mode: 'onSubmit',
+    defaultValues: {
+      email: patient.email,
+      userName: patient.userName,
+      dateOfBirth: patient.dateOfBirth,
+      phoneNumber: patient.phoneNumber,
+      bloodType: patient.bloodType,
+      diabetes: patient.diabetes,
+      rhFactor: patient.rhFactor,
+      bloodTransfusion: patient.bloodTransfusion,
+      intoleranceToMedicines: patient.intoleranceToMedicines,
+      infectiousDiseases: patient.infectiousDiseases,
+      surgicalInterventions: patient.surgicalInterventions,
+      allergies: patient.allergies
+    }
+  })
+
+  const onSubmit: SubmitHandler<PatientValues> = async (values) => {
+    // login(values)
+    console.log('values', values)
+    // handleClose()
+  }
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='mb-4'>
+        <Input
+          type='text'
+          placeholder="Ваше ім'я"
+          name='userName'
+          id='userName'
+          obj={register('userName', {
+            required: { value: true, message: "Поле обов'язкове" },
+            minLength: { value: 2, message: "Ім'я має мінімум 2 символів" },
+            maxLength: { value: 20, message: "Ім'я має максимум 20 символів" }
+          })}>
+          Ім'я
+        </Input>
+        {errors?.userName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.userName.message}</P>}
+      </div>
+
+      <div className='mb-4'>
+        <Input
+          type='email'
+          placeholder='example@email.com'
+          name='email'
+          id='email'
+          obj={register('email', {
+            required: { value: true, message: "Поле обов'язкове" },
+            pattern: { value: /^\S+@\S+$/i, message: 'Невірна електронна пошта' }
+          })}>
+          Електронна пошта
+        </Input>
+        {errors?.email && <P className='text-red text-sm my-1'>{errors.email.message}</P>}
+      </div>
+
+      <div className='mb-4'>
+        {/* @TODO Add date input mask  */}
+        <Input
+          type='text'
+          placeholder='Введіть дату народження'
+          name='dateOfBirth'
+          id='dateOfBirth'
+          obj={register('dateOfBirth')}>
+          Дата народження
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        {/* @TODO Add phoneNumber input mask  */}
+        <Input
+          type='text'
+          placeholder='Введіть номер телефону'
+          name='phoneNumber'
+          id='phoneNumber'
+          obj={register('phoneNumber')}>
+          Номер телефону
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        <label htmlFor='bloodType' className='block font-regular mb-2'>
+          Група крові
+        </label>
+        <select
+          id='bloodType'
+          value={watch('bloodType') ?? ''}
+          onChange={(e) => setValue('bloodType', e.target.value)}
+          className='font-light text-[#616262] px-3 py-1.5 rounded border border-grey-400 w-full'>
+          {bloodOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className='mb-4'>
+        <Input type='text' placeholder='Діабет' name='diabetes' id='diabetes' obj={register('diabetes')}>
+          Діабет
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        <label htmlFor='rhFactor' className='block font-regular mb-2'>
+          Резус фактор
+        </label>
+        <select
+          id='rhFactor'
+          value={watch('rhFactor') ?? ''}
+          onChange={(e) => setValue('rhFactor', e.target.value)}
+          className='font-light text-[#616262] px-3 py-1.5 rounded border border-grey-400 w-full'>
+          {rhOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className='mb-4'>
+        <Input
+          type='text'
+          placeholder='Переливання крові'
+          name='bloodTransfusion'
+          id='bloodTransfusion'
+          obj={register('bloodTransfusion')}>
+          Переливання крові
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        <Input
+          type='text'
+          placeholder='Непереносимість ліків'
+          name='intoleranceToMedicines'
+          id='intoleranceToMedicines'
+          obj={register('intoleranceToMedicines')}>
+          Непереносимість ліків
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        <Input
+          type='text'
+          placeholder='Інфекційні захворювання'
+          name='infectiousDiseases'
+          id='infectiousDiseases'
+          obj={register('infectiousDiseases')}>
+          Інфекційні захворювання
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        <Input
+          type='text'
+          placeholder='Хірургічні втручання'
+          name='surgicalInterventions'
+          id='surgicalInterventions'
+          obj={register('surgicalInterventions')}>
+          Хірургічні втручання
+        </Input>
+      </div>
+
+      <div className='mb-4'>
+        <Input type='text' placeholder='Алергії' name='allergies' id='allergies' obj={register('allergies')}>
+          Алергії
+        </Input>
+      </div>
+
+      <Button className='mt-5 w-full' type='submit'>
+        Зберегти
+      </Button>
+    </form>
+  )
+}
+export default EditPatientProfileForm
