@@ -16,10 +16,14 @@ import userAvatar from '@/assets/about-img5.jpg'
 const HEADER_ANIMATION_HEIGHT = 270
 const HEADER_ANIMATION_HEIGHT_HERO = 550
 
-const Header = () => {
+interface HeaderProps {
+  isLoggedIn: boolean
+}
+
+const Header = ({ isLoggedIn }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false)
   const [openAuthModal, setOpenAuthModal] = useState(false)
-  const [isAuth, setIsAuth] = useState(false)
+
   const path = usePathname()
 
   useEffect(() => {
@@ -38,7 +42,7 @@ const Header = () => {
 
   return (
     <>
-      <header
+      <div
         className={twMerge(
           'fixed top-0 left-0 w-full z-[100] bg-hero bg-center bg-no-repeat bg-cover transition-all ease-in-out duration-300 lg:bg-none lg:backdrop-blur',
           scrolled && 'lg:!bg-hero bg-center bg-no-repeat bg-cover'
@@ -96,7 +100,7 @@ const Header = () => {
           </div>
 
           <div className='flex items-center gap-4 ml-4'>
-            {isAuth ? (
+            {isLoggedIn ? (
               <>
                 <Link href='/mycabinet/patient/1'>
                   <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
@@ -120,7 +124,7 @@ const Header = () => {
             </div>
           </div>
         </div>
-      </header>
+      </div>
     </>
   )
 }
