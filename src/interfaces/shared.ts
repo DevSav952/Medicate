@@ -25,4 +25,6 @@ export interface IDoctorSignUp {
   password: string
   doctorName: string
   confirmPassword: string
+  position: string
+  phone: string
 }

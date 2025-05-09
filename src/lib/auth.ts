@@ -134,21 +134,20 @@ export const registerDoctor = async (doctor: IDoctorSignUp) => {
   const salt = await bcrypt.genSalt(10)
   const hash = await bcrypt.hash(doctor.password, salt)
 
-  const doc = new Patient({
+  const doc = new Doctor({
     email: doctor.email,
     passwordHash: hash,
     doctorName: doctor.doctorName,
-    position: '',
-    description: '',
-    phone: ''
+    position: doctor.position,
+    phone: doctor.phone
   })
 
   const patientDoc = await doc.save()
 
   session.isLoggedIn = true
-  session.role = 'patient'
+  session.role = 'doctor'
   session.id = patientDoc._id
-  session.userName = patientDoc.userName
+  session.userName = patientDoc.doctorName
   session.email = patientDoc.email
 
   await session.save()

@@ -32,115 +32,138 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
 
   const onSubmit: SubmitHandler<DoctorValue> = async (values) => {
     registerDoctor(values)
-    console.log('values', values)
-    // handleClose()
+
+    handleClose()
   }
 
   return (
     <form className='mt-5' onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        type='email'
-        placeholder='example@email.com'
-        name='email'
-        id='email'
-        obj={register('email', {
-          required: { value: true, message: "Поле обов'язкове" },
-          pattern: { value: /^\S+@\S+$/i, message: 'Невірна електронна пошта' }
-        })}>
-        Електронна пошта
-      </Input>
-      {errors?.email && <P className='text-red text-sm my-1'>{errors.email.message}</P>}
-      <Input
-        type='text'
-        name='userName'
-        id='userName'
-        placeholder="Введіть ім'я"
-        labelStyles='mt-1.5'
-        obj={register('doctorName', {
-          required: { value: true, message: "Поле обов'язкове" },
-          minLength: { value: 2, message: "Ім'я має мінімум 2 символів" },
-          maxLength: { value: 50, message: "Ім'я має максимум 20 символів" }
-        })}>
-        Ім'я
-      </Input>
-      {errors?.doctorName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.doctorName.message}</P>}
-
-      <Input
-        type='text'
-        name='verificationCode'
-        id='verificationCode'
-        placeholder='Введіть код'
-        labelStyles='mt-1.5'
-        obj={register('verificationCode', {
-          required: { value: true, message: "Поле обов'язкове" },
-          validate: {
-            aboba: (value) =>
-              value === process.env.NEXT_PUBLIC_DOCTOR_SIGNUP_VERIFICATION_CODE || 'Невірний код підтвердження'
-          }
-        })}>
-        Верифікаційний код
-      </Input>
-      {errors?.verificationCode && (
-        <P className='text-red text-sm mb-1 dark:!text-red'>{errors.verificationCode.message}</P>
-      )}
-      <div className='relative flex flex-col mt-1.5'>
+      <div className='h-[400px] overflow-y-scroll'>
         <Input
-          type='password'
-          placeholder='Пароль'
-          name='password'
-          id='password'
-          obj={register('password', {
+          type='email'
+          placeholder='example@email.com'
+          name='email'
+          id='email'
+          obj={register('email', {
             required: { value: true, message: "Поле обов'язкове" },
-            minLength: { value: 8, message: 'Пароль має мінімум 8 символів' },
-            maxLength: { value: 20, message: 'Пароль має максимум 20 символів' }
+            pattern: { value: /^\S+@\S+$/i, message: 'Невірна електронна пошта' }
           })}>
-          Пароль
+          Електронна пошта
         </Input>
-        <span
-          onClick={() => setShowPassword((state) => !state)}
-          className='absolute top-[43px] right-3.5 cursor-pointer'>
-          {showPassword ? (
-            <FaEye size={16} className='transition-all duration-200' />
-          ) : (
-            <FaEyeSlash size={16} className='transition-all duration-200' />
-          )}
-        </span>
-      </div>
-      {errors?.password && <P className='text-red text-sm my-1'>{errors.password.message}</P>}
-
-      <div className='relative flex flex-col mt-1.5'>
+        {errors?.email && <P className='text-red text-sm my-1'>{errors.email.message}</P>}
         <Input
-          type={showConfirmPassword ? 'text' : 'password'}
-          name='confirmPassword'
-          id='confirmPassword'
-          placeholder='Підтвердіть пароль'
-          obj={register('confirmPassword', {
+          type='text'
+          name='doctorName'
+          id='doctorName'
+          placeholder="Введіть ім'я"
+          labelStyles='mt-1.5'
+          obj={register('doctorName', {
             required: { value: true, message: "Поле обов'язкове" },
-            validate: (value) => value === watch('password') || 'Паролі не співпадають'
+            minLength: { value: 2, message: "Ім'я має мінімум 2 символів" },
+            maxLength: { value: 50, message: "Ім'я має максимум 20 символів" }
           })}>
-          Підтвердіть пароль
+          Ім'я
         </Input>
-        <span
-          onClick={() => setShowConfirmPassword((state) => !state)}
-          className='absolute top-[43px] right-3.5 cursor-pointer'>
-          {showConfirmPassword ? (
-            <FaEye
-              size={16}
-              className='dark:text-white-100 dark:lg:hover:text-purple-100 transition-all duration-200'
-            />
-          ) : (
-            <FaEyeSlash
-              size={16}
-              className='dark:text-white-100 dark:lg:hover:text-purple-100 transition-all duration-200'
-            />
-          )}
-        </span>
-      </div>
-      {errors?.confirmPassword && (
-        <P className='text-red text-sm mb-1 dark:!text-red'>{errors.confirmPassword.message}</P>
-      )}
+        {errors?.doctorName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.doctorName.message}</P>}
 
-      <Button className='mt-5 w-full' type='submit'>
+        <Input
+          type='text'
+          name='position'
+          id='position'
+          placeholder='Ваша спеціальність'
+          labelStyles='mt-1.5'
+          obj={register('position')}>
+          Спеціальність
+        </Input>
+
+        {/* @TODO Add phoneNumber input mask  */}
+        <Input
+          type='text'
+          name='phone'
+          id='phone'
+          placeholder='Ваша спеціальність'
+          labelStyles='mt-1.5'
+          obj={register('phone')}>
+          Номер телефону
+        </Input>
+
+        <Input
+          type='text'
+          name='verificationCode'
+          id='verificationCode'
+          placeholder='Введіть код'
+          labelStyles='mt-1.5'
+          obj={register('verificationCode', {
+            required: { value: true, message: "Поле обов'язкове" },
+            validate: {
+              aboba: (value) =>
+                value === process.env.NEXT_PUBLIC_DOCTOR_SIGNUP_VERIFICATION_CODE || 'Невірний код підтвердження'
+            }
+          })}>
+          Верифікаційний код
+        </Input>
+        {errors?.verificationCode && (
+          <P className='text-red text-sm mb-1 dark:!text-red'>{errors.verificationCode.message}</P>
+        )}
+        <div className='relative flex flex-col mt-1.5'>
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            placeholder='Пароль'
+            name='password'
+            id='password'
+            obj={register('password', {
+              required: { value: true, message: "Поле обов'язкове" },
+              minLength: { value: 8, message: 'Пароль має мінімум 8 символів' },
+              maxLength: { value: 20, message: 'Пароль має максимум 20 символів' }
+            })}>
+            Пароль
+          </Input>
+          <span
+            onClick={() => setShowPassword((state) => !state)}
+            className='absolute top-[43px] right-3.5 cursor-pointer'>
+            {showPassword ? (
+              <FaEye size={16} className='transition-all duration-200' />
+            ) : (
+              <FaEyeSlash size={16} className='transition-all duration-200' />
+            )}
+          </span>
+        </div>
+        {errors?.password && <P className='text-red text-sm my-1'>{errors.password.message}</P>}
+
+        <div className='relative flex flex-col mt-1.5'>
+          <Input
+            type={showConfirmPassword ? 'text' : 'password'}
+            name='confirmPassword'
+            id='confirmPassword'
+            placeholder='Підтвердіть пароль'
+            obj={register('confirmPassword', {
+              required: { value: true, message: "Поле обов'язкове" },
+              validate: (value) => value === watch('password') || 'Паролі не співпадають'
+            })}>
+            Підтвердіть пароль
+          </Input>
+          <span
+            onClick={() => setShowConfirmPassword((state) => !state)}
+            className='absolute top-[43px] right-3.5 cursor-pointer'>
+            {showConfirmPassword ? (
+              <FaEye
+                size={16}
+                className='dark:text-white-100 dark:lg:hover:text-purple-100 transition-all duration-200'
+              />
+            ) : (
+              <FaEyeSlash
+                size={16}
+                className='dark:text-white-100 dark:lg:hover:text-purple-100 transition-all duration-200'
+              />
+            )}
+          </span>
+        </div>
+        {errors?.confirmPassword && (
+          <P className='text-red text-sm mb-1 dark:!text-red'>{errors.confirmPassword.message}</P>
+        )}
+      </div>
+
+      <Button className='mt-5 w-full mb-4' type='submit'>
         Увійти
       </Button>
     </form>

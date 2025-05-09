@@ -28,8 +28,7 @@ const DoctorSignInForm = ({ handleClose }: SignInFormProps) => {
 
   const onSubmit: SubmitHandler<IDoctorSignIn> = async (values) => {
     loginDoctor(values)
-    console.log('values', values)
-    // handleClose()
+    handleClose()
   }
 
   return (
@@ -48,7 +47,7 @@ const DoctorSignInForm = ({ handleClose }: SignInFormProps) => {
       {errors?.email && <P className='text-red text-sm my-1'>{errors.email.message}</P>}
       <div className='relative flex flex-col !mt-1.5'>
         <Input
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           placeholder='Пароль'
           name='password'
           id='password'
