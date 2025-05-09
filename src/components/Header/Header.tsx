@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { StyledLink } from '@/components/ui/StyledLink/StyledLink'
 import AuthModal from '@/components/modals/AuthModal/AuthModal'
+import { Session } from '@/interfaces/Session.interface'
 
 import logo from '@/assets/logo.png'
 import { twMerge } from 'tailwind-merge'
@@ -17,10 +18,10 @@ const HEADER_ANIMATION_HEIGHT = 270
 const HEADER_ANIMATION_HEIGHT_HERO = 550
 
 interface HeaderProps {
-  isLoggedIn: boolean
+  session: Session
 }
 
-const Header = ({ isLoggedIn }: HeaderProps) => {
+const Header = ({ session }: HeaderProps) => {
   const [scrolled, setScrolled] = useState(false)
   const [openAuthModal, setOpenAuthModal] = useState(false)
 
@@ -100,16 +101,15 @@ const Header = ({ isLoggedIn }: HeaderProps) => {
           </div>
 
           <div className='flex items-center gap-4 ml-4'>
-            {isLoggedIn ? (
+            {session.isLoggedIn ? (
               <>
-                <Link href='/mycabinet/patient/1'>
+                <Link href={`/mycabinet/${session.role}/1`}>
                   <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
                     <FaUser className='fill-blue-100' />
                   </div>
                 </Link>
-                <Link href='/mycabinet/doctor/1'>
-                  <Image src={userAvatar} alt='user avatar' className='w-10 h-10 rounded-full' width={40} height={40} />
-                </Link>
+
+                <Image src={userAvatar} alt='user avatar' className='w-10 h-10 rounded-full' width={40} height={40} />
               </>
             ) : (
               <AuthModal

@@ -2,11 +2,11 @@ import Header from './Header'
 import { getSession } from '@/lib/auth'
 
 const HeaderWrapper = async () => {
-  const { isLoggedIn } = await getSession()
+  const session = await getSession()
 
   return (
     <header>
-      <Header isLoggedIn={isLoggedIn} />
+      <Header session={session} />
     </header>
   )
 }
