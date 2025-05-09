@@ -28,7 +28,6 @@ const SignInForm = ({ handleClose }: SignInFormProps) => {
 
   const onSubmit: SubmitHandler<ISignIn> = async (values) => {
     loginPatient(values)
-    console.log('values', values)
     handleClose()
   }
 
