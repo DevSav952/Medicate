@@ -1,3 +1,5 @@
+import mongoose, { Schema } from 'mongoose'
+
 export interface Patient {
   _id: string
   email: string
@@ -13,3 +15,31 @@ export interface Patient {
   surgicalInterventions: string
   allergies: string
 }
+
+const patientSchema = new Schema({
+  userName: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  passwordHash: {
+    type: String,
+    required: true
+  },
+  dateOfBirth: String,
+  phoneNumber: String,
+  bloodType: String,
+  diabetes: String,
+  rhFactor: String,
+  bloodTransfusion: String,
+  intoleranceToMedicines: String,
+  infectiousDiseases: String,
+  surgicalInterventions: String,
+  allergies: String
+})
+
+const Patient = mongoose.models.Patients || mongoose.model('Patients', patientSchema)
+export default Patient

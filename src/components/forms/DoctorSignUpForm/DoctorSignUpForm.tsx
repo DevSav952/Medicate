@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IDoctorSignUp } from '@/interfaces/shared'
 import { P } from '@/components/ui/Typography/Typography'
+import { registerDoctor } from '@/lib/auth'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -13,6 +14,8 @@ import { FaEyeSlash } from 'react-icons/fa'
 interface DoctorSignUpFormProps {
   handleClose: () => void
 }
+
+type DoctorValue = IDoctorSignUp & { verificationCode: string }
 
 const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
   const [showPassword, setShowPassword] = useState(false)
@@ -23,12 +26,12 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
     formState: { errors },
     handleSubmit,
     watch
-  } = useForm<IDoctorSignUp>({
+  } = useForm<DoctorValue>({
     mode: 'onSubmit'
   })
 
-  const onSubmit: SubmitHandler<IDoctorSignUp> = async (values) => {
-    // login(values)
+  const onSubmit: SubmitHandler<DoctorValue> = async (values) => {
+    registerDoctor(values)
     console.log('values', values)
     // handleClose()
   }
@@ -53,14 +56,14 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
         id='userName'
         placeholder="Введіть ім'я"
         labelStyles='mt-1.5'
-        obj={register('userName', {
+        obj={register('doctorName', {
           required: { value: true, message: "Поле обов'язкове" },
           minLength: { value: 2, message: "Ім'я має мінімум 2 символів" },
           maxLength: { value: 50, message: "Ім'я має максимум 20 символів" }
         })}>
         Ім'я
       </Input>
-      {errors?.userName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.userName.message}</P>}
+      {errors?.doctorName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.doctorName.message}</P>}
 
       <Input
         type='text'
@@ -77,7 +80,9 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
         })}>
         Верифікаційний код
       </Input>
-      {errors?.userName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.userName.message}</P>}
+      {errors?.verificationCode && (
+        <P className='text-red text-sm mb-1 dark:!text-red'>{errors.verificationCode.message}</P>
+      )}
       <div className='relative flex flex-col mt-1.5'>
         <Input
           type='password'

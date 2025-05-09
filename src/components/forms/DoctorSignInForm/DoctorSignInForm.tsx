@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IDoctorSignIn } from '@/interfaces/shared'
 import { P } from '@/components/ui/Typography/Typography'
+import { loginDoctor } from '@/lib/auth'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -26,7 +27,7 @@ const DoctorSignInForm = ({ handleClose }: SignInFormProps) => {
   })
 
   const onSubmit: SubmitHandler<IDoctorSignIn> = async (values) => {
-    // login(values)
+    loginDoctor(values)
     console.log('values', values)
     // handleClose()
   }

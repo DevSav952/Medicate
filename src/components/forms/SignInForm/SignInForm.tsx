@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/Button/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { ISignIn } from '@/interfaces/shared'
 import { P } from '@/components/ui/Typography/Typography'
+import { loginPatient } from '@/lib/auth'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -26,9 +27,9 @@ const SignInForm = ({ handleClose }: SignInFormProps) => {
   })
 
   const onSubmit: SubmitHandler<ISignIn> = async (values) => {
-    // login(values)
+    loginPatient(values)
     console.log('values', values)
-    // handleClose()
+    handleClose()
   }
 
   return (
@@ -47,7 +48,7 @@ const SignInForm = ({ handleClose }: SignInFormProps) => {
       {errors?.email && <P className='text-red text-sm my-1'>{errors.email.message}</P>}
       <div className='relative flex flex-col !mt-1.5'>
         <Input
-          type='password'
+          type={showPassword ? 'text' : 'password'}
           placeholder='Пароль'
           name='password'
           id='password'

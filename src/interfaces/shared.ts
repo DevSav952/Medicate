@@ -23,7 +23,6 @@ export interface ISignUp {
 export interface IDoctorSignUp {
   email: string
   password: string
-  verificationCode: string
-  userName: string
+  doctorName: string
   confirmPassword: string
 }

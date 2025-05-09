@@ -19,7 +19,7 @@ const HEADER_ANIMATION_HEIGHT_HERO = 550
 const Header = () => {
   const [scrolled, setScrolled] = useState(false)
   const [openAuthModal, setOpenAuthModal] = useState(false)
-  const [isAuth, setIsAuth] = useState(true)
+  const [isAuth, setIsAuth] = useState(false)
   const path = usePathname()
 
   useEffect(() => {
