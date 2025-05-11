@@ -56,6 +56,7 @@ export const loginPatient = async (data: ISignIn) => {
   session.id = patientData._id
   session.userName = patientData.userName
   session.email = patientData.email
+  session.image = patientData.image
 
   await session.save()
 }
@@ -80,7 +81,8 @@ export const registerPatient = async (patient: ISignUp) => {
     intoleranceToMedicines: '',
     infectiousDiseases: '',
     surgicalInterventions: '',
-    allergies: ''
+    allergies: '',
+    image: ''
   })
 
   const patientDoc = await doc.save()
@@ -90,6 +92,7 @@ export const registerPatient = async (patient: ISignUp) => {
   session.id = patientDoc._id
   session.userName = patientDoc.userName
   session.email = patientDoc.email
+  session.image = patientDoc.image
 
   await session.save()
 }
@@ -123,6 +126,7 @@ export const loginDoctor = async (data: ISignIn) => {
   session.id = doctorData._id
   session.userName = doctorData.userName
   session.email = doctorData.email
+  session.image = doctorData.image
 
   await session.save()
 }
@@ -139,7 +143,8 @@ export const registerDoctor = async (doctor: IDoctorSignUp) => {
     passwordHash: hash,
     doctorName: doctor.doctorName,
     position: doctor.position,
-    phone: doctor.phone
+    phone: doctor.phone,
+    image: ''
   })
 
   const patientDoc = await doc.save()
@@ -149,6 +154,7 @@ export const registerDoctor = async (doctor: IDoctorSignUp) => {
   session.id = patientDoc._id
   session.userName = patientDoc.doctorName
   session.email = patientDoc.email
+  session.image = patientDoc.image
 
   await session.save()
 }

@@ -104,12 +104,20 @@ const Header = ({ session }: HeaderProps) => {
             {session.isLoggedIn ? (
               <>
                 <Link href={`/mycabinet/${session.role}/${session.id}`}>
-                  <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
-                    <FaUser className='fill-blue-100' />
-                  </div>
+                  {session.image ? (
+                    <Image
+                      src={userAvatar}
+                      alt='user avatar'
+                      className='w-10 h-10 rounded-full'
+                      width={40}
+                      height={40}
+                    />
+                  ) : (
+                    <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
+                      <FaUser className='fill-blue-100' />
+                    </div>
+                  )}
                 </Link>
-
-                <Image src={userAvatar} alt='user avatar' className='w-10 h-10 rounded-full' width={40} height={40} />
               </>
             ) : (
               <AuthModal

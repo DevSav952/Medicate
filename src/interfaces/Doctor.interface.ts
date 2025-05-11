@@ -5,7 +5,7 @@ export interface Doctor {
   email: string
   doctorName: string
   position: string
-  image: any
+  image: string
   description: string
   phone: string
 }

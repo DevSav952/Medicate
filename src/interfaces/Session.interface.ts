@@ -4,4 +4,5 @@ export interface Session {
   userName?: string
   email?: string
   role?: 'patient' | 'doctor'
+  image?: string
 }
