@@ -98,7 +98,7 @@ const DoctorProfile = ({ params }: DoctorProfileProps) => {
   return (
     <div className='shadow-custom-right bg-white py-[30px] px-4'>
       <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
-        <EditDoctorModal />
+        {doctorProfile && <EditDoctorModal doctor={doctorProfile} />}
 
         {doctorProfile?.image ? (
           <Image src={userAvatar} width={80} height={80} alt='User avatar' className='w-[80px] h-[80px] rounded-full' />

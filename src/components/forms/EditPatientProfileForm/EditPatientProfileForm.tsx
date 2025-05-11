@@ -1,11 +1,14 @@
 'use client'
 
 import { Input } from '@/components/ui/Input/Input'
-import { useState } from 'react'
 import { Button } from '@/components/ui/Button/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Patient } from '@/interfaces/Patient.interface'
 import { P } from '@/components/ui/Typography/Typography'
+import { updatePatientById } from '@/lib/patient'
+import { getSession } from '@/lib/auth'
+import { useEffect, useState } from 'react'
+import { Session } from '@/interfaces/Session.interface'
 
 interface EditPatientProfileFormProps {
   patient: Patient
@@ -45,6 +48,12 @@ const rhOptions = [
 ]
 
 const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileFormProps) => {
+  const [session, setSession] = useState<Session | null>(null)
+
+  useEffect(() => {
+    getSession().then((session) => setSession(session))
+  }, [])
+
   const {
     register,
     formState: { errors },
@@ -70,9 +79,13 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
   })
 
   const onSubmit: SubmitHandler<PatientValues> = async (values) => {
-    // login(values)
-    console.log('values', values)
-    // handleClose()
+    if (!session) return
+
+    const result = await updatePatientById({ _id: session.id ?? '', ...values })
+
+    if (result) {
+      handleClose()
+    }
   }
 
   return (

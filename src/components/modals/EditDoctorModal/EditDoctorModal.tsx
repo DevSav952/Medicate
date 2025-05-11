@@ -5,12 +5,17 @@ import { Modal } from '@/components/ui/Modal/Modal'
 import { useState } from 'react'
 import { mockedDoctors } from '@/mocks/Doctors.mock'
 import EditDoctorProfileForm from '@/components/forms/EditDoctorProfileForm/EditDoctorProfileForm'
+import { Doctor } from '@/interfaces/Doctor.interface'
 
 import { MdEdit } from 'react-icons/md'
 
 const mockedDoctor = mockedDoctors[0]
 
-const EditDoctorModal = () => {
+interface EditDoctorModalProps {
+  doctor: Doctor
+}
+
+const EditDoctorModal = ({ doctor }: EditDoctorModalProps) => {
   const [isOpen, setOpen] = useState(false)
 
   const handleOpenAuthModal = () => setOpen(true)
@@ -25,7 +30,7 @@ const EditDoctorModal = () => {
       />
       <Modal isOpen={isOpen} handleClose={handleCloseAuthModal} className='h-[700px] lg:w-[960px]'>
         <div className='h-full w-full'>
-          <EditDoctorProfileForm handleClose={handleCloseAuthModal} doctor={mockedDoctor} />
+          <EditDoctorProfileForm handleClose={handleCloseAuthModal} doctor={doctor} />
         </div>
       </Modal>
     </>

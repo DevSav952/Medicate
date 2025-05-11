@@ -5,6 +5,10 @@ import { Input } from '@/components/ui/Input/Input'
 import { P } from '@/components/ui/Typography/Typography'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import { SubmitHandler, useForm } from 'react-hook-form'
+import { Session } from '@/interfaces/Session.interface'
+import { updateDoctorById } from '@/lib/doctor'
+import { getSession } from '@/lib/auth'
+import { useEffect, useState } from 'react'
 
 interface EditPatientProfileFormProps {
   doctor: Doctor
@@ -14,6 +18,12 @@ interface EditPatientProfileFormProps {
 type DoctorValues = Omit<Doctor, '_id' | 'description'>
 
 const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormProps) => {
+  const [session, setSession] = useState<Session | null>(null)
+
+  useEffect(() => {
+    getSession().then((session) => setSession(session))
+  }, [])
+
   const {
     register,
     formState: { errors },
@@ -31,9 +41,15 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
   })
 
   const onSubmit: SubmitHandler<DoctorValues> = async (values) => {
-    // login(values)
+    if (!session) return
+
     console.log('values', values)
-    // handleClose()
+
+    const result = await updateDoctorById({ _id: session.id ?? '', description: '', ...values })
+
+    if (result) {
+      handleClose()
+    }
   }
 
   return (

@@ -4,11 +4,15 @@ import { IconButton } from '@/components/ui/IconButton/IconButton'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useState } from 'react'
 import EditPatientProfileForm from '@/components/forms/EditPatientProfileForm/EditPatientProfileForm'
-import { mockedPatient } from '@/mocks/Patient.mock'
+import { Patient } from '@/interfaces/Patient.interface'
 
 import { MdEdit } from 'react-icons/md'
 
-const EditProfileModal = () => {
+interface EditProfileModalProps {
+  patient: Patient
+}
+
+const EditProfileModal = ({ patient }: EditProfileModalProps) => {
   const [isOpen, setOpen] = useState(false)
 
   const handleOpenAuthModal = () => setOpen(true)
@@ -23,7 +27,7 @@ const EditProfileModal = () => {
       />
       <Modal isOpen={isOpen} handleClose={handleCloseAuthModal} className='h-[700px] lg:w-[960px]'>
         <div className='h-[calc(100%-50px)] overflow-y-scroll w-full mt-[-50px]'>
-          <EditPatientProfileForm handleClose={handleCloseAuthModal} patient={mockedPatient} />
+          <EditPatientProfileForm handleClose={handleCloseAuthModal} patient={patient} />
         </div>
       </Modal>
     </>
