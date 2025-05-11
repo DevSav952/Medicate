@@ -36,8 +36,6 @@ const Header = ({ session }: HeaderProps) => {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  console.log(scrolled)
-
   const handleOpenAuthModal = () => {
     setOpenAuthModal(true)
   }
