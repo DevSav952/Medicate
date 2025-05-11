@@ -3,7 +3,7 @@
 import PageHeading from '@/components/PageHeading/PageHeading'
 import { Container } from '@/components/ui/Container/Container'
 import { H2, H6, P } from '@/components/ui/Typography/Typography'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Tabs from '@/components/ui/Tabs/Tabs'
 import Image from 'next/image'
 import { mockedAppointments } from '@/mocks/Appointments.mock'
@@ -13,6 +13,7 @@ import EditDoctorModal from '@/components/modals/EditDoctorModal/EditDoctorModal
 import { fetcher } from '@/utils/fetcher'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import useSWR from 'swr'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -136,7 +137,14 @@ interface DoctorProfilePageProps {
 }
 
 const DoctorProfilePage = ({ params }: DoctorProfilePageProps) => {
-  const [activeTab, setActiveTab] = useState<string>(TABS_ENUM.APPOINTMENTS)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const tab = searchParams.get('tab') ?? TABS_ENUM.APPOINTMENTS
+  const [activeTab, setActiveTab] = useState<string>(tab)
+
+  useEffect(() => {
+    setActiveTab(tab)
+  }, [tab])
 
   return (
     <>
@@ -146,7 +154,14 @@ const DoctorProfilePage = ({ params }: DoctorProfilePageProps) => {
           <DoctorProfile params={params} />
         </div>
         <div className='lg:col-start-1 lg:col-end-2 lg:row-start-1'>
-          <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Tabs
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={(tab) => {
+              setActiveTab(tab)
+              router.push(`?tab=${tab}`)
+            }}
+          />
         </div>
       </Container>
     </>
