@@ -10,6 +10,9 @@ import { mockedAppointments } from '@/mocks/Appointments.mock'
 import DoctorAppointmentCard from '@/components/doctor/DoctorAppointmentCard/DoctorAppointmentCard'
 import dayjs from 'dayjs'
 import EditDoctorModal from '@/components/modals/EditDoctorModal/EditDoctorModal'
+import { fetcher } from '@/utils/fetcher'
+import { Doctor } from '@/interfaces/Doctor.interface'
+import useSWR from 'swr'
 
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -74,36 +77,50 @@ const tabs = [
   { id: TABS_ENUM.CALENDAR, label: 'Календар', content: <CalendarTab /> }
 ]
 
-const DoctorProfile = () => {
-  const [isAuth, setIsAuth] = useState(true)
+interface DoctorProfileProps {
+  params: {
+    doctorId: string
+  }
+}
+
+const DoctorProfile = ({ params }: DoctorProfileProps) => {
+  const { doctorId } = params
+
+  const { data: doctorProfile } = useSWR<Doctor>(`/api/doctor/${doctorId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
 
   return (
     <div className='shadow-custom-right bg-white py-[30px] px-4'>
       <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
         <EditDoctorModal />
 
-        {isAuth ? (
+        {doctorProfile?.image ? (
           <Image src={userAvatar} width={80} height={80} alt='User avatar' className='w-[80px] h-[80px] rounded-full' />
         ) : (
           <div className='flex items-center justify-center w-[80px] h-[80px] bg-blue-100 rounded-full'>
             <FaUser size={24} fill='#fff' />
           </div>
         )}
-        <P className='px-4 line-clamp-2 text-lg font-bold mt-2'>Іван Петренко</P>
+        <P className='px-4 line-clamp-2 text-lg font-bold mt-2'>{doctorProfile?.doctorName}</P>
         <div className='w-full'>
           <H2 className='text-lg mb-4 mt-6'>Особисті дані</H2>
           <ul className='flex flex-col gap-3 md:grid md:grid-cols-3 lg:grid-cols-1'>
             <li>
               <P className='mb-1 text-xs'>Cпеціалізація</P>
-              <H6 className='text-lg'>Дерматолог</H6>
+              <H6 className='text-lg'>{doctorProfile?.position}</H6>
             </li>
             <li>
               <P className='mb-1 text-xs'>E-mail</P>
-              <H6 className='text-lg'>test@gmail.com</H6>
+              <H6 className='text-lg'>{doctorProfile?.email}</H6>
             </li>
             <li>
               <P className='mb-1 text-xs'>Номер телефону</P>
-              <H6 className='text-lg'>0991111111</H6>
+              <H6 className='text-lg'>{doctorProfile?.phone}</H6>
             </li>
           </ul>
         </div>
@@ -112,7 +129,13 @@ const DoctorProfile = () => {
   )
 }
 
-const DoctorProfilePage = () => {
+interface DoctorProfilePageProps {
+  params: {
+    doctorId: string
+  }
+}
+
+const DoctorProfilePage = ({ params }: DoctorProfilePageProps) => {
   const [activeTab, setActiveTab] = useState<string>(TABS_ENUM.APPOINTMENTS)
 
   return (
@@ -120,7 +143,7 @@ const DoctorProfilePage = () => {
       <PageHeading title='Ваш профіль' />
       <Container className='lg:grid lg:grid-cols-[1fr_270px] lg:gap-4 xl:grid-cols-[1fr_320px]'>
         <div className='mb-[30px] lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:mb-0'>
-          <DoctorProfile />
+          <DoctorProfile params={params} />
         </div>
         <div className='lg:col-start-1 lg:col-end-2 lg:row-start-1'>
           <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />

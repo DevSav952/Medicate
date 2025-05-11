@@ -103,7 +103,7 @@ const Header = ({ session }: HeaderProps) => {
           <div className='flex items-center gap-4 ml-4'>
             {session.isLoggedIn ? (
               <>
-                <Link href={`/mycabinet/${session.role}/1`}>
+                <Link href={`/mycabinet/${session.role}/${session.id}`}>
                   <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
                     <FaUser className='fill-blue-100' />
                   </div>

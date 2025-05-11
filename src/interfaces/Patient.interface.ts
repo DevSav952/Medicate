@@ -14,6 +14,7 @@ export interface Patient {
   infectiousDiseases: string
   surgicalInterventions: string
   allergies: string
+  image?: string
 }
 
 const patientSchema = new Schema({
@@ -38,7 +39,8 @@ const patientSchema = new Schema({
   intoleranceToMedicines: String,
   infectiousDiseases: String,
   surgicalInterventions: String,
-  allergies: String
+  allergies: String,
+  image: String
 })
 
 const Patient = mongoose.models.Patients || mongoose.model('Patients', patientSchema)
