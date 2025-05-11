@@ -3,7 +3,7 @@
 import PageHeading from '@/components/PageHeading/PageHeading'
 import { Container } from '@/components/ui/Container/Container'
 import { H2, H4, H6, P } from '@/components/ui/Typography/Typography'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Tabs from '@/components/ui/Tabs/Tabs'
 import Image from 'next/image'
 import { mockedAppointments } from '@/mocks/Appointments.mock'
@@ -18,6 +18,7 @@ import EditProfileModal from '@/components/modals/EditProfileModal/EditProfileMo
 import useSWR from 'swr'
 import { Patient } from '@/interfaces/Patient.interface'
 import { fetcher } from '@/utils/fetcher'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -44,7 +45,7 @@ const AppointmentTab = () => {
     <>
       <div className='mt-6 flex justify-between'>
         <H6>Записатися на прийом</H6>
-        <StyledLinkButton href='/' className='bg-blue-100'>
+        <StyledLinkButton href='/appointments/add' className='bg-blue-100'>
           <FaPlus fill='#fff' />
         </StyledLinkButton>
       </div>
@@ -91,7 +92,7 @@ const AnalyzesTab = () => {
     <>
       <div className='mt-6 flex justify-between'>
         <H6>Додати аналіз</H6>
-        <StyledLinkButton href='/' className='bg-blue-100'>
+        <StyledLinkButton href='/analyses/add' className='bg-blue-100'>
           <FaPlus fill='#fff' />
         </StyledLinkButton>
       </div>
@@ -258,7 +259,15 @@ interface PatientProfilePageProps {
 }
 
 const PatientProfilePage = ({ params }: PatientProfilePageProps) => {
-  const [activeTab, setActiveTab] = useState<string>(TABS_ENUM.APPOINTMENTS)
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const tab = searchParams.get('tab') ?? TABS_ENUM.APPOINTMENTS
+  const [activeTab, setActiveTab] = useState<string>(tab)
+
+  useEffect(() => {
+    setActiveTab(tab)
+  }, [tab])
+
   return (
     <>
       <PageHeading title='Ваш профіль' />
@@ -267,7 +276,14 @@ const PatientProfilePage = ({ params }: PatientProfilePageProps) => {
           <PatientProfile params={params} />
         </div>
         <div className='lg:col-start-1 lg:col-end-2 lg:row-start-1'>
-          <Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
+          <Tabs
+            tabs={tabs}
+            activeTab={activeTab}
+            setActiveTab={(tab) => {
+              setActiveTab(tab)
+              router.push(`?tab=${tab}`)
+            }}
+          />
         </div>
       </Container>
     </>

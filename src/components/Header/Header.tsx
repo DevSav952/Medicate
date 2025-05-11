@@ -103,7 +103,7 @@ const Header = ({ session }: HeaderProps) => {
           <div className='flex items-center gap-4 ml-4'>
             {session.isLoggedIn ? (
               <>
-                <Link href={`/mycabinet/${session.role}/${session.id}`}>
+                <Link href={`/mycabinet/${session.role}/${session.id}?tab=appointments`}>
                   {session.image ? (
                     <Image
                       src={userAvatar}
