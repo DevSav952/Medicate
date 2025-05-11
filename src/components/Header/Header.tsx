@@ -14,7 +14,7 @@ import { twMerge } from 'tailwind-merge'
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
 
-const HEADER_ANIMATION_HEIGHT = 270
+const HEADER_ANIMATION_HEIGHT = 220
 const HEADER_ANIMATION_HEIGHT_HERO = 550
 
 interface HeaderProps {
@@ -35,6 +35,8 @@ const Header = ({ session }: HeaderProps) => {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  console.log(scrolled)
 
   const handleOpenAuthModal = () => {
     setOpenAuthModal(true)
