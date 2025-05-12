@@ -14,6 +14,7 @@ import { fetcher } from '@/utils/fetcher'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import useSWR from 'swr'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Calendar from '@/components/Calendar/Calendar'
 
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -70,7 +71,11 @@ const AppointmentsTab = () => {
 }
 
 const CalendarTab = () => {
-  return <P>Календар</P>
+  return (
+    <>
+      <Calendar />
+    </>
+  )
 }
 
 const tabs = [
