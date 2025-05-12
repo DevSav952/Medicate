@@ -47,7 +47,7 @@ const AuthModal = ({ isOpen, handleOpenAuthModal, handleCloseAuthModal }: AuthMo
                   {openedModal === 'patient-sign-in' ? (
                     <>
                       <div>
-                        <H2 className='mb-2 text-[32px]'>З поверненням!</H2>
+                        <H2 className='mb-2 text-[32px]'>З поверненням, пацієнте!</H2>
                         <P className='mb-2'>Будь ласка, внесiть свої дані для входу.</P>
 
                         <SignInForm handleClose={handleCloseAuthModal} />
@@ -75,7 +75,7 @@ const AuthModal = ({ isOpen, handleOpenAuthModal, handleCloseAuthModal }: AuthMo
                   ) : (
                     <>
                       <div>
-                        <H2 className='mb-2 text-[32px]'>Вітаємо!</H2>
+                        <H2 className='mb-2 text-[32px]'>Вітаємо, пацієнте!</H2>
                         <P className='mb-2'>Будь ласка, внесiть свої дані для реєстрації.</P>
 
                         <SignUpForm handleClose={handleCloseAuthModal} />
@@ -120,7 +120,7 @@ const AuthModal = ({ isOpen, handleOpenAuthModal, handleCloseAuthModal }: AuthMo
                   {openedModal === 'doctor-sign-in' ? (
                     <>
                       <div>
-                        <H2 className='mb-2 text-[32px]'>З поверненням!</H2>
+                        <H2 className='mb-2 text-[32px]'>З поверненням, лікарю!</H2>
                         <P className='mb-2'>Будь ласка, внесiть свої дані для входу.</P>
 
                         <DoctorSignInForm handleClose={handleCloseAuthModal} />
@@ -148,7 +148,7 @@ const AuthModal = ({ isOpen, handleOpenAuthModal, handleCloseAuthModal }: AuthMo
                   ) : (
                     <>
                       <div className='mt-[-16px]'>
-                        <H2 className='mb-2 text-[32px]'>Вітаємо!</H2>
+                        <H2 className='mb-2 text-[32px]'>Вітаємо, лікарю!</H2>
                         <P className='mb-2'>Будь ласка, внесiть свої дані для реєстрації.</P>
 
                         <DoctorSignUpForm handleClose={handleCloseAuthModal} />
