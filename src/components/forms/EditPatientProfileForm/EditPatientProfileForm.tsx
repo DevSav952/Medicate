@@ -9,6 +9,8 @@ import { updatePatientById } from '@/lib/patient'
 import { getSession } from '@/lib/auth'
 import { useEffect, useState } from 'react'
 import { Session } from '@/interfaces/Session.interface'
+import { DatePicker } from '@/components/ui/DatePicker/date-picker'
+import dayjs from 'dayjs'
 
 interface EditPatientProfileFormProps {
   patient: Patient
@@ -122,15 +124,14 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
       </div>
 
       <div className='mb-4'>
-        {/* @TODO Add date input mask  */}
-        <Input
-          type='text'
-          placeholder='Введіть дату народження'
-          name='dateOfBirth'
-          id='dateOfBirth'
-          obj={register('dateOfBirth')}>
+        <label htmlFor='dateOfBirth' className='block font-regular mb-2'>
           Дата народження
-        </Input>
+        </label>
+        <DatePicker
+          initialDate={patient.dateOfBirth}
+          onChange={(date) => setValue('dateOfBirth', dayjs(date).format('YYYY-MM-DD'))}
+          calendarModalStyles='w-full'
+        />
       </div>
 
       <div className='mb-4'>

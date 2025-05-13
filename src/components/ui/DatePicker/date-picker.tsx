@@ -15,13 +15,25 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 
 interface DatePickerProps {
   startYear?: number
+  initialDate?: string
   endYear?: number
+  calendarModalStyles?: string
+  onChange?: (date: Date) => void
 }
 export function DatePicker({
   startYear = getYear(new Date()) - 100,
-  endYear = getYear(new Date()) + 100
+  endYear = getYear(new Date()) + 100,
+  initialDate,
+  calendarModalStyles,
+  onChange
 }: DatePickerProps) {
-  const [date, setDate] = React.useState<Date>(new Date())
+  const [date, setDate] = React.useState<Date>(initialDate ? new Date(initialDate) : new Date())
+
+  React.useEffect(() => {
+    if (onChange) {
+      onChange(date)
+    }
+  }, [date, onChange])
 
   const months = [
     'Січень',
@@ -60,18 +72,18 @@ export function DatePicker({
       <PopoverTrigger asChild>
         <Button
           variant={'outline'}
-          className={cn('w-[250px] justify-start text-left font-normal', !date && 'text-muted-foreground')}>
+          className={cn('w-full justify-start text-left font-normal', !date && 'text-muted-foreground')}>
           <FaCalendarAlt className='mr-2 h-4 w-4 text-blue-100' />
           {date ? format(date, 'PPP', { locale: uk }) : <span> дату</span>}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-auto p-0 bg-white'>
+      <PopoverContent className={cn('p-0 bg-white z-[120]', calendarModalStyles)}>
         <div className='flex justify-between p-2'>
           <Select onValueChange={handleMonthChange} value={months[getMonth(date)]}>
             <SelectTrigger className='w-[110px]'>
               <SelectValue placeholder='Month' />
             </SelectTrigger>
-            <SelectContent className='bg-white'>
+            <SelectContent className='bg-white z-[121]'>
               {months.map((month) => (
                 <SelectItem key={month} value={month}>
                   {month}
@@ -83,7 +95,7 @@ export function DatePicker({
             <SelectTrigger className='w-[110px]'>
               <SelectValue placeholder='Year' />
             </SelectTrigger>
-            <SelectContent className='bg-white'>
+            <SelectContent className='bg-white z-[121]'>
               {years.map((year) => (
                 <SelectItem key={year} value={year.toString()}>
                   {year}
@@ -100,6 +112,7 @@ export function DatePicker({
           initialFocus
           month={date}
           onMonthChange={setDate}
+          className='w-full'
         />
       </PopoverContent>
     </Popover>
