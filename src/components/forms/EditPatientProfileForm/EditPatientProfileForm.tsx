@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react'
 import { Session } from '@/interfaces/Session.interface'
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
 import dayjs from 'dayjs'
+import { Select } from '@/components/ui/Select/Select'
 
 interface EditPatientProfileFormProps {
   patient: Patient
@@ -147,20 +148,14 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
       </div>
 
       <div className='mb-4'>
-        <label htmlFor='bloodType' className='block font-regular mb-2'>
-          Група крові
-        </label>
-        <select
+        <Select
           id='bloodType'
+          name='bloodType'
           value={watch('bloodType') ?? ''}
-          onChange={(e) => setValue('bloodType', e.target.value)}
-          className='font-light text-[#616262] px-3 py-1.5 rounded border border-grey-400 w-full'>
-          {bloodOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          options={bloodOptions}
+          onChange={(e) => setValue('bloodType', e.target.value)}>
+          Група крові
+        </Select>
       </div>
 
       <div className='mb-4'>
@@ -170,20 +165,14 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
       </div>
 
       <div className='mb-4'>
-        <label htmlFor='rhFactor' className='block font-regular mb-2'>
-          Резус фактор
-        </label>
-        <select
+        <Select
           id='rhFactor'
+          name='rhFactor'
           value={watch('rhFactor') ?? ''}
-          onChange={(e) => setValue('rhFactor', e.target.value)}
-          className='font-light text-[#616262] px-3 py-1.5 rounded border border-grey-400 w-full'>
-          {rhOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+          options={rhOptions}
+          onChange={(e) => setValue('rhFactor', e.target.value)}>
+          Резус фактор
+        </Select>
       </div>
 
       <div className='mb-4'>

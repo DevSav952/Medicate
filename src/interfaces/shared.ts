@@ -28,3 +28,8 @@ export interface IDoctorSignUp {
   position: string
   phone: string
 }
+
+export interface SelectOption {
+  label: string
+  value: string
+}
