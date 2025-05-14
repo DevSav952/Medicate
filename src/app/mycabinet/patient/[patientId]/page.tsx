@@ -6,7 +6,6 @@ import { H2, H4, H6, P } from '@/components/ui/Typography/Typography'
 import { useEffect, useMemo, useState } from 'react'
 import Tabs from '@/components/ui/Tabs/Tabs'
 import Image from 'next/image'
-import { mockedAppointments } from '@/mocks/Appointments.mock'
 import dayjs from 'dayjs'
 import AppointmentCard from '@/components/AppointmentCard/AppointmentCard'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
@@ -18,7 +17,8 @@ import EditProfileModal from '@/components/modals/EditProfileModal/EditProfileMo
 import useSWR from 'swr'
 import { Patient } from '@/interfaces/Patient.interface'
 import { fetcher } from '@/utils/fetcher'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams, useParams } from 'next/navigation'
+import { IAppointment } from '@/interfaces/Appointment.interface'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
@@ -31,14 +31,25 @@ const TABS_ENUM = {
 }
 
 const AppointmentTab = () => {
+  const params = useParams()
+  const { patientId } = params
+
+  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/patient/${patientId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
   const futureAppointments = useMemo(
-    () => mockedAppointments.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())),
-    [mockedAppointments]
+    () => appointments?.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())) || [],
+    [appointments]
   )
 
   const pastAppointments = useMemo(
-    () => mockedAppointments.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())),
-    [mockedAppointments]
+    () => appointments?.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())) || [],
+    [appointments]
   )
 
   return (

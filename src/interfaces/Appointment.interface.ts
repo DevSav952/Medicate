@@ -3,16 +3,56 @@ import mongoose, { Schema } from 'mongoose'
 
 export interface IAppointment {
   _id: string
-  patientId: string
-  patientName: string
-  doctorId: string
-  doctorName: string
-  speciality: string
+  patient: {
+    _id: string
+    patientName: string
+    dateOfBirth: string
+    bloodType: string
+    diabetes: string
+    rhFactor: string
+    bloodTransfusion: string
+    intoleranceToMedicines: string
+    infectiousDiseases: string
+    surgicalInterventions: string
+    allergies: string
+  }
+  doctor: {
+    _id: string
+    doctorName: string
+    position: string
+  }
   startTime: string
   endTime: string
   description?: string
   analyzes?: Analyses[]
 }
+
+export interface IDoctoAppointment {
+  _id: string
+  patient: {
+    _id: string
+    patientName: string
+    dateOfBirth: string
+    bloodType: string
+    diabetes: string
+    rhFactor: string
+    bloodTransfusion: string
+    intoleranceToMedicines: string
+    infectiousDiseases: string
+    surgicalInterventions: string
+    allergies: string
+  }
+  doctor: {
+    _id: string
+    doctorName: string
+    position: string
+  }
+  startTime: string
+  endTime: string
+  description?: string
+  analyzes?: Analyses[]
+}
+
 export interface CreateAppointment {
   patientId: string
   doctorId: string

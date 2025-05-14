@@ -13,11 +13,12 @@ import EditDoctorModal from '@/components/modals/EditDoctorModal/EditDoctorModal
 import { fetcher } from '@/utils/fetcher'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import useSWR from 'swr'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import Calendar from '@/components/Calendar/Calendar'
 
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
+import { IAppointment } from '@/interfaces/Appointment.interface'
 
 const TABS_ENUM = {
   APPOINTMENTS: 'appointments',
@@ -25,13 +26,24 @@ const TABS_ENUM = {
 }
 
 const AppointmentsTab = () => {
+  const params = useParams()
+  const { patientId } = params
+
+  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/doctor/${patientId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
   const futureAppointments = useMemo(
-    () => mockedAppointments.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())),
+    () => appointments?.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())) || [],
     [mockedAppointments]
   )
 
   const pastAppointments = useMemo(
-    () => mockedAppointments.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())),
+    () => appointments?.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())) || [],
     [mockedAppointments]
   )
 
