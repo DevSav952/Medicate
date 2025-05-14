@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { SelectOption } from '@/interfaces/shared'
+import { twMerge } from 'tailwind-merge'
 
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa'
-import { twMerge } from 'tailwind-merge'
 
 interface DropdownProps {
   options: SelectOption[]
