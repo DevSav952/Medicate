@@ -1,12 +1,14 @@
 'use client'
 
 import { Input } from '@/components/ui/Input/Input'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/Button/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IDoctorSignUp } from '@/interfaces/shared'
 import { P } from '@/components/ui/Typography/Typography'
 import { registerDoctor } from '@/lib/auth'
+import { doctorSpecialties } from '@/mocks/shared'
+import Dropdown from '@/components/ui/Dropdown/Dropdown'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -25,7 +27,8 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
     register,
     formState: { errors },
     handleSubmit,
-    watch
+    watch,
+    setValue
   } = useForm<DoctorValue>({
     mode: 'onSubmit'
   })
@@ -66,22 +69,17 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
         </Input>
         {errors?.doctorName && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.doctorName.message}</P>}
 
-        <Input
-          type='text'
-          name='position'
-          id='position'
-          placeholder='Ваша спеціальність'
-          labelStyles='mt-1.5'
-          obj={register('position')}>
-          Спеціальність
-        </Input>
+        <div className='mt-1.5'>
+          <label className='block font-regular mb-2'>Спеціальність</label>
+          <Dropdown options={doctorSpecialties} onChange={(value) => setValue('position', value)} />
+        </div>
 
         {/* @TODO Add phoneNumber input mask  */}
         <Input
           type='text'
           name='phone'
           id='phone'
-          placeholder='Ваша спеціальність'
+          placeholder='Номер телефону'
           labelStyles='mt-1.5'
           obj={register('phone')}>
           Номер телефону

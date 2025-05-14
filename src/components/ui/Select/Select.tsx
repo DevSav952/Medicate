@@ -11,19 +11,22 @@ interface SelectProps {
   value?: string
   obj?: object
   labelStyles?: string
+  selectStyles?: string
   options: SelectOption[]
+  size?: number
 }
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
-  ({ name, id, children, required, obj, onChange, value, labelStyles, options }, ref) => {
+  ({ name, id, children, required, obj, onChange, value, labelStyles, options, selectStyles, size }, ref) => {
     return (
       <>
         <label className={twMerge('block font-regular mb-2', labelStyles)} htmlFor={id}>
           {children}
         </label>
         <select
+          size={size}
           required={required}
-          className='font-regular opacity-90 px-3 py-1.5 rounded border border-grey-400 w-full'
+          className={twMerge('font-regular opacity-90 px-3 py-1.5 rounded border border-grey-400 w-full', selectStyles)}
           name={name}
           id={id}
           value={value}
