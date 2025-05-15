@@ -25,7 +25,6 @@ import userAvatar from '@/assets/about-img5.jpg'
 
 const TABS_ENUM = {
   APPOINTMENTS: 'appointments',
-  TREATMENT: 'treatment',
   ANALYZES: 'analyzes',
   BILLING: 'billing'
 }
@@ -92,10 +91,6 @@ const AppointmentTab = () => {
       )}
     </>
   )
-}
-
-const TreatmentTab = () => {
-  return <P>Лікування</P>
 }
 
 const AnalyzesTab = () => {
@@ -168,7 +163,6 @@ const BillingTab = () => {
 
 const tabs = [
   { id: TABS_ENUM.APPOINTMENTS, label: 'Записи на прийом', content: <AppointmentTab /> },
-  { id: TABS_ENUM.TREATMENT, label: 'Лікування', content: <TreatmentTab /> },
   { id: TABS_ENUM.ANALYZES, label: 'Аналізи', content: <AnalyzesTab /> },
   { id: TABS_ENUM.BILLING, label: 'Оплата', content: <BillingTab /> }
 ]
