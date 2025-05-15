@@ -7,6 +7,7 @@ type StyledLinkButtonProps = {
   className?: string
   variant?: 'normal' | 'outline'
   href: string
+  target?: string
 }
 
 const base =
@@ -18,8 +19,8 @@ const variants = {
 } as const
 
 export const StyledLinkButton = forwardRef<HTMLAnchorElement, StyledLinkButtonProps>(
-  ({ children, className, variant = 'normal', href }, ref) => (
-    <Link href={href} className={twMerge(base, variants[variant], className)} ref={ref}>
+  ({ children, className, variant = 'normal', href, target }, ref) => (
+    <Link href={href} target={target} className={twMerge(base, variants[variant], className)} ref={ref}>
       {children}
     </Link>
   )

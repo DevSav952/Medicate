@@ -16,6 +16,7 @@ import { Session } from '@/interfaces/Session.interface'
 import { getSession } from '@/lib/auth'
 import { createAppointment } from '@/lib/appointments'
 import { Button } from '@/components/ui/Button/Button'
+import { Input } from '@/components/ui/Input/Input'
 
 // @TODO: block this page for non auth users
 // @TODO: add validation for form
@@ -77,9 +78,10 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
   } = useForm<AppointmentValues>({
     mode: 'onSubmit',
     defaultValues: {
-      patientId: session?.id || '',
+      patient: session?.id || '',
+      reason: appointment?.reason || '',
       startTime: appointment?.startTime || '',
-      doctorId: appointment?.doctorId || '',
+      doctor: appointment?.doctor._id || '',
       description: appointment?.description || ''
     }
   })
@@ -87,7 +89,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
   const onSubmit: SubmitHandler<AppointmentValues> = async (values) => {
     const newAppointment: CreateAppointment = {
       ...values,
-      patientId: session?.id ?? '',
+      patient: session?.id ?? '',
       startTime: dayjs(selectedDate)
         .add(Number(values.startTimeHours.slice(0, 2)), 'hour')
         .toISOString(),
@@ -101,6 +103,12 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='mt-1.5'>
+        <Input name='reason' placeholder='Причина візиту' id='reason' obj={register('reason')}>
+          Причина візиту
+        </Input>
+      </div>
+
       <div className='mt-1.5 w-full'>
         <label className='block font-regular mb-2'>Оберіть спеціальність лікаря</label>
         <Dropdown
@@ -117,7 +125,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
         <Dropdown
           options={doctorOptions}
           onChange={(option) => {
-            setValue('doctorId', option)
+            setValue('doctor', option)
             setSearchQuery(option)
           }}
           disabled={!searchQuery}

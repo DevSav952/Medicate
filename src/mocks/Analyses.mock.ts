@@ -2,10 +2,42 @@ import { Analyses } from '@/interfaces/Analyses.interface'
 
 export const mockedAnalyzes: Analyses[] = [
   {
-    _id: '3bfb2b3b-09ee-4055-a74c-ba5f341bb1e1',
-    userId: '3bfb2b3b-09ee-4055-a74c-ba5f341bb1e1',
-    analysisName: 'Аналіз крові',
-    createdAt: '2023-06-04T10:00:00Z',
-    updatedAt: '2023-06-04T11:00:00Z'
+    _id: '1a2b3c4d5e',
+    userId: 'user123',
+    analysisName: 'Blood Test',
+    description: 'Complete blood count analysis',
+    createdAt: '2025-05-10T08:30:00.000Z',
+    updatedAt: '2025-05-10T08:30:00.000Z'
+  },
+  {
+    _id: '2b3c4d5e6f',
+    userId: 'user456',
+    analysisName: 'X-Ray Chest',
+    description: 'Chest X-Ray for lung diagnostics',
+    createdAt: '2025-05-11T10:15:00.000Z',
+    updatedAt: '2025-05-11T10:20:00.000Z'
+  },
+  {
+    _id: '3c4d5e6f7g',
+    userId: 'user789',
+    analysisName: 'Urine Test',
+    createdAt: '2025-05-12T09:00:00.000Z',
+    updatedAt: '2025-05-12T09:00:00.000Z'
+  },
+  {
+    _id: '4d5e6f7g8h',
+    userId: 'user321',
+    analysisName: 'MRI Brain',
+    description: 'Detailed scan of brain for neurological issues',
+    createdAt: '2025-05-13T11:45:00.000Z',
+    updatedAt: '2025-05-13T11:45:00.000Z'
+  },
+  {
+    _id: '5e6f7g8h9i',
+    userId: 'user654',
+    analysisName: 'Allergy Test',
+    description: 'Check for food and seasonal allergies',
+    createdAt: '2025-05-14T13:20:00.000Z',
+    updatedAt: '2025-05-14T13:25:00.000Z'
   }
 ]

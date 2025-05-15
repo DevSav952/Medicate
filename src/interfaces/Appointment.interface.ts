@@ -1,5 +1,6 @@
 import { Analyses } from './Analyses.interface'
 import mongoose, { Schema } from 'mongoose'
+import { IMedicine } from './Medicine.interface'
 
 export interface IAppointment {
   _id: string
@@ -21,43 +22,25 @@ export interface IAppointment {
     doctorName: string
     position: string
   }
+  reason: string
   startTime: string
   endTime: string
   description?: string
   analyzes?: Analyses[]
-}
 
-export interface IDoctoAppointment {
-  _id: string
-  patient: {
-    _id: string
-    patientName: string
-    dateOfBirth: string
-    bloodType: string
-    diabetes: string
-    rhFactor: string
-    bloodTransfusion: string
-    intoleranceToMedicines: string
-    infectiousDiseases: string
-    surgicalInterventions: string
-    allergies: string
-  }
-  doctor: {
-    _id: string
-    doctorName: string
-    position: string
-  }
-  startTime: string
-  endTime: string
-  description?: string
-  analyzes?: Analyses[]
+  // Doctors fields
+
+  medicine?: IMedicine[]
+  diagnosis?: string
+  treatment?: string
 }
 
 export interface CreateAppointment {
-  patientId: string
-  doctorId: string
+  patient: string
+  doctor: string
   startTime: string
   endTime: string
+  reason: string
   description?: string
   analyzes?: Analyses[]
 }
@@ -81,7 +64,12 @@ const appointmentSchema = new Schema({
     type: String,
     required: true
   },
+  reason: {
+    type: String,
+    required: true
+  },
   description: String
+
   //  analyzes: {
   //   type: Schema.Types.ObjectId,
   //   ref: 'Doctors',
