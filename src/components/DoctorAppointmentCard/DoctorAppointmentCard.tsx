@@ -1,4 +1,4 @@
-import { Appointment } from '@/interfaces/Appointment.interface'
+import { IAppointment } from '@/interfaces/Appointment.interface'
 import { H6, P } from '@/components/ui/Typography/Typography'
 import dayjs from 'dayjs'
 import { twMerge } from 'tailwind-merge'
@@ -8,7 +8,7 @@ import Link from 'next/link'
 dayjs.locale('uk')
 
 interface DoctorAppointmentCardProps {
-  appointment: Appointment
+  appointment: IAppointment
 }
 
 const DoctorAppointmentCard = ({ appointment }: DoctorAppointmentCardProps) => {
@@ -18,7 +18,7 @@ const DoctorAppointmentCard = ({ appointment }: DoctorAppointmentCardProps) => {
         <div className={twMerge('w-2 bg-orange-400')} />
         <div className='py-4 pr-4 pl-3 flex flex-col'>
           <H6>
-            {appointment.patientName}. {appointment.speciality}
+            {appointment.patient.patientName}. {appointment.doctor.position}
           </H6>
           <P className='capitalize'>
             {dayjs(appointment.startTime).format('MMM DD, YYYY HH:mm')} - {dayjs(appointment.endTime).format('HH:mm')}
