@@ -1,12 +1,12 @@
-import { Analyses } from './Analyses.interface'
 import mongoose, { Schema } from 'mongoose'
+import { Analyses } from './Analyses.interface'
 import { IMedicine } from './Medicine.interface'
 
 export interface IAppointment {
   _id: string
   patient: {
     _id: string
-    patientName: string
+    userName: string
     dateOfBirth: string
     bloodType: string
     diabetes: string

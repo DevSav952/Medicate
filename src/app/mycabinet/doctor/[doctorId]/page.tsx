@@ -1,24 +1,23 @@
 'use client'
 
+import Calendar from '@/components/Calendar/Calendar'
+import DoctorAppointmentCard from '@/components/doctor/DoctorAppointmentCard/DoctorAppointmentCard'
+import EditDoctorModal from '@/components/modals/EditDoctorModal/EditDoctorModal'
 import PageHeading from '@/components/PageHeading/PageHeading'
 import { Container } from '@/components/ui/Container/Container'
-import { H2, H6, P } from '@/components/ui/Typography/Typography'
-import { useEffect, useMemo, useState } from 'react'
 import Tabs from '@/components/ui/Tabs/Tabs'
-import Image from 'next/image'
-import { mockedAppointments } from '@/mocks/Appointments.mock'
-import DoctorAppointmentCard from '@/components/doctor/DoctorAppointmentCard/DoctorAppointmentCard'
-import dayjs from 'dayjs'
-import EditDoctorModal from '@/components/modals/EditDoctorModal/EditDoctorModal'
-import { fetcher } from '@/utils/fetcher'
+import { H2, H6, P } from '@/components/ui/Typography/Typography'
 import { Doctor } from '@/interfaces/Doctor.interface'
-import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
+import dayjs from 'dayjs'
+import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
-import Calendar from '@/components/Calendar/Calendar'
+import { useEffect, useMemo, useState } from 'react'
+import useSWR from 'swr'
 
-import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
 import { IAppointment } from '@/interfaces/Appointment.interface'
+import { FaUser } from 'react-icons/fa'
 
 const TABS_ENUM = {
   APPOINTMENTS: 'appointments',
@@ -27,9 +26,9 @@ const TABS_ENUM = {
 
 const AppointmentsTab = () => {
   const params = useParams()
-  const { patientId } = params
+  const { doctorId } = params
 
-  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/doctor/${patientId}`, fetcher, {
+  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/doctor/${doctorId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -39,12 +38,12 @@ const AppointmentsTab = () => {
 
   const futureAppointments = useMemo(
     () => appointments?.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())) || [],
-    [mockedAppointments]
+    [appointments]
   )
 
   const pastAppointments = useMemo(
     () => appointments?.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())) || [],
-    [mockedAppointments]
+    [appointments]
   )
 
   return (

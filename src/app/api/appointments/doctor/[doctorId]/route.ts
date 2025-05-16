@@ -1,7 +1,7 @@
 'use server'
 
-import connectMongoDB from '@/lib/connectMongoDB'
 import Appointment from '@/interfaces/Appointment.interface'
+import connectMongoDB from '@/lib/connectMongoDB'
 import { NextResponse } from 'next/server'
 
 export async function GET(req: Request) {
