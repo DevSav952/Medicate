@@ -154,7 +154,7 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
               type='file'
               name='file'
               id='file'
-              accept='image/*'
+              accept='image/jpg, image/jpeg, image/png'
               className='hidden'
               onChange={async (e) => {
                 const timestamp = Date.now()
