@@ -42,7 +42,7 @@ export interface CreateAppointment {
   endTime: string
   reason: string
   description?: string
-  analyzes?: Analyses[]
+  analyzes?: string[]
 }
 
 const appointmentSchema = new Schema({
@@ -68,12 +68,11 @@ const appointmentSchema = new Schema({
     type: String,
     required: true
   },
-  description: String
-
-  //  analyzes: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Doctors',
-  // }
+  description: String,
+  analyzes: {
+    type: [Schema.Types.ObjectId],
+    ref: 'Analyses'
+  }
 })
 
 const Appointment = mongoose.models.Appointments || mongoose.model('Appointments', appointmentSchema)

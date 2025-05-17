@@ -16,6 +16,7 @@ export async function GET(req: Request) {
         'userName dateOfBirth bloodType diabetes rhFactor bloodTransfusion intoleranceToMedicines infectiousDiseases surgicalInterventions allergies'
       )
       .populate('doctor', 'doctorName position')
+      .populate('analyzes', 'analysisName description date')
 
     if (!appointments) {
       return NextResponse.json({ message: 'Appointment not found' }, { status: 404 })

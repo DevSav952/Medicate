@@ -15,8 +15,12 @@ import { fetcher } from '@/utils/fetcher'
 import { Session } from '@/interfaces/Session.interface'
 import { getSession } from '@/lib/auth'
 import { createAppointment } from '@/lib/appointments'
-import { Button } from '@/components/ui/Button/Button'
 import { Input } from '@/components/ui/Input/Input'
+import { Analyses } from '@/interfaces/Analyses.interface'
+import SelectAnalyzesModal from '@/components/modals/SelectAnalyzesModal/SelectAnalyzesModal'
+import { H6 } from '@/components/ui/Typography/Typography'
+import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
+import { Button } from '@/components/ui/Button/Button'
 
 // @TODO: block this page for non auth users
 // @TODO: add validation for form
@@ -33,6 +37,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
   const [selectedDate, setSelectedDate] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [session, setSession] = useState<Session | null>(null)
+  const [analyses, setAnalyzes] = useState<Analyses[]>(appointment?.analyzes || [])
 
   useEffect(() => {
     getSession().then((session) => {
@@ -95,77 +100,96 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
         .toISOString(),
       endTime: dayjs(selectedDate)
         .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
-        .toISOString()
+        .toISOString(),
+      analyzes: analyses.map((analyzes) => analyzes._id)
     }
 
     await createAppointment(newAppointment)
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className='mt-1.5'>
-        <Input name='reason' placeholder='Причина візиту' id='reason' obj={register('reason')}>
-          Причина візиту
-        </Input>
-      </div>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='mt-1.5'>
+          <Input name='reason' placeholder='Причина візиту' id='reason' obj={register('reason')}>
+            Причина візиту
+          </Input>
+        </div>
 
-      <div className='mt-1.5 w-full'>
-        <label className='block font-regular mb-2'>Оберіть спеціальність лікаря</label>
-        <Dropdown
-          options={doctorSpecialties}
-          onChange={(option) => {
-            setSearchQuery(option)
-          }}
-        />
-      </div>
-
-      <div className='mt-1.5 w-full'>
-        <label className='block font-regular mb-2'>Оберіть лікаря</label>
-
-        <Dropdown
-          options={doctorOptions}
-          onChange={(option) => {
-            setValue('doctor', option)
-            setSearchQuery(option)
-          }}
-          disabled={!searchQuery}
-        />
-      </div>
-
-      <div className='sm:flex sm:justify-between sm:gap-4'>
         <div className='mt-1.5 w-full'>
-          <label className='block font-regular mb-2'>Оберіть дату прийому</label>
-          <DatePicker
-            onChange={(date) => {
-              setValue('startTime', dayjs(date).format('YYYY-MM-DD'))
-              setSelectedDate(dayjs(date).format('YYYY-MM-DD'))
+          <label className='block font-regular mb-2'>Оберіть спеціальність лікаря</label>
+          <Dropdown
+            options={doctorSpecialties}
+            onChange={(option) => {
+              setSearchQuery(option)
             }}
-            calendarModalStyles='w-full'
-            initialDate={
-              appointment?.startTime ? dayjs(appointment?.startTime).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')
-            }
           />
         </div>
-        <div className='mt-1.5 w-full'>
-          <label className='block font-regular mb-2'>Оберіть час прийому</label>
-          <Dropdown options={[...timeOptions]} onChange={(option) => setValue('startTimeHours', option)} />
-        </div>
-      </div>
-      <div className='mt-1.5'>
-        <Textarea
-          placeholder='Причини прийому'
-          name='description'
-          id='description'
-          obj={register('description')}
-          rows={5}>
-          Причини прийому
-        </Textarea>
-      </div>
 
-      <Button className='mt-5 w-full' type='submit'>
-        Зберегти
-      </Button>
-    </form>
+        <div className='mt-1.5 w-full'>
+          <label className='block font-regular mb-2'>Оберіть лікаря</label>
+
+          <Dropdown
+            options={doctorOptions}
+            onChange={(option) => {
+              setValue('doctor', option)
+              setSearchQuery(option)
+            }}
+            disabled={!searchQuery}
+          />
+        </div>
+
+        <div className='sm:flex sm:justify-between sm:gap-4'>
+          <div className='mt-1.5 w-full'>
+            <label className='block font-regular mb-2'>Оберіть дату прийому</label>
+            <DatePicker
+              onChange={(date) => {
+                setValue('startTime', dayjs(date).format('YYYY-MM-DD'))
+                setSelectedDate(dayjs(date).format('YYYY-MM-DD'))
+              }}
+              calendarModalStyles='w-full'
+              initialDate={
+                appointment?.startTime
+                  ? dayjs(appointment?.startTime).format('YYYY-MM-DD')
+                  : dayjs().format('YYYY-MM-DD')
+              }
+            />
+          </div>
+          <div className='mt-1.5 w-full'>
+            <label className='block font-regular mb-2'>Оберіть час прийому</label>
+            <Dropdown options={[...timeOptions]} onChange={(option) => setValue('startTimeHours', option)} />
+          </div>
+        </div>
+        <div className='mt-1.5'>
+          <Textarea
+            placeholder='Причини прийому'
+            name='description'
+            id='description'
+            obj={register('description')}
+            rows={5}>
+            Причини прийому
+          </Textarea>
+        </div>
+
+        <div className='mt-1.5'>
+          <H6>Аналізи</H6>
+
+          <div className='grid grid-cols-1 gap-4 mt-4'>
+            {analyses.map((analysis) => (
+              <AnalysesCard key={analysis._id} analysis={analysis} />
+            ))}
+          </div>
+        </div>
+
+        <div className='mt-4'>
+          <SelectAnalyzesModal allowedAction={(analyzes) => setAnalyzes(analyzes)} />
+        </div>
+
+        <Button className='mt-5 w-full' type='submit'>
+          Зберегти
+        </Button>
+      </form>
+    </>
   )
 }
 export default AddEditAppointmentForm

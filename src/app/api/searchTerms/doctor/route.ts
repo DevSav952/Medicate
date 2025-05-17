@@ -17,8 +17,6 @@ export async function GET(req: Request) {
       position: { $regex: position || '', $options: 'i' }
     })
 
-    console.log('doctors', doctors)
-
     return NextResponse.json(doctors)
   } catch (error) {
     return NextResponse.json({ message: `Internal Server Error: ${error}` }, { status: 500 })

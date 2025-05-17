@@ -22,9 +22,9 @@ const Dropdown = ({ options, onChange, disabled }: DropdownProps) => {
 
     setIsOpen(!isOpen)
   }
-  const handleSelect = (option: string) => {
-    setSelected(option)
-    onChange(option)
+  const handleSelect = (option: SelectOption) => {
+    setSelected(option.label)
+    onChange(option.value)
     setIsOpen(false)
   }
 
@@ -59,7 +59,7 @@ const Dropdown = ({ options, onChange, disabled }: DropdownProps) => {
           {options.map((option) => (
             <div
               key={option.value}
-              onClick={() => handleSelect(option.label)}
+              onClick={() => handleSelect(option)}
               className='px-4 py-2 cursor-pointer hover:bg-gray-100'>
               {option.label}
             </div>
