@@ -21,8 +21,15 @@ const EventInfoModal = ({ isOpen, handleClose, event }: EventInfoModalProps) => 
         <P className='capitalize'>
           {dayjs(event.startTime).format('MMM DD, YYYY HH:mm')} - {dayjs(event.endTime).format('HH:mm')}
         </P>
-        <P>{event.reason}</P>
-        <P>{event.description}</P>
+        <div className='my-2'>
+          <H6>Причина візиту</H6>
+          <P>{event.reason || '-'}</P>
+        </div>
+        <div className='mb-2'>
+          <H6>Деталі від пацієнта</H6>
+          <P>{event.description || '-'}</P>
+        </div>
+
         <div className='mt-4 flex'>
           <Link href={`/appointments/${event._id}`} className='text-white bg-blue-100 px-2.5 py-1.5 rounded block'>
             До візиту
