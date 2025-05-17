@@ -16,13 +16,15 @@ export async function GET(req: Request) {
 
   try {
     await connectMongoDB()
-    const list = await Patient.findById(patientId)
+    const patient = await Patient.findById(patientId)
 
-    if (!list) {
+    const { passwordHash, ...patientData } = patient._doc
+
+    if (!patient) {
       return NextResponse.json({ message: 'Patient not found' }, { status: 404 })
     }
 
-    return NextResponse.json(list)
+    return NextResponse.json(patientData)
   } catch (error) {
     return NextResponse.json({ message: `Internal Server Error: ${error}` }, { status: 500 })
   }

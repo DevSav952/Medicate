@@ -14,10 +14,10 @@ import Image from 'next/image'
 import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
-
 import { IAppointment } from '@/interfaces/Appointment.interface'
-import { FaUser } from 'react-icons/fa'
 import { BUCKET_URL } from '@/constants/bucket'
+
+import { FaUser } from 'react-icons/fa'
 
 const TABS_ENUM = {
   APPOINTMENTS: 'appointments',

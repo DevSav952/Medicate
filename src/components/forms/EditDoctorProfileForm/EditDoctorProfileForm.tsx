@@ -42,20 +42,11 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
   })
 
   const onSubmit: SubmitHandler<DoctorValues> = async (values) => {
-    if (isFileUploaded) {
-      const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values, image: fileName })
+    const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values, image: fileName })
 
-      if (result) {
-        mutate(`/api/doctor/${doctor._id}`)
-        handleClose()
-      }
-    } else {
-      const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values })
-
-      if (result) {
-        mutate(`/api/doctor/${doctor._id}`)
-        handleClose()
-      }
+    if (result) {
+      mutate(`/api/doctor/${doctor._id}`)
+      handleClose()
     }
   }
 
@@ -95,7 +86,6 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
                 onClick={(e) => {
                   e.preventDefault()
                   fileInputRef.current?.click()
-                  setIsEditImage(false)
                 }}>
                 Завантажити
               </Button>
@@ -134,6 +124,7 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
                   )
 
                   setFileName(fileName)
+                  setIsEditImage(false)
                 }}
               />
             </div>

@@ -19,9 +19,9 @@ import { Patient } from '@/interfaces/Patient.interface'
 import { fetcher } from '@/utils/fetcher'
 import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { IAppointment } from '@/interfaces/Appointment.interface'
+import { BUCKET_URL } from '@/constants/bucket'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
-import userAvatar from '@/assets/about-img5.jpg'
 
 const TABS_ENUM = {
   APPOINTMENTS: 'appointments',
@@ -189,7 +189,14 @@ const PatientProfile = ({ params }: PatientProfileProps) => {
       <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
         {patientProfile && <EditProfileModal patient={patientProfile} />}
         {patientProfile?.image ? (
-          <Image src={userAvatar} width={80} height={80} alt='User avatar' className='w-[80px] h-[80px] rounded-full' />
+          <Image
+            src={`${BUCKET_URL}/custom/avatars/${patientProfile.image}`}
+            width={80}
+            height={80}
+            alt='User avatar'
+            unoptimized
+            className='w-[80px] h-[80px] rounded-full'
+          />
         ) : (
           <div className='flex items-center justify-center w-[80px] h-[80px] bg-blue-100 rounded-full'>
             <FaUser size={24} fill='#fff' />

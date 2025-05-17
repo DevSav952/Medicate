@@ -6,12 +6,17 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { Patient } from '@/interfaces/Patient.interface'
 import { P } from '@/components/ui/Typography/Typography'
 import { updatePatientById } from '@/lib/patient'
-import { getSession } from '@/lib/auth'
-import { useEffect, useState } from 'react'
-import { Session } from '@/interfaces/Session.interface'
+import { useRef, useState } from 'react'
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
 import dayjs from 'dayjs'
 import { Select } from '@/components/ui/Select/Select'
+import { mutate } from 'swr'
+import { saveFileToBucket } from '@/lib/bucket'
+import { BUCKET_URL } from '@/constants/bucket'
+import Image from 'next/image'
+
+import { FaUser } from 'react-icons/fa'
+import { MdModeEdit } from 'react-icons/md'
 
 interface EditPatientProfileFormProps {
   patient: Patient
@@ -51,11 +56,10 @@ const rhOptions = [
 ]
 
 const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileFormProps) => {
-  const [session, setSession] = useState<Session | null>(null)
-
-  useEffect(() => {
-    getSession().then((session) => setSession(session))
-  }, [])
+  const [isFileUploaded, setFileUploaded] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [fileName, setFileName] = useState(patient.image)
+  const [isEditImage, setIsEditImage] = useState(false)
 
   const {
     register,
@@ -82,17 +86,93 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
   })
 
   const onSubmit: SubmitHandler<PatientValues> = async (values) => {
-    if (!session) return
-
-    const result = await updatePatientById({ _id: session.id ?? '', ...values })
+    const result = await updatePatientById({ _id: patient._id ?? '', ...values, image: fileName })
 
     if (result) {
+      mutate(`/api/patient/${patient._id}`)
       handleClose()
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <div className='flex mb-4 flex-col'>
+        <label className='block font-regular mb-2'>Фото профілю</label>
+
+        <div className='relative h-[80px] w-[80px] rounded-full bg-[#2a41e812] shadow-md flex items-center justify-center text-blue-200 mb-4'>
+          {fileName ? (
+            <Image
+              alt=''
+              width={80}
+              height={80}
+              className='w-full h-full rounded-full'
+              unoptimized
+              src={`${BUCKET_URL}/custom/avatars/${fileName}`}
+            />
+          ) : (
+            <FaUser className='dark:fill-grey-600' />
+          )}
+
+          <div className='flex items-center justify-center absolute right-[-25px] top-0'>
+            <MdModeEdit
+              className='dark:fill-grey-600'
+              onClick={() => {
+                setFileUploaded(true)
+                setIsEditImage(true)
+              }}
+            />
+          </div>
+        </div>
+        {isEditImage && (
+          <div className='flex items-center gap-3'>
+            <Button
+              onClick={(e) => {
+                e.preventDefault()
+                fileInputRef.current?.click()
+              }}>
+              Завантажити
+            </Button>
+            <Button
+              onClick={() => {
+                setFileName(patient?.image)
+                setFileUploaded(false)
+                setIsEditImage(false)
+              }}>
+              Cкасувати
+            </Button>
+            <Button
+              className='bg-red'
+              onClick={() => {
+                setFileName('')
+                setFileUploaded(true)
+                setIsEditImage(false)
+              }}>
+              Видалити фото
+            </Button>
+            <input
+              ref={fileInputRef}
+              type='file'
+              name='file'
+              id='file'
+              accept='image/*'
+              className='hidden'
+              onChange={async (e) => {
+                const timestamp = Date.now()
+                const extension = e.target.files![0].name.split('.').pop()
+
+                const fileName = await saveFileToBucket(
+                  e.target.files![0],
+                  `${patient?._id}_${timestamp}.${extension}`,
+                  'beclinic/custom/avatars'
+                )
+
+                setFileName(fileName)
+                setIsEditImage(false)
+              }}
+            />
+          </div>
+        )}
+      </div>
       <div className='mb-4'>
         <Input
           type='text'
