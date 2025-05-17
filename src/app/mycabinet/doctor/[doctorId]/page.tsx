@@ -129,15 +129,15 @@ const DoctorProfile = ({ params }: DoctorProfileProps) => {
           <ul className='flex flex-col gap-3 md:grid md:grid-cols-3 lg:grid-cols-1'>
             <li>
               <P className='mb-1 text-xs'>Cпеціалізація</P>
-              <H6 className='text-lg'>{doctorProfile?.position}</H6>
+              <H6 className='text-lg'>{doctorProfile?.position || '-'}</H6>
             </li>
             <li>
               <P className='mb-1 text-xs'>E-mail</P>
-              <H6 className='text-lg'>{doctorProfile?.email}</H6>
+              <H6 className='text-lg'>{doctorProfile?.email || '-'}</H6>
             </li>
             <li>
               <P className='mb-1 text-xs'>Номер телефону</P>
-              <H6 className='text-lg'>{doctorProfile?.phone}</H6>
+              <H6 className='text-lg'>{doctorProfile?.phone || '-'}</H6>
             </li>
           </ul>
         </div>
