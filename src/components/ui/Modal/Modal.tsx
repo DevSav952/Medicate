@@ -9,9 +9,11 @@ interface IModal {
   isOpen: boolean
   handleClose: (e?: any) => void
   className?: string
+  buttonClassName?: string
+  modalInnerStyles?: string
 }
 
-export function Modal({ children, isOpen, handleClose, className }: IModal) {
+export function Modal({ children, isOpen, handleClose, className, buttonClassName, modalInnerStyles }: IModal) {
   useEffect(() => {
     const closeOnEscapeKey = (e: KeyboardEvent) => (e.key === 'Escape' ? handleClose() : null)
     document.body.addEventListener('keydown', closeOnEscapeKey)
@@ -44,10 +46,14 @@ export function Modal({ children, isOpen, handleClose, className }: IModal) {
             'fixed z-[102] flex flex-col box-border overflow-hidden p-4 bg-white rounded top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] sm:p-5 sm:w-[510px] md:w-[550px] lg:w-[600px]',
             className
           )}>
-          <button className='py-2 px-2 self-end font-bold z-[2]' onClick={(e) => handleClose(e)}>
+          <button
+            className={twMerge('py-2 px-2 self-end font-bold z-[2]', buttonClassName)}
+            onClick={(e) => handleClose(e)}>
             <FaTimes size='24px' className='transition-all ease-linear duration-150 lg:hover:text-red' />
           </button>
-          <div className='flex items-center justify-center h-[100%] mb-10 box-border'>{children}</div>
+          <div className={twMerge('flex items-center justify-center h-[100%] mb-10 box-border', modalInnerStyles)}>
+            {children}
+          </div>
         </div>
       </>
     </ReactPortal>

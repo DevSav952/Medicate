@@ -56,7 +56,6 @@ const rhOptions = [
 ]
 
 const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileFormProps) => {
-  const [isFileUploaded, setFileUploaded] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState(patient.image)
   const [isEditImage, setIsEditImage] = useState(false)
@@ -117,7 +116,6 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
             <MdModeEdit
               className='dark:fill-grey-600'
               onClick={() => {
-                setFileUploaded(true)
                 setIsEditImage(true)
               }}
             />
@@ -135,7 +133,6 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
             <Button
               onClick={() => {
                 setFileName(patient?.image)
-                setFileUploaded(false)
                 setIsEditImage(false)
               }}>
               Cкасувати
@@ -144,7 +141,6 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
               className='bg-red'
               onClick={() => {
                 setFileName('')
-                setFileUploaded(true)
                 setIsEditImage(false)
               }}>
               Видалити фото

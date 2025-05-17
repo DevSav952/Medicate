@@ -23,7 +23,6 @@ interface EditPatientProfileFormProps {
 type DoctorValues = Omit<Doctor, '_id' | 'description'>
 
 const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormProps) => {
-  const [isFileUploaded, setFileUploaded] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [fileName, setFileName] = useState(doctor.image)
   const [isEditImage, setIsEditImage] = useState(false)
@@ -74,7 +73,6 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
               <MdModeEdit
                 className='dark:fill-grey-600'
                 onClick={() => {
-                  setFileUploaded(true)
                   setIsEditImage(true)
                 }}
               />
@@ -92,7 +90,6 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
               <Button
                 onClick={() => {
                   setFileName(doctor?.image)
-                  setFileUploaded(false)
                   setIsEditImage(false)
                 }}>
                 Cкасувати
@@ -101,7 +98,6 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
                 className='bg-red'
                 onClick={() => {
                   setFileName('')
-                  setFileUploaded(true)
                   setIsEditImage(false)
                 }}>
                 Видалити фото

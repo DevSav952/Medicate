@@ -6,7 +6,7 @@ const AnalysesAddPage = () => {
   return (
     <>
       <PageHeading title='Додати аналіз' />
-      <Container className=''>
+      <Container>
         <AddEditAnalysesForm />
       </Container>
     </>
