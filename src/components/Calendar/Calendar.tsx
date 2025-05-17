@@ -1,78 +1,57 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
-import { DateSelectArg, EventClickArg, EventApi } from '@fullcalendar/core'
+import React, { useState, useMemo } from 'react'
+import { EventClickArg, EventApi } from '@fullcalendar/core'
 import FullCalendar from '@fullcalendar/react'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from './dialog'
 import { H6, P } from '@/components/ui/Typography/Typography'
 import { cn } from '@/utils/cn'
 import ukLocale from '@fullcalendar/core/locales/uk'
-import DoctorAppointmentCard from '@/components/DoctorAppointmentCard/DoctorAppointmentCard'
+import CalendarAppointmentCard from '@/components/doctor/CalendarAppointmentCard/DoctorAppointmentCard'
 import dayjs from 'dayjs'
+import { useParams } from 'next/navigation'
+import { IAppointment } from '@/interfaces/Appointment.interface'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
+import EventInfoModal from '@/components/modals/EventInfoModal/EventInfoModal'
 
 const Calendar: React.FC = () => {
-  const [currentEvents, setCurrentEvents] = useState<EventApi[]>([])
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false)
-  const [newEventTitle, setNewEventTitle] = useState<string>('')
-  const [selectedDate, setSelectedDate] = useState<DateSelectArg | null>(null)
+  const params = useParams()
+  const { doctorId } = params
+  const [selectedEvent, setSelectedEvent] = useState<IAppointment | null>(null)
 
-  // console.log('currentEvents', currentEvents)
+  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/doctor/${doctorId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
 
-  useEffect(() => {
-    // Load events from local storage when the component mounts
-    if (typeof window !== 'undefined') {
-      const savedEvents = localStorage.getItem('events')
-      if (savedEvents) {
-        setCurrentEvents(JSON.parse(savedEvents))
-      }
-    }
-  }, [])
+  const currentEvents: EventApi[] = useMemo(() => {
+    return (
+      (appointments?.map((appointment) => ({
+        id: appointment._id,
+        title: appointment.patient.userName,
+        start: new Date(appointment.startTime),
+        end: new Date(appointment.endTime)
+      })) as EventApi[]) ?? []
+    )
+  }, [appointments])
 
-  useEffect(() => {
-    // Save events to local storage whenever they change
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('events', JSON.stringify(currentEvents))
-    }
+  const todayEvents: EventApi[] = useMemo(() => {
+    return currentEvents.filter((event) => dayjs(event.start).isSame(dayjs(), 'day'))
   }, [currentEvents])
 
-  const handleDateClick = (selected: DateSelectArg) => {
-    setSelectedDate(selected)
-    setIsDialogOpen(true)
-  }
-
   const handleEventClick = (selected: EventClickArg) => {
-    // Prompt user for confirmation before deleting an event
-    if (window.confirm(`Are you sure you want to delete the event "${selected.event.title}"?`)) {
-      selected.event.remove()
+    const selectedEvent = appointments?.find((appointment) => appointment._id === selected.event.id)
+    if (selectedEvent) {
+      setSelectedEvent(selectedEvent)
     }
   }
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false)
-    setNewEventTitle('')
-  }
-
-  const handleAddEvent = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (newEventTitle && selectedDate) {
-      const calendarApi = selectedDate.view.calendar // Get the calendar API instance.
-      calendarApi.unselect() // Unselect the date range.
-
-      const newEvent = {
-        id: `${selectedDate.start.toISOString()}-${newEventTitle}`,
-        title: newEventTitle,
-        start: selectedDate.start,
-        end: selectedDate.end,
-        allDay: selectedDate.allDay
-      }
-
-      calendarApi.addEvent(newEvent)
-      handleCloseDialog()
-    }
-  }
+  const handleEventInfoModalClose = () => setSelectedEvent(null)
 
   return (
     <div className='mt-6'>
@@ -82,31 +61,19 @@ const Calendar: React.FC = () => {
           <ul
             className={cn(
               'flex flex-col gap-4 mt-4 overflow-y-auto h-[170px]',
-              currentEvents.length <= 0 && 'h-full mt-0'
+              todayEvents.length <= 0 && 'h-full mt-0'
             )}>
-            {currentEvents.length <= 0 && (
+            {todayEvents.length <= 0 && (
               <div className='flex flex-col items-center justify-center h-full'>
                 <P className='italic text-center text-gray-400'>Немає прийомів</P>
               </div>
             )}
 
-            {currentEvents.length > 0 &&
-              currentEvents.map((event: EventApi) => {
-                console.log('event', event)
-                console.log('event.start', event.start)
-
+            {todayEvents.length > 0 &&
+              todayEvents.map((event: EventApi) => {
                 return (
                   <>
-                    <DoctorAppointmentCard
-                      appointment={{
-                        doctorName: event.title,
-                        speciality: event.title,
-                        _id: event.id,
-                        patientName: event.title,
-                        startTime: dayjs(event.start).toISOString(),
-                        endTime: dayjs(event.end).toISOString()
-                      }}
-                    />
+                    <CalendarAppointmentCard event={event} />
                   </>
                 )
               })}
@@ -117,46 +84,31 @@ const Calendar: React.FC = () => {
           <FullCalendar
             locale={ukLocale}
             height={'75vh'}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]} // Initialize calendar with required plugins.
+            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
             headerToolbar={{
               left: 'prev,next today',
               center: 'title',
               right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            }} // Set header toolbar options.
-            initialView='dayGridMonth' // Initial view mode of the calendar.
-            editable={true} // Allow events to be edited.
-            selectable={true} // Allow dates to be selectable.
-            selectMirror={true} // Mirror selections visually.
-            dayMaxEvents={true} // Limit the number of events displayed per day.
-            select={handleDateClick} // Handle date selection to create new events.
-            eventClick={handleEventClick} // Handle clicking on events (e.g., to delete them).
-            eventsSet={(events) => setCurrentEvents(events)} // Update state with current events whenever they change.
-            initialEvents={typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('events') || '[]') : []} // Initial events loaded from local storage.
+            }}
+            initialView='dayGridMonth'
+            editable={true}
+            selectable={true}
+            selectMirror={true}
+            dayMaxEvents={true}
+            eventClick={handleEventClick}
+            events={currentEvents.map((event) => ({
+              id: event.id,
+              title: event.title,
+              start: event.start?.toISOString() ?? '',
+              end: event.end?.toISOString() ?? ''
+            }))}
           />
         </div>
       </div>
 
-      {/* Dialog for adding new events */}
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Event Details</DialogTitle>
-          </DialogHeader>
-          <form className='space-x-5 mb-4' onSubmit={handleAddEvent}>
-            <input
-              type='text'
-              placeholder='Event Title'
-              value={newEventTitle}
-              onChange={(e) => setNewEventTitle(e.target.value)} // Update new event title as the user types.
-              required
-              className='border border-gray-200 p-3 rounded-md text-lg'
-            />
-            <button className='bg-green-500 text-white p-3 mt-5 rounded-md' type='submit'>
-              Add
-            </button>
-          </form>
-        </DialogContent>
-      </Dialog>
+      {selectedEvent && (
+        <EventInfoModal isOpen={!!selectedEvent} event={selectedEvent} handleClose={handleEventInfoModalClose} />
+      )}
     </div>
   )
 }
