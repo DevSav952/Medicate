@@ -13,7 +13,6 @@ import { Separator } from '@/components/ui/Separator/Separator'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 import MedicineCard from '@/components/MedicineCard/MedicineCard'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
-import { mockedAnalyzes } from '@/mocks/Analyses.mock'
 import { mockedMedicine } from '@/mocks/Medicine.mock'
 
 dayjs.locale('uk')
