@@ -26,10 +26,10 @@ const sessionOptions: SessionOptions = {
 export const getSession = async () => {
   const session = await getIronSession<Session>(cookies(), sessionOptions)
 
-  if (!session.isLoggedIn) {
-    session.isLoggedIn = defaultSession.isLoggedIn
-    // session.theme = defaultSession.theme
-  }
+  // if (!session.isLoggedIn) {
+  //   session.isLoggedIn = defaultSession.isLoggedIn
+  //   // session.theme = defaultSession.theme
+  // }
 
   return session
 }

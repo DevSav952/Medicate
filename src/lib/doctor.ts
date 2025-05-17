@@ -29,7 +29,8 @@ export const updateDoctorById = async (doctor: IDoctor) => {
     session.email = updDoctor.email
     session.image = updDoctor.image
 
-    revalidatePath(`/mycabinet/doctor/${doctor._id}`)
+    // Probably we can remove this because it's a client page
+    // revalidatePath(`/mycabinet/doctor/${doctor._id}`)
     return { success: true }
   } catch (error) {
     console.error('Error updating doctor:', error)

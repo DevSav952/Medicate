@@ -5,10 +5,15 @@ import { Input } from '@/components/ui/Input/Input'
 import { P } from '@/components/ui/Typography/Typography'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { Session } from '@/interfaces/Session.interface'
 import { updateDoctorById } from '@/lib/doctor'
-import { getSession } from '@/lib/auth'
-import { useEffect, useState } from 'react'
+import { useRef, useState } from 'react'
+import Image from 'next/image'
+import { saveFileToBucket } from '@/lib/bucket'
+import { BUCKET_URL } from '@/constants/bucket'
+import { mutate } from 'swr'
+
+import { FaUser } from 'react-icons/fa'
+import { MdModeEdit } from 'react-icons/md'
 
 interface EditPatientProfileFormProps {
   doctor: Doctor
@@ -18,43 +23,123 @@ interface EditPatientProfileFormProps {
 type DoctorValues = Omit<Doctor, '_id' | 'description'>
 
 const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormProps) => {
-  const [session, setSession] = useState<Session | null>(null)
-
-  useEffect(() => {
-    getSession().then((session) => setSession(session))
-  }, [])
-
+  const [isFileUploaded, setFileUploaded] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [fileName, setFileName] = useState(doctor.image)
+  const [isEditImage, setIsEditImage] = useState(false)
   const {
     register,
     formState: { errors },
-    handleSubmit,
-    setValue,
-    watch
+    handleSubmit
   } = useForm<DoctorValues>({
     mode: 'onSubmit',
     defaultValues: {
       email: doctor.email,
       position: doctor.position,
       doctorName: doctor.doctorName,
-      phone: doctor.position
+      phone: doctor.phone
     }
   })
 
   const onSubmit: SubmitHandler<DoctorValues> = async (values) => {
-    if (!session) return
+    if (isFileUploaded) {
+      const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values, image: fileName })
 
-    console.log('values', values)
+      if (result) {
+        mutate(`/api/doctor/${doctor._id}`)
+        handleClose()
+      }
+    } else {
+      const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values })
 
-    const result = await updateDoctorById({ _id: session.id ?? '', description: '', ...values })
-
-    if (result) {
-      handleClose()
+      if (result) {
+        mutate(`/api/doctor/${doctor._id}`)
+        handleClose()
+      }
     }
   }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='h-full flex flex-col justify-between'>
       <div>
+        <div className='flex mb-4 flex-col'>
+          <label className='block font-regular mb-2'>Фото профілю</label>
+
+          <div className='relative h-[80px] w-[80px] rounded-full bg-[#2a41e812] shadow-md flex items-center justify-center text-blue-200 mb-4'>
+            {fileName ? (
+              <Image
+                alt=''
+                width={80}
+                height={80}
+                className='w-full h-full rounded-full'
+                unoptimized
+                src={`${BUCKET_URL}/custom/avatars/${fileName}`}
+              />
+            ) : (
+              <FaUser className='dark:fill-grey-600' />
+            )}
+
+            <div className='flex items-center justify-center absolute right-[-25px] top-0'>
+              <MdModeEdit
+                className='dark:fill-grey-600'
+                onClick={() => {
+                  setFileUploaded(true)
+                  setIsEditImage(true)
+                }}
+              />
+            </div>
+          </div>
+          {isEditImage && (
+            <div className='flex items-center gap-3'>
+              <Button
+                onClick={(e) => {
+                  e.preventDefault()
+                  fileInputRef.current?.click()
+                  setIsEditImage(false)
+                }}>
+                Завантажити
+              </Button>
+              <Button
+                onClick={() => {
+                  setFileName(doctor?.image)
+                  setFileUploaded(false)
+                  setIsEditImage(false)
+                }}>
+                Cкасувати
+              </Button>
+              <Button
+                className='bg-red'
+                onClick={() => {
+                  setFileName('')
+                  setFileUploaded(true)
+                  setIsEditImage(false)
+                }}>
+                Видалити фото
+              </Button>
+              <input
+                ref={fileInputRef}
+                type='file'
+                name='file'
+                id='file'
+                accept='image/*'
+                className='hidden'
+                onChange={async (e) => {
+                  const timestamp = Date.now()
+                  const extension = e.target.files![0].name.split('.').pop()
+
+                  const fileName = await saveFileToBucket(
+                    e.target.files![0],
+                    `${doctor?._id}_${timestamp}.${extension}`,
+                    'beclinic/custom/avatars'
+                  )
+
+                  setFileName(fileName)
+                }}
+              />
+            </div>
+          )}
+        </div>
+
         <div className='mb-4'>
           <Input
             type='text'
