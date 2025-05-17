@@ -1,11 +1,12 @@
 import mongoose, { Schema } from 'mongoose'
+import { StaticImageData } from 'next/image'
 
 export interface Doctor {
   _id: string
   email: string
   doctorName: string
   position: string
-  image: string
+  image: string | StaticImageData
   description: string
   phone: string
 }

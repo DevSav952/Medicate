@@ -8,8 +8,8 @@ export const createAppointment = async (appointment: CreateAppointment) => {
     await connectMongoDB()
 
     const doc = new Appointment({
-      patient: appointment.patientId,
-      doctor: appointment.doctorId,
+      patient: appointment.patient,
+      doctor: appointment.doctor,
       startTime: appointment.startTime,
       endTime: appointment.endTime,
       description: appointment.description
