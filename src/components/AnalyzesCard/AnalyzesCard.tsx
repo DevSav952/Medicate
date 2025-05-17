@@ -17,7 +17,7 @@ const AnalysesCard = ({ analysis }: AnalysesCardProps) => {
         <div className='w-2 bg-blue-100' />
         <div className='py-4 pr-4 pl-3 flex flex-col'>
           <H6>{analysis.analysisName}</H6>
-          <P className='capitalize'>{dayjs(analysis.createdAt).locale('uk').format('MMM DD, YYYY HH:mm')}</P>
+          <P className='capitalize'>{dayjs(analysis.date).locale('uk').format('MMM DD, YYYY')}</P>
         </div>
       </div>
     </Link>

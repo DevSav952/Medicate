@@ -10,7 +10,6 @@ import dayjs from 'dayjs'
 import AppointmentCard from '@/components/AppointmentCard/AppointmentCard'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
-import { mockedAnalyzes } from '@/mocks/Analyses.mock'
 import { mockedPayments } from '@/mocks/Payment.mock'
 import PaymentCard from '@/components/PaymentCard/PaymentCard'
 import EditProfileModal from '@/components/modals/EditProfileModal/EditProfileModal'
@@ -20,6 +19,7 @@ import { fetcher } from '@/utils/fetcher'
 import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { IAppointment } from '@/interfaces/Appointment.interface'
 import { BUCKET_URL } from '@/constants/bucket'
+import { Analyses } from '@/interfaces/Analyses.interface'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 
@@ -94,6 +94,17 @@ const AppointmentTab = () => {
 }
 
 const AnalyzesTab = () => {
+  const params = useParams()
+  const { patientId } = params
+
+  const { data: analyses } = useSWR<Analyses[]>(`/api/analyses/patient/${patientId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
   return (
     <>
       <div className='mt-6 flex justify-between'>
@@ -103,15 +114,15 @@ const AnalyzesTab = () => {
         </StyledLinkButton>
       </div>
 
-      {mockedAnalyzes.length === 0 && <P>Аналізи відсутні</P>}
+      {(!analyses || analyses?.length === 0) && <P>Аналізи відсутні</P>}
 
-      {mockedAnalyzes.length > 0 && (
+      {analyses && analyses?.length > 0 && (
         <div className='mt-6'>
           <H6>Аналізи</H6>
 
-          {mockedAnalyzes.length > 0 && (
+          {analyses.length > 0 && (
             <div className='grid grid-cols-1 gap-4 mt-4'>
-              {mockedAnalyzes.map((analysis) => (
+              {analyses.map((analysis) => (
                 <AnalysesCard key={analysis._id} analysis={analysis} />
               ))}
             </div>
