@@ -10,10 +10,10 @@ import { registerDoctor } from '@/lib/auth'
 import { doctorSpecialties } from '@/mocks/shared'
 import Dropdown from '@/components/ui/Dropdown/Dropdown'
 import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
+import { toast } from 'sonner'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
-import { toast } from 'sonner'
 
 interface DoctorSignUpFormProps {
   handleClose: () => void

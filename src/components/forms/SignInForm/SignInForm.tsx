@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { ISignIn } from '@/interfaces/shared'
 import { P } from '@/components/ui/Typography/Typography'
 import { loginPatient } from '@/lib/auth'
+import { toast } from 'sonner'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -27,7 +28,17 @@ const SignInForm = ({ handleClose }: SignInFormProps) => {
   })
 
   const onSubmit: SubmitHandler<ISignIn> = async (values) => {
-    loginPatient(values)
+    const result = await loginPatient(values)
+
+    if (result.success) {
+      handleClose()
+    } else {
+      toast.error('Невірний логін або пароль', {
+        duration: 3000,
+        className: 'border border-red bg-red text-[#fff]'
+      })
+    }
+
     handleClose()
   }
 

@@ -7,6 +7,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { ISignUp } from '@/interfaces/shared'
 import { P } from '@/components/ui/Typography/Typography'
 import { registerPatient } from '@/lib/auth'
+import { toast } from 'sonner'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -29,8 +30,16 @@ const SignUpForm = ({ handleClose }: SignUpFormProps) => {
   })
 
   const onSubmit: SubmitHandler<ISignUp> = async (values) => {
-    registerPatient(values)
-    handleClose()
+    const result = await registerPatient(values)
+
+    if (result.success) {
+      handleClose()
+    } else {
+      toast.error('Помилка створення пацієнта', {
+        duration: 3000,
+        className: 'border border-red bg-red text-[#fff]'
+      })
+    }
   }
 
   return (
