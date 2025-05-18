@@ -27,7 +27,7 @@ export interface IAppointment {
   endTime: string
   description?: string
   analyzes?: Analyses[]
-
+  fileName?: string
   // Doctors fields
 
   medicine?: IMedicine[]
@@ -43,6 +43,7 @@ export interface CreateAppointment {
   reason: string
   description?: string
   analyzes?: string[]
+  fileName?: string
 }
 
 const appointmentSchema = new Schema({
@@ -72,7 +73,8 @@ const appointmentSchema = new Schema({
   analyzes: {
     type: [Schema.Types.ObjectId],
     ref: 'Analyses'
-  }
+  },
+  fileName: String
 })
 
 const Appointment = mongoose.models.Appointments || mongoose.model('Appointments', appointmentSchema)

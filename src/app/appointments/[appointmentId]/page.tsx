@@ -13,7 +13,7 @@ import { Separator } from '@/components/ui/Separator/Separator'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 import MedicineCard from '@/components/MedicineCard/MedicineCard'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
-import { mockedMedicine } from '@/mocks/Medicine.mock'
+import AttachmentPreviewModal from '@/components/modals/AttachmentPreviewModal/AttachmentPreviewModal'
 
 dayjs.locale('uk')
 
@@ -52,6 +52,14 @@ const UpcomingAppointment = ({ appointmentData }: { appointmentData: IAppointmen
           <P>-</P>
         )}
       </div>
+      <Separator className='bg-[#D1D1D1]' />
+
+      {appointmentData?.fileName && (
+        <>
+          <H4 className='mb-2'>Додаткові файли</H4>
+          <AttachmentPreviewModal attachment={appointmentData.fileName} />
+        </>
+      )}
     </>
   )
 }
@@ -86,13 +94,15 @@ const PastAppointment = ({ appointmentData }: { appointmentData: IAppointment })
           <P className='text-xs'>Приймати, днів</P>
           <P className='text-xs'>Коментар</P>
         </div>
-        {appointmentData?.analyzes && appointmentData.analyzes.length > 0 ? (
-          appointmentData.analyzes.map((analysis) => <AnalysesCard key={analysis._id} analysis={analysis} />)
+        {appointmentData?.medicine && appointmentData.medicine.length > 0 ? (
+          appointmentData.medicine.map((medicine) => <MedicineCard key={medicine.name} medicine={medicine} />)
         ) : (
           <P>-</P>
         )}
       </div>
       <Separator className='bg-[#D1D1D1]' />
+
+      {appointmentData?.fileName && <AttachmentPreviewModal attachment={appointmentData.fileName} />}
 
       <H4>Коментар лікаря</H4>
       <P>{appointmentData?.treatment || '-'}</P>

@@ -5,7 +5,7 @@ import { CreateAppointment, IAppointment } from '@/interfaces/Appointment.interf
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/Textarea/Textarea'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { SelectOption } from '@/interfaces/shared'
 import Dropdown from '@/components/ui/Dropdown/Dropdown'
 import { doctorSpecialties } from '@/mocks/shared'
@@ -21,6 +21,9 @@ import SelectAnalyzesModal from '@/components/modals/SelectAnalyzesModal/SelectA
 import { H6 } from '@/components/ui/Typography/Typography'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
 import { Button } from '@/components/ui/Button/Button'
+import { saveFileToBucket } from '@/lib/bucket'
+import AttachmentPreviewModal from '@/components/modals/AttachmentPreviewModal/AttachmentPreviewModal'
+import { twMerge } from 'tailwind-merge'
 
 // @TODO: block this page for non auth users
 // @TODO: add validation for form
@@ -38,6 +41,9 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
   const [searchQuery, setSearchQuery] = useState('')
   const [session, setSession] = useState<Session | null>(null)
   const [analyses, setAnalyzes] = useState<Analyses[]>(appointment?.analyzes || [])
+
+  const [fileName, setFileName] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     getSession().then((session) => {
@@ -101,7 +107,8 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
       endTime: dayjs(selectedDate)
         .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
         .toISOString(),
-      analyzes: analyses.map((analyzes) => analyzes._id)
+      analyzes: analyses.map((analyzes) => analyzes._id),
+      fileName: fileName
     }
 
     await createAppointment(newAppointment)
@@ -181,8 +188,60 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
           </div>
         </div>
 
-        <div className='mt-4'>
+        <div className={twMerge(analyses.length > 0 && 'mt-4')}>
           <SelectAnalyzesModal allowedAction={(analyzes) => setAnalyzes(analyzes)} />
+        </div>
+
+        <div className='mt-4'>
+          <H6>Додаткові файли</H6>
+
+          <div className='grid grid-cols-1 gap-4 mt-4'>
+            {analyses.map((analysis) => (
+              <AnalysesCard key={analysis._id} analysis={analysis} />
+            ))}
+          </div>
+        </div>
+
+        <div className='flex items-center gap-3'>
+          {!fileName && (
+            <Button
+              onClick={() => {
+                fileInputRef.current?.click()
+              }}>
+              Додати файл
+            </Button>
+          )}
+          {fileName && <AttachmentPreviewModal attachment={fileName} />}
+
+          {fileName && (
+            <Button
+              className='border border-solid border-red bg-transparent text-red'
+              onClick={() => {
+                setFileName('')
+              }}>
+              Скасувати
+            </Button>
+          )}
+
+          <input
+            ref={fileInputRef}
+            type='file'
+            name='file'
+            id='file'
+            accept='image/jpg, image/jpeg, image/png, application/pdf'
+            className='hidden'
+            onChange={async (e) => {
+              const timestamp = Date.now()
+              const extension = e.target.files![0].name.split('.').pop()
+
+              const fileName = await saveFileToBucket(
+                e.target.files![0],
+                `appointment_${timestamp}.${extension}`,
+                'beclinic/custom/files'
+              )
+              setFileName(fileName)
+            }}
+          />
         </div>
 
         <Button className='mt-5 w-full' type='submit'>

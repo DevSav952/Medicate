@@ -17,7 +17,8 @@ export const createAppointment = async (appointment: CreateAppointment) => {
       startTime: appointment.startTime,
       endTime: appointment.endTime,
       description: appointment.description,
-      analyzes: analyzes
+      analyzes: analyzes,
+      fileName: appointment.fileName
     })
 
     await doc.save()
