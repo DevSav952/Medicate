@@ -13,6 +13,7 @@ import logo from '@/assets/logo.png'
 import { twMerge } from 'tailwind-merge'
 import { FaUser } from 'react-icons/fa'
 import userAvatar from '@/assets/about-img5.jpg'
+import { BUCKET_URL } from '@/constants/bucket'
 
 const HEADER_ANIMATION_HEIGHT = 220
 const HEADER_ANIMATION_HEIGHT_HERO = 550
@@ -106,11 +107,12 @@ const Header = ({ session }: HeaderProps) => {
                 <Link href={`/mycabinet/${session.role}/${session.id}?tab=appointments`}>
                   {session.image ? (
                     <Image
-                      src={userAvatar}
+                      src={`${BUCKET_URL}/custom/avatars/${session.image}`}
                       alt='user avatar'
                       className='w-10 h-10 rounded-full'
                       width={40}
                       height={40}
+                      unoptimized
                     />
                   ) : (
                     <div className='w-10 h-10 flex items-center justify-center bg-white rounded-full'>
