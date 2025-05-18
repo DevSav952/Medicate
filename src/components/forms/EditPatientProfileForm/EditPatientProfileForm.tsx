@@ -14,10 +14,10 @@ import { mutate } from 'swr'
 import { saveFileToBucket } from '@/lib/bucket'
 import { BUCKET_URL } from '@/constants/bucket'
 import Image from 'next/image'
+import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 import { FaUser } from 'react-icons/fa'
 import { MdModeEdit } from 'react-icons/md'
-import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 interface EditPatientProfileFormProps {
   patient: Patient

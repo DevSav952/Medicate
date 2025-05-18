@@ -11,10 +11,10 @@ import Image from 'next/image'
 import { saveFileToBucket } from '@/lib/bucket'
 import { BUCKET_URL } from '@/constants/bucket'
 import { mutate } from 'swr'
+import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 import { FaUser } from 'react-icons/fa'
 import { MdModeEdit } from 'react-icons/md'
-import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 interface EditPatientProfileFormProps {
   doctor: Doctor
