@@ -39,13 +39,14 @@ const AnalysesCard = ({ analysis, onSelect, selected }: CustomAnalyzesCardProps)
 )
 
 interface SelectAnalyzesModalProps {
+  selectedAnalyzes: Analyses[]
   allowedAction: (selectedData: Analyses[]) => void
 }
 
-const SelectAnalyzesModal = ({ allowedAction }: SelectAnalyzesModalProps) => {
+const SelectAnalyzesModal = ({ allowedAction, selectedAnalyzes }: SelectAnalyzesModalProps) => {
   const [isOpen, setOpen] = useState(false)
   const [session, setSession] = useState<Session | null>(null)
-  const [selectedData, setSelectedData] = useState<Analyses[]>([])
+  const [selectedData, setSelectedData] = useState<Analyses[]>(selectedAnalyzes || [])
 
   useEffect(() => {
     getSession().then((session) => {
@@ -103,7 +104,7 @@ const SelectAnalyzesModal = ({ allowedAction }: SelectAnalyzesModalProps) => {
               setOpen(false)
             }}
             className='border border-solid'>
-            Додати аналізи
+            Зберегти
           </Button>
         </div>
       </Modal>

@@ -46,6 +46,8 @@ export interface CreateAppointment {
   fileName?: string
 }
 
+export type EditAppointment = CreateAppointment & { _id: string }
+
 const appointmentSchema = new Schema({
   patient: {
     type: Schema.Types.ObjectId,

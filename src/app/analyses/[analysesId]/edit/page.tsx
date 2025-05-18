@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import { useParams } from 'next/navigation'
 
-const AnalysesAddPage = () => {
+const AnalysesEditPage = () => {
   const params = useParams()
   const { analysesId } = params
 
@@ -27,4 +27,4 @@ const AnalysesAddPage = () => {
     </>
   )
 }
-export default AnalysesAddPage
+export default AnalysesEditPage

@@ -1,7 +1,7 @@
 'use client'
 
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
-import { CreateAppointment, IAppointment } from '@/interfaces/Appointment.interface'
+import { CreateAppointment, IAppointment, EditAppointment } from '@/interfaces/Appointment.interface'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/Textarea/Textarea'
 import dayjs from 'dayjs'
@@ -14,7 +14,7 @@ import { Doctor } from '@/interfaces/Doctor.interface'
 import { fetcher } from '@/utils/fetcher'
 import { Session } from '@/interfaces/Session.interface'
 import { getSession } from '@/lib/auth'
-import { createAppointment } from '@/lib/appointments'
+import { createAppointment, updateAppointmentById } from '@/lib/appointments'
 import { Input } from '@/components/ui/Input/Input'
 import { Analyses } from '@/interfaces/Analyses.interface'
 import SelectAnalyzesModal from '@/components/modals/SelectAnalyzesModal/SelectAnalyzesModal'
@@ -37,12 +37,14 @@ type AppointmentValues = Omit<CreateAppointment, 'endTime'> & {
 }
 
 const AddEditAppointmentForm = ({ appointment }: FormProps) => {
-  const [selectedDate, setSelectedDate] = useState<string | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
+  const [selectedDate, setSelectedDate] = useState<string | null>(
+    dayjs(appointment?.startTime).format('YYYY-MM-DD') || null
+  )
+  const [searchQuery, setSearchQuery] = useState(appointment?.doctor.position || '')
   const [session, setSession] = useState<Session | null>(null)
   const [analyses, setAnalyzes] = useState<Analyses[]>(appointment?.analyzes || [])
 
-  const [fileName, setFileName] = useState('')
+  const [fileName, setFileName] = useState(appointment?.fileName || '')
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -98,20 +100,38 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
   })
 
   const onSubmit: SubmitHandler<AppointmentValues> = async (values) => {
-    const newAppointment: CreateAppointment = {
-      ...values,
-      patient: session?.id ?? '',
-      startTime: dayjs(selectedDate)
-        .add(Number(values.startTimeHours.slice(0, 2)), 'hour')
-        .toISOString(),
-      endTime: dayjs(selectedDate)
-        .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
-        .toISOString(),
-      analyzes: analyses.map((analyzes) => analyzes._id),
-      fileName: fileName
-    }
+    if (appointment?._id) {
+      const editAppointment: EditAppointment = {
+        ...values,
+        _id: appointment._id,
+        patient: session?.id ?? '',
+        startTime: dayjs(selectedDate)
+          .add(Number(values.startTimeHours.slice(0, 2)), 'hour')
+          .toISOString(),
+        endTime: dayjs(selectedDate)
+          .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
+          .toISOString(),
+        analyzes: analyses.map((analyzes) => analyzes._id),
+        fileName: fileName
+      }
 
-    await createAppointment(newAppointment)
+      await updateAppointmentById(editAppointment)
+    } else {
+      const newAppointment: CreateAppointment = {
+        ...values,
+        patient: session?.id ?? '',
+        startTime: dayjs(selectedDate)
+          .add(Number(values.startTimeHours.slice(0, 2)), 'hour')
+          .toISOString(),
+        endTime: dayjs(selectedDate)
+          .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
+          .toISOString(),
+        analyzes: analyses.map((analyzes) => analyzes._id),
+        fileName: fileName
+      }
+
+      await createAppointment(newAppointment)
+    }
   }
 
   return (
@@ -130,6 +150,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
             onChange={(option) => {
               setSearchQuery(option)
             }}
+            defaultValue={searchQuery}
           />
         </div>
 
@@ -143,6 +164,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
               setSearchQuery(option)
             }}
             disabled={!searchQuery}
+            defaultValue={appointment?.doctor.doctorName}
           />
         </div>
 
@@ -164,7 +186,11 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
           </div>
           <div className='mt-1.5 w-full'>
             <label className='block font-regular mb-2'>Оберіть час прийому</label>
-            <Dropdown options={[...timeOptions]} onChange={(option) => setValue('startTimeHours', option)} />
+            <Dropdown
+              options={[...timeOptions]}
+              onChange={(option) => setValue('startTimeHours', option)}
+              defaultValue={dayjs(appointment?.startTime).format('HH:mm')}
+            />
           </div>
         </div>
         <div className='mt-1.5'>
@@ -189,17 +215,11 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
         </div>
 
         <div className={twMerge(analyses.length > 0 && 'mt-4')}>
-          <SelectAnalyzesModal allowedAction={(analyzes) => setAnalyzes(analyzes)} />
+          <SelectAnalyzesModal allowedAction={(analyzes) => setAnalyzes(analyzes)} selectedAnalyzes={analyses} />
         </div>
 
-        <div className='mt-4'>
+        <div className='my-4'>
           <H6>Додаткові файли</H6>
-
-          <div className='grid grid-cols-1 gap-4 mt-4'>
-            {analyses.map((analysis) => (
-              <AnalysesCard key={analysis._id} analysis={analysis} />
-            ))}
-          </div>
         </div>
 
         <div className='flex items-center gap-3'>

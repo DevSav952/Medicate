@@ -10,11 +10,12 @@ interface DropdownProps {
   options: SelectOption[]
   onChange: (option: string) => void
   disabled?: boolean
+  defaultValue?: string
 }
 
-const Dropdown = ({ options, onChange, disabled }: DropdownProps) => {
+const Dropdown = ({ options, onChange, disabled, defaultValue }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<string | null>(defaultValue || null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const toggleDropdown = () => {
