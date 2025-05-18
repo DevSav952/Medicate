@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 
 import { FaTimes } from 'react-icons/fa'
 import { IoMenu } from 'react-icons/io5'
+import { Session } from '@/interfaces/Session.interface'
 
 const links = [
   {
@@ -31,7 +32,11 @@ const links = [
   }
 ]
 
-const HeaderMenu = () => {
+interface HeaderMenuProps {
+  session?: Session
+}
+
+const HeaderMenu = ({ session }: HeaderMenuProps) => {
   const [isBurgerShow, setBurgerShow] = useState(false)
   const path = usePathname()
 
@@ -60,6 +65,33 @@ const HeaderMenu = () => {
         </div>
         <div>
           <ul>
+            {session?.isLoggedIn && session.role === 'patient' && (
+              <>
+                <li className='py-2.5 flex'>
+                  <StyledLink
+                    href={`/mycabinet/patient/${session.id}?tab=appointments`}
+                    className={twMerge(
+                      'text-[#1E2428] text-lg hover:text-[#5bafc9] transition-all duration-300 ease-in-out',
+                      path === `/mycabinet/patient/${session.id}?tab=appointments` && 'text-[#5bafc9]'
+                    )}
+                    onClick={() => setBurgerShow(false)}>
+                    Візити до лікаря
+                  </StyledLink>
+                </li>
+                <li className='py-2.5 flex'>
+                  <StyledLink
+                    href={`/mycabinet/patient/${session.id}?tab=analyzes`}
+                    className={twMerge(
+                      'text-[#1E2428] text-lg hover:text-[#5bafc9] transition-all duration-300 ease-in-out',
+                      path === `/mycabinet/patient/${session.id}?tab=analyzes` && 'text-[#5bafc9]'
+                    )}
+                    onClick={() => setBurgerShow(false)}>
+                    Аналізи
+                  </StyledLink>
+                </li>
+              </>
+            )}
+
             {links.map((link) => (
               <li key={link.href} className='py-2.5 flex'>
                 <StyledLink

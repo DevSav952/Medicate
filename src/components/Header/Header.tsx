@@ -58,6 +58,30 @@ const Header = ({ session }: HeaderProps) => {
 
           <div className='hidden lg:block'>
             <ul className='flex items-center gap-5'>
+              {session.isLoggedIn && session.role === 'patient' && (
+                <>
+                  <li className='p-2.5 flex'>
+                    <StyledLink
+                      href={`/mycabinet/patient/${session.id}?tab=appointments`}
+                      className={twMerge(
+                        'text-white text-lg hover:text-[#89E3FF] transition-all duration-300 ease-in-out',
+                        path === `/mycabinet/patient/${session.id}?tab=appointments` && 'text-[#89E3FF]'
+                      )}>
+                      Візити до лікаря
+                    </StyledLink>
+                  </li>
+                  <li className='p-2.5 flex'>
+                    <StyledLink
+                      href={`/mycabinet/patient/${session.id}?tab=analyzes`}
+                      className={twMerge(
+                        'text-white text-lg hover:text-[#89E3FF] transition-all duration-300 ease-in-out',
+                        path === `/mycabinet/patient/${session.id}?tab=analyzes` && 'text-[#89E3FF]'
+                      )}>
+                      Аналізи
+                    </StyledLink>
+                  </li>
+                </>
+              )}
               <li className='p-2.5 flex'>
                 <StyledLink
                   href='/doctors'
@@ -130,7 +154,7 @@ const Header = ({ session }: HeaderProps) => {
             )}
 
             <div className='lg:hidden'>
-              <HeaderMenu />
+              <HeaderMenu session={session} />
             </div>
           </div>
         </div>

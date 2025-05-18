@@ -6,7 +6,7 @@ export default function AddAppointmentsPage() {
   return (
     <>
       <PageHeading title='Додати прийом' />
-      <Container className=''>
+      <Container>
         <AddEditAppointmentForm />
       </Container>
     </>
