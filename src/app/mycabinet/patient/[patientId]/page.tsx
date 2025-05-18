@@ -20,6 +20,8 @@ import { useRouter, useSearchParams, useParams } from 'next/navigation'
 import { IAppointment } from '@/interfaces/Appointment.interface'
 import { BUCKET_URL } from '@/constants/bucket'
 import { Analyses } from '@/interfaces/Analyses.interface'
+import { Button } from '@/components/ui/Button/Button'
+import { logout } from '@/lib/auth'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 
@@ -269,6 +271,11 @@ const PatientProfile = ({ params }: PatientProfileProps) => {
               <P className='font-medium'>{patientProfile?.allergies || 'ні'}</P>
             </li>
           </ul>
+        </div>
+        <div className='w-full'>
+          <Button className='mt-8 bg-red' onClick={() => logout()}>
+            Вийти з акаунту
+          </Button>
         </div>
       </div>
     </div>
