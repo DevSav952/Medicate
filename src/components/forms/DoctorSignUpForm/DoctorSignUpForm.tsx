@@ -1,7 +1,7 @@
 'use client'
 
 import { Input } from '@/components/ui/Input/Input'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/Button/Button'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { IDoctorSignUp } from '@/interfaces/shared'
@@ -9,6 +9,7 @@ import { P } from '@/components/ui/Typography/Typography'
 import { registerDoctor } from '@/lib/auth'
 import { doctorSpecialties } from '@/mocks/shared'
 import Dropdown from '@/components/ui/Dropdown/Dropdown'
+import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
@@ -34,9 +35,11 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
   })
 
   const onSubmit: SubmitHandler<DoctorValue> = async (values) => {
-    registerDoctor(values)
+    console.log('values', values)
 
-    handleClose()
+    // registerDoctor(values)
+
+    // handleClose()
   }
 
   return (
@@ -74,16 +77,9 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
           <Dropdown options={doctorSpecialties} onChange={(value) => setValue('position', value)} />
         </div>
 
-        {/* @TODO Add phoneNumber input mask  */}
-        <Input
-          type='text'
-          name='phone'
-          id='phone'
-          placeholder='Номер телефону'
-          labelStyles='mt-1.5'
-          obj={register('phone')}>
+        <PhoneInput type='text' name='phone' id='phone' labelStyles='mt-1.5' obj={register('phone')}>
           Номер телефону
-        </Input>
+        </PhoneInput>
 
         <Input
           type='text'

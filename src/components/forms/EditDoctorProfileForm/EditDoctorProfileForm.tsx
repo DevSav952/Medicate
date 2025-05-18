@@ -14,6 +14,7 @@ import { mutate } from 'swr'
 
 import { FaUser } from 'react-icons/fa'
 import { MdModeEdit } from 'react-icons/md'
+import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 interface EditPatientProfileFormProps {
   doctor: Doctor
@@ -159,10 +160,9 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
         </div>
 
         <div className='mb-4'>
-          {/* @TODO Add phoneNumber input mask  */}
-          <Input type='text' placeholder='Введіть номер телефону' name='phone' id='phone' obj={register('phone')}>
+          <PhoneInput type='text' name='phone' id='phone' obj={register('phone')}>
             Номер телефону
-          </Input>
+          </PhoneInput>
         </div>
       </div>
 
