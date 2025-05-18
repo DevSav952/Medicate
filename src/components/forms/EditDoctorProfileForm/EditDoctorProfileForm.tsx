@@ -12,6 +12,7 @@ import { saveFileToBucket } from '@/lib/bucket'
 import { BUCKET_URL } from '@/constants/bucket'
 import { mutate } from 'swr'
 import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
+import { toast } from 'sonner'
 
 import { FaUser } from 'react-icons/fa'
 import { MdModeEdit } from 'react-icons/md'
@@ -44,9 +45,14 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
   const onSubmit: SubmitHandler<DoctorValues> = async (values) => {
     const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values, image: fileName })
 
-    if (result) {
+    if (result.success) {
       mutate(`/api/doctor/${doctor._id}`)
       handleClose()
+    } else {
+      toast.error('Помилка редагування лікаря', {
+        duration: 3000,
+        className: 'border border-red bg-red text-[#fff]'
+      })
     }
   }
 

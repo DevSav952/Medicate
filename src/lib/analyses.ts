@@ -15,8 +15,8 @@ export const createAnalyses = async (analyses: Omit<IAnalyses, '_id'>) => {
       fileName: analyses.fileName
     })
 
-    await doc.save()
-    return { success: true }
+    const newAnalyses = await doc.save()
+    return { success: true, analysesId: newAnalyses._id }
   } catch (error) {
     console.error('Error creating analyses:', error)
     return { success: false }

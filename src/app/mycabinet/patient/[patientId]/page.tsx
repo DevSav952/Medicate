@@ -22,6 +22,7 @@ import { BUCKET_URL } from '@/constants/bucket'
 import { Analyses } from '@/interfaces/Analyses.interface'
 import { Button } from '@/components/ui/Button/Button'
 import { logout } from '@/lib/auth'
+import SnackBar from '@/components/ui/SnackBar/SnackBar'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 
@@ -316,6 +317,8 @@ const PatientProfilePage = ({ params }: PatientProfilePageProps) => {
           />
         </div>
       </Container>
+
+      <SnackBar />
     </>
   )
 }

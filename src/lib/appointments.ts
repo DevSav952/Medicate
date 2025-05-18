@@ -21,8 +21,8 @@ export const createAppointment = async (appointment: CreateAppointment) => {
       fileName: appointment.fileName
     })
 
-    await doc.save()
-    return { success: true }
+    const newAppointment = await doc.save()
+    return { success: true, appointmentId: newAppointment._id }
   } catch (error) {
     console.error('Error creating appointment:', error)
     return { success: false }
@@ -49,7 +49,7 @@ export const updateAppointmentById = async (appointment: EditAppointment) => {
       }
     )
 
-    return { success: true }
+    return { success: true, appointmentId: appointment._id }
   } catch (error) {
     console.error('Error edit appointment:', error)
     return { success: false }

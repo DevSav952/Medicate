@@ -24,6 +24,9 @@ import { Button } from '@/components/ui/Button/Button'
 import { saveFileToBucket } from '@/lib/bucket'
 import AttachmentPreviewModal from '@/components/modals/AttachmentPreviewModal/AttachmentPreviewModal'
 import { twMerge } from 'tailwind-merge'
+import SnackBar from '@/components/ui/SnackBar/SnackBar'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 // @TODO: block this page for non auth users
 // @TODO: add validation for form
@@ -37,6 +40,7 @@ type AppointmentValues = Omit<CreateAppointment, 'endTime'> & {
 }
 
 const AddEditAppointmentForm = ({ appointment }: FormProps) => {
+  const router = useRouter()
   const [selectedDate, setSelectedDate] = useState<string | null>(
     dayjs(appointment?.startTime).format('YYYY-MM-DD') || null
   )
@@ -115,7 +119,21 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
         fileName: fileName
       }
 
-      await updateAppointmentById(editAppointment)
+      const result = await updateAppointmentById(editAppointment)
+
+      if (result.success) {
+        toast.success('Візит успішно оновлено', {
+          duration: 3000,
+          className: 'border border-green-100 bg-green-100 text-[#fff]'
+        })
+
+        router.push(`/appointments/${result.appointmentId}`)
+      } else {
+        toast.success('Помилка оновлення візиту', {
+          duration: 3000,
+          className: 'border border-red bg-red text-[#fff]'
+        })
+      }
     } else {
       const newAppointment: CreateAppointment = {
         ...values,
@@ -130,7 +148,21 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
         fileName: fileName
       }
 
-      await createAppointment(newAppointment)
+      const result = await createAppointment(newAppointment)
+
+      if (result.success) {
+        toast.success('Візит успішно створено', {
+          duration: 3000,
+          className: 'border border-green-100 bg-green-100 text-[#fff]'
+        })
+
+        router.push(`/appointments/${result.appointmentId}`)
+      } else {
+        toast.success('Помилка створення візиту', {
+          duration: 3000,
+          className: 'border border-red bg-red text-[#fff]'
+        })
+      }
     }
   }
 
@@ -268,6 +300,8 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
           Зберегти
         </Button>
       </form>
+
+      <SnackBar />
     </>
   )
 }

@@ -18,6 +18,7 @@ import { IAppointment } from '@/interfaces/Appointment.interface'
 import { BUCKET_URL } from '@/constants/bucket'
 import { Button } from '@/components/ui/Button/Button'
 import { logout } from '@/lib/auth'
+import SnackBar from '@/components/ui/SnackBar/SnackBar'
 
 import { FaUser } from 'react-icons/fa'
 
@@ -194,6 +195,8 @@ const DoctorProfilePage = ({ params }: DoctorProfilePageProps) => {
           />
         </div>
       </Container>
+
+      <SnackBar />
     </>
   )
 }

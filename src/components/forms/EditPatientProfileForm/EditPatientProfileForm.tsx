@@ -15,6 +15,7 @@ import { saveFileToBucket } from '@/lib/bucket'
 import { BUCKET_URL } from '@/constants/bucket'
 import Image from 'next/image'
 import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
+import { toast } from 'sonner'
 
 import { FaUser } from 'react-icons/fa'
 import { MdModeEdit } from 'react-icons/md'
@@ -88,9 +89,14 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
   const onSubmit: SubmitHandler<PatientValues> = async (values) => {
     const result = await updatePatientById({ _id: patient._id ?? '', ...values, image: fileName })
 
-    if (result) {
+    if (result.success) {
       mutate(`/api/patient/${patient._id}`)
       handleClose()
+    } else {
+      toast.error('Помилка редагування пацієнта', {
+        duration: 3000,
+        className: 'border border-red bg-red text-[#fff]'
+      })
     }
   }
 

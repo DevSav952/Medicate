@@ -28,7 +28,10 @@ const config: Config = {
         'blue-100': '#2a93c9',
         'blue-200': '#56b0cf',
         'blue-300': '#0674d1',
-        red: '#e74c3c'
+        red: '#e74c3c',
+        green: {
+          100: '#11a762'
+        }
       },
       boxShadow: {
         'doctor-card': '5px 5px 50px 0px rgba(6, 30, 52, 0.11)',

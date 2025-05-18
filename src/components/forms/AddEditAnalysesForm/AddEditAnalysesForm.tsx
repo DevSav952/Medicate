@@ -15,6 +15,8 @@ import { Session } from '@/interfaces/Session.interface'
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
 import dayjs from 'dayjs'
 import { useRouter } from 'next/navigation'
+import SnackBar from '@/components/ui/SnackBar/SnackBar'
+import { toast } from 'sonner'
 
 interface FormProps {
   analyses?: Analyses
@@ -53,98 +55,126 @@ const AddEditAnalysesForm = ({ analyses }: FormProps) => {
       const result = await updateAnalysesById({ _id: analyses._id, patientId: session?.id ?? '', ...values, fileName })
 
       if (result.success) {
+        toast.success('Аналіз успішно оновлено', {
+          duration: 3000,
+          className: 'border border-green-100 bg-green-100 text-[#fff]'
+        })
+
         router.push(`/analyses/${analyses._id}`)
+      } else {
+        toast.success('Помилка оновлення аналізу', {
+          duration: 3000,
+          className: 'border border-red bg-red text-[#fff]'
+        })
       }
     } else {
       const result = await createAnalyses({ patientId: session?.id ?? '', ...values, fileName })
 
       if (result.success) {
-        router.push(`/mycabinet/patient/${session?.id}?tab=analyzes`)
+        toast.success('Аналіз успішно створено', {
+          duration: 3000,
+          className: 'border border-green-100 bg-green-100 text-[#fff]'
+        })
+
+        router.push(`/appointments/${result.analysesId}`)
+      } else {
+        toast.success('Помилка створення аналізу', {
+          duration: 3000,
+          className: 'border border-red bg-red text-[#fff]'
+        })
       }
     }
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className='mb-4'>
-        <Input
-          type='text'
-          placeholder='Введіть назву аналізу'
-          name='analysisName'
-          id='analysisName'
-          obj={register('analysisName', {
-            required: { value: true, message: "Поле обов'язкове" },
-            minLength: { value: 3, message: 'Назва аналізу має містити мінімум 3 символи' }
-          })}>
-          Назва аналізу
-        </Input>
-        {errors?.analysisName && <P className='text-red text-sm my-1'>{errors.analysisName.message}</P>}
-      </div>
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='mb-4'>
+          <Input
+            type='text'
+            placeholder='Введіть назву аналізу'
+            name='analysisName'
+            id='analysisName'
+            obj={register('analysisName', {
+              required: { value: true, message: "Поле обов'язкове" },
+              minLength: { value: 3, message: 'Назва аналізу має містити мінімум 3 символи' }
+            })}>
+            Назва аналізу
+          </Input>
+          {errors?.analysisName && <P className='text-red text-sm my-1'>{errors.analysisName.message}</P>}
+        </div>
 
-      <div className='mb-4 w-full'>
-        <label className='block font-regular mb-2'>Оберіть дату прийому</label>
-        <DatePicker
-          onChange={(date) => {
-            setValue('date', dayjs(date).format('YYYY-MM-DD'))
-          }}
-          calendarModalStyles='w-full'
-          initialDate={analyses?.date ? dayjs(analyses?.date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')}
-        />
-      </div>
+        <div className='mb-4 w-full'>
+          <label className='block font-regular mb-2'>Оберіть дату прийому</label>
+          <DatePicker
+            onChange={(date) => {
+              setValue('date', dayjs(date).format('YYYY-MM-DD'))
+            }}
+            calendarModalStyles='w-full'
+            initialDate={analyses?.date ? dayjs(analyses?.date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')}
+          />
+        </div>
 
-      <div className='mb-4'>
-        <Textarea placeholder='Введіть назву аналізу' name='description' id='description' obj={register('description')}>
-          Опис аналізу
-        </Textarea>
-        {errors?.description && <P className='text-red text-sm my-1'>{errors.description.message}</P>}
-      </div>
+        <div className='mb-4'>
+          <Textarea
+            placeholder='Введіть назву аналізу'
+            name='description'
+            id='description'
+            obj={register('description')}>
+            Опис аналізу
+          </Textarea>
+          {errors?.description && <P className='text-red text-sm my-1'>{errors.description.message}</P>}
+        </div>
 
-      <div className='flex items-center gap-3'>
-        {!fileName && (
-          <Button
-            onClick={() => {
-              fileInputRef.current?.click()
-            }}>
-            Додати файл
-          </Button>
-        )}
-        {fileName && <AttachmentPreviewModal attachment={fileName} />}
+        <div className='flex items-center gap-3'>
+          {!fileName && (
+            <Button
+              onClick={() => {
+                fileInputRef.current?.click()
+              }}>
+              Додати файл
+            </Button>
+          )}
+          {fileName && <AttachmentPreviewModal attachment={fileName} />}
 
-        {fileName && (
-          <Button
-            className='border border-solid border-red bg-transparent text-red'
-            onClick={() => {
-              setFileName('')
-            }}>
-            Скасувати
-          </Button>
-        )}
+          {fileName && (
+            <Button
+              className='border border-solid border-red bg-transparent text-red'
+              onClick={() => {
+                setFileName('')
+              }}>
+              Скасувати
+            </Button>
+          )}
 
-        <input
-          ref={fileInputRef}
-          type='file'
-          name='file'
-          id='file'
-          accept='image/jpg, image/jpeg, image/png, application/pdf'
-          className='hidden'
-          onChange={async (e) => {
-            const timestamp = Date.now()
-            const extension = e.target.files![0].name.split('.').pop()
+          <input
+            ref={fileInputRef}
+            type='file'
+            name='file'
+            id='file'
+            accept='image/jpg, image/jpeg, image/png, application/pdf'
+            className='hidden'
+            onChange={async (e) => {
+              const timestamp = Date.now()
+              const extension = e.target.files![0].name.split('.').pop()
 
-            const fileName = await saveFileToBucket(
-              e.target.files![0],
-              `analyses_${timestamp}.${extension}`,
-              'beclinic/custom/files'
-            )
-            setFileName(fileName)
-          }}
-        />
-      </div>
+              const fileName = await saveFileToBucket(
+                e.target.files![0],
+                `analyses_${timestamp}.${extension}`,
+                'beclinic/custom/files'
+              )
+              setFileName(fileName)
+            }}
+          />
+        </div>
 
-      <Button className='mt-5 w-full' type='submit'>
-        Зберегти
-      </Button>
-    </form>
+        <Button className='mt-5 w-full' type='submit'>
+          Зберегти
+        </Button>
+      </form>
+
+      <SnackBar />
+    </>
   )
 }
 export default AddEditAnalysesForm
