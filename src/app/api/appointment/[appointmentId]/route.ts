@@ -3,14 +3,21 @@
 import connectMongoDB from '@/lib/connectMongoDB'
 import Appointment from '@/interfaces/Appointment.interface'
 import { NextResponse } from 'next/server'
+import Analyses from '@/interfaces/Analyses.interface'
+import Doctor from '@/interfaces/Doctor.interface'
 
 export async function GET(req: Request) {
   const url = new URL(req.url)
   const appointmentId = url.pathname.split('/').pop()
 
+  console.log('appointmentId', appointmentId)
+
   try {
     await connectMongoDB()
-    const appointments = await Appointment.findById(appointmentId)
+    await Analyses
+    await Doctor
+
+    const appointment = await Appointment.findById(appointmentId)
       .populate(
         'patient',
         'userName dateOfBirth bloodType diabetes rhFactor bloodTransfusion intoleranceToMedicines infectiousDiseases surgicalInterventions allergies'
@@ -18,11 +25,11 @@ export async function GET(req: Request) {
       .populate('doctor', 'doctorName position')
       .populate('analyzes', 'analysisName description date')
 
-    if (!appointments) {
+    if (!appointment) {
       return NextResponse.json({ message: 'Appointment not found' }, { status: 404 })
     }
 
-    return NextResponse.json(appointments)
+    return NextResponse.json(appointment)
   } catch (error) {
     return NextResponse.json({ message: `Internal Server Error: ${error}` }, { status: 500 })
   }
