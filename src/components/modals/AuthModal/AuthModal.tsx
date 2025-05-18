@@ -9,6 +9,7 @@ import SignUpForm from '@/components/forms/SignUpForm/SignUpForm'
 import Image from 'next/image'
 import DoctorSignInForm from '@/components/forms/DoctorSignInForm/DoctorSignInForm'
 import DoctorSignUpForm from '@/components/forms/DoctorSignUpForm/DoctorSignUpForm'
+import SnackBar from '@/components/ui/SnackBar/SnackBar'
 
 import patientAuth from '@/assets/patient-auth.jpg'
 import doctorAuth from '@/assets/doctor-auth.jpg'
@@ -179,6 +180,8 @@ const AuthModal = ({ isOpen, handleOpenAuthModal, handleCloseAuthModal }: AuthMo
           )}
         </div>
       </Modal>
+
+      <SnackBar />
     </>
   )
 }

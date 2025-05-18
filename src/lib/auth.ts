@@ -132,29 +132,35 @@ export const loginDoctor = async (data: ISignIn) => {
 }
 
 export const registerDoctor = async (doctor: IDoctorSignUp) => {
-  await connectMongoDB()
-  const session = await getSession()
+  try {
+    await connectMongoDB()
+    const session = await getSession()
 
-  const salt = await bcrypt.genSalt(10)
-  const hash = await bcrypt.hash(doctor.password, salt)
+    const salt = await bcrypt.genSalt(10)
+    const hash = await bcrypt.hash(doctor.password, salt)
 
-  const doc = new Doctor({
-    email: doctor.email,
-    passwordHash: hash,
-    doctorName: doctor.doctorName,
-    position: doctor.position,
-    phone: doctor.phone,
-    image: ''
-  })
+    const doc = new Doctor({
+      email: doctor.email,
+      passwordHash: hash,
+      doctorName: doctor.doctorName,
+      position: doctor.position,
+      phone: doctor.phone,
+      image: ''
+    })
 
-  const patientDoc = await doc.save()
+    const patientDoc = await doc.save()
 
-  session.isLoggedIn = true
-  session.role = 'doctor'
-  session.id = patientDoc._id
-  session.userName = patientDoc.doctorName
-  session.email = patientDoc.email
-  session.image = patientDoc.image
+    session.isLoggedIn = true
+    session.role = 'doctor'
+    session.id = patientDoc._id
+    session.userName = patientDoc.doctorName
+    session.email = patientDoc.email
+    session.image = patientDoc.image
 
-  await session.save()
+    await session.save()
+    return { success: true }
+  } catch (error) {
+    console.log('Error creating doctor:', error)
+    return { success: false }
+  }
 }

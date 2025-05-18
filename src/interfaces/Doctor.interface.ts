@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose'
+import { unique } from 'next/dist/build/utils'
 import { StaticImageData } from 'next/image'
 
 export interface Doctor {
@@ -18,7 +19,8 @@ const doctorSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   passwordHash: {
     type: String,

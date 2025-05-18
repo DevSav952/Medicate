@@ -13,6 +13,7 @@ import { PhoneInput } from '@/components/ui/PhoneInput/PhoneInput'
 
 import { FaEye } from 'react-icons/fa'
 import { FaEyeSlash } from 'react-icons/fa'
+import { toast } from 'sonner'
 
 interface DoctorSignUpFormProps {
   handleClose: () => void
@@ -35,11 +36,16 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
   })
 
   const onSubmit: SubmitHandler<DoctorValue> = async (values) => {
-    console.log('values', values)
+    const result = await registerDoctor(values)
 
-    // registerDoctor(values)
-
-    // handleClose()
+    if (result.success) {
+      handleClose()
+    } else {
+      toast.error('Помилка створення лікаря', {
+        duration: 3000,
+        className: 'border border-red bg-red text-[#fff]'
+      })
+    }
   }
 
   return (
