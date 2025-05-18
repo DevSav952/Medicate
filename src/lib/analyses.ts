@@ -22,3 +22,25 @@ export const createAnalyses = async (analyses: Omit<IAnalyses, '_id'>) => {
     return { success: false }
   }
 }
+
+export const updateAnalysesById = async (analyses: IAnalyses) => {
+  try {
+    await connectMongoDB()
+
+    await Analyses.updateOne(
+      { _id: analyses._id },
+      {
+        patientId: analyses.patientId,
+        analysisName: analyses.analysisName,
+        description: analyses.description,
+        date: analyses.date,
+        fileName: analyses.fileName
+      }
+    )
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error edit analyses:', error)
+    return { success: false }
+  }
+}

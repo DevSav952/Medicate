@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/Textarea/Textarea'
 import { P } from '@/components/ui/Typography/Typography'
 import { saveFileToBucket } from '@/lib/bucket'
 import AttachmentPreviewModal from '@/components/modals/AttachmentPreviewModal/AttachmentPreviewModal'
-import { createAnalyses } from '@/lib/analyses'
+import { createAnalyses, updateAnalysesById } from '@/lib/analyses'
 import { getSession } from '@/lib/auth'
 import { Session } from '@/interfaces/Session.interface'
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
@@ -23,7 +23,7 @@ interface FormProps {
 type AnalysesValues = Omit<Analyses, '_id' | 'patientId' | 'fileName'>
 
 const AddEditAnalysesForm = ({ analyses }: FormProps) => {
-  const [fileName, setFileName] = useState('')
+  const [fileName, setFileName] = useState(analyses?.fileName || '')
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [session, setSession] = useState<Session | null>(null)
   const router = useRouter()
@@ -49,10 +49,18 @@ const AddEditAnalysesForm = ({ analyses }: FormProps) => {
   })
 
   const onSubmit: SubmitHandler<AnalysesValues> = async (values) => {
-    const result = await createAnalyses({ patientId: session?.id ?? '', ...values, fileName })
+    if (analyses?._id) {
+      const result = await updateAnalysesById({ _id: analyses._id, patientId: session?.id ?? '', ...values, fileName })
 
-    if (result.success) {
-      router.push(`/mycabinet/patient/${session?.id}?tab=analyzes`)
+      if (result.success) {
+        router.push(`/analyses/${analyses._id}`)
+      }
+    } else {
+      const result = await createAnalyses({ patientId: session?.id ?? '', ...values, fileName })
+
+      if (result.success) {
+        router.push(`/mycabinet/patient/${session?.id}?tab=analyzes`)
+      }
     }
   }
 
