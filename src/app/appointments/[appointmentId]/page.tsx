@@ -46,7 +46,11 @@ const UpcomingAppointment = ({ appointmentData }: { appointmentData: IAppointmen
 
       <H4 className='mb-2'>Аналізи</H4>
       <div className='flex flex-col gap-4'>
-        {appointmentData?.analyzes?.map((analysis) => <AnalysesCard key={analysis._id} analysis={analysis} />) || '-'}
+        {appointmentData?.analyzes && appointmentData.analyzes.length > 0 ? (
+          appointmentData.analyzes.map((analysis) => <AnalysesCard key={analysis._id} analysis={analysis} />)
+        ) : (
+          <P>-</P>
+        )}
       </div>
     </>
   )
@@ -65,7 +69,8 @@ const PastAppointment = ({ appointmentData }: { appointmentData: IAppointment })
 
       <H4 className='mb-2'>Аналізи</H4>
       <div className='flex flex-col gap-4'>
-        {appointmentData?.analyzes?.map((analysis) => <AnalysesCard key={analysis._id} analysis={analysis} />) || '-'}
+        {appointmentData?.analyzes?.map((analysis) => <AnalysesCard key={analysis._id} analysis={analysis} />)}
+        {appointmentData?.analyzes?.length === 0 && <P>-</P>}
       </div>
 
       <Separator className='bg-[#D1D1D1]' />
@@ -81,8 +86,11 @@ const PastAppointment = ({ appointmentData }: { appointmentData: IAppointment })
           <P className='text-xs'>Приймати, днів</P>
           <P className='text-xs'>Коментар</P>
         </div>
-        {/* {appointmentData?.medicine?.map((medicine) => <MedicineCard key={medicine.name} medicine={medicine} />) || '-'} */}
-        {mockedMedicine?.map((medicine) => <MedicineCard key={medicine.name} medicine={medicine} />) || '-'}
+        {appointmentData?.analyzes && appointmentData.analyzes.length > 0 ? (
+          appointmentData.analyzes.map((analysis) => <AnalysesCard key={analysis._id} analysis={analysis} />)
+        ) : (
+          <P>-</P>
+        )}
       </div>
       <Separator className='bg-[#D1D1D1]' />
 
