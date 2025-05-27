@@ -90,7 +90,7 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
     const result = await updatePatientById({ _id: patient._id ?? '', ...values, image: fileName })
 
     if (result.success) {
-      mutate(`/api/patient/${patient._id}`)
+      await mutate(`/api/patient/${patient._id}`)
       handleClose()
     } else {
       toast.error('Помилка редагування пацієнта', {
@@ -219,7 +219,7 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
       </div>
 
       <div className='mb-4'>
-        <PhoneInput type='text' name='phone' id='phone' obj={register('phoneNumber')}>
+        <PhoneInput type='text' name='phoneNumber' id='phoneNumber' obj={register('phoneNumber')}>
           Номер телефону
         </PhoneInput>
       </div>
