@@ -12,19 +12,38 @@ import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
+import dayjs from 'dayjs'
 
 interface DatePickerProps {
   startYear?: number
   initialDate?: string
   endYear?: number
   calendarModalStyles?: string
+  showOutsideDays?: boolean
   onChange?: (date: Date) => void
 }
+
+const MONTHS = [
+  'Січень',
+  'Лютий',
+  'Березень',
+  'Квітень',
+  'Травень',
+  'Червень',
+  'Липень',
+  'Серпень',
+  'Вересень',
+  'Жовтень',
+  'Листопад',
+  'Грудень'
+]
+
 export function DatePicker({
-  startYear = getYear(new Date()) - 100,
-  endYear = getYear(new Date()) + 100,
+  startYear = getYear(new Date()),
+  endYear = getYear(new Date()) + 25,
   initialDate,
   calendarModalStyles,
+  showOutsideDays,
   onChange
 }: DatePickerProps) {
   const [date, setDate] = React.useState<Date>(initialDate ? new Date(initialDate) : new Date())
@@ -35,20 +54,10 @@ export function DatePicker({
     }
   }, [date, onChange])
 
-  const months = [
-    'Січень',
-    'Лютий',
-    'Березень',
-    'Квітень',
-    'Травень',
-    'Червень',
-    'Липень',
-    'Серпень',
-    'Вересень',
-    'Жовтень',
-    'Листопад',
-    'Грудень'
-  ]
+  const months = React.useMemo(() => {
+    return dayjs(date).isSame(dayjs(), 'year') ? MONTHS.slice(getMonth(new Date()), MONTHS.length) : MONTHS
+  }, [date])
+
   const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
 
   const handleMonthChange = (month: string) => {
@@ -62,7 +71,7 @@ export function DatePicker({
   }
 
   const handleSelect = (selectedData: Date | undefined) => {
-    if (selectedData) {
+    if (selectedData && dayjs(selectedData).isAfter(dayjs())) {
       setDate(selectedData)
     }
   }
@@ -113,6 +122,7 @@ export function DatePicker({
           month={date}
           onMonthChange={setDate}
           className='w-full'
+          showOutsideDays={showOutsideDays}
         />
       </PopoverContent>
     </Popover>

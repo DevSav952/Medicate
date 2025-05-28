@@ -7,6 +7,7 @@ import { uk } from 'date-fns/locale'
 
 import { cn } from '@/utils/cn'
 import { buttonVariants } from './button'
+import dayjs from 'dayjs'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -16,6 +17,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
       locale={uk}
       showOutsideDays={showOutsideDays}
       className={cn('p-3 w-full', className)}
+      fromDate={dayjs().add(1, 'day').toDate()}
       classNames={{
         months: 'flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0',
         month: 'space-y-4  w-full',

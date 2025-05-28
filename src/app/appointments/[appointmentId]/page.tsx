@@ -141,12 +141,14 @@ const SingleAppointmentPage = () => {
           </div>
 
           <div className='flex gap-4 text-white'>
-            <MdEdit
-              className='transition-all duration-300 hover:text-orange-400 cursor-pointer'
-              onClick={() => {
-                router.push(`/appointments/${appointmentData?._id}/edit`)
-              }}
-            />
+            {dayjs(appointmentData?.startTime).isAfter(currentTime) && (
+              <MdEdit
+                className='transition-all duration-300 hover:text-orange-400 cursor-pointer'
+                onClick={() => {
+                  router.push(`/appointments/${appointmentData?._id}/edit`)
+                }}
+              />
+            )}
           </div>
         </div>
       </PageHeading>

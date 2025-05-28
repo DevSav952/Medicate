@@ -39,6 +39,8 @@ const AppointmentsTab = () => {
     refreshWhenOffline: false
   })
 
+  console.log('appointments', appointments)
+
   const futureAppointments = useMemo(
     () => appointments?.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())) || [],
     [appointments]

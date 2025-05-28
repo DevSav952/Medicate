@@ -1,5 +1,3 @@
-'use client'
-
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
 import { CreateAppointment, IAppointment, EditAppointment } from '@/interfaces/Appointment.interface'
 import { SubmitHandler, useForm } from 'react-hook-form'
@@ -13,7 +11,6 @@ import useSWR from 'swr'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import { fetcher } from '@/utils/fetcher'
 import { Session } from '@/interfaces/Session.interface'
-import { getSession } from '@/lib/auth'
 import { createAppointment, updateAppointmentById } from '@/lib/appointments'
 import { Input } from '@/components/ui/Input/Input'
 import { Analyses } from '@/interfaces/Analyses.interface'
@@ -32,6 +29,7 @@ import { useRouter } from 'next/navigation'
 // @TODO: add validation for form
 
 interface FormProps {
+  session: Session
   appointment?: IAppointment
 }
 
@@ -39,23 +37,18 @@ type AppointmentValues = Omit<CreateAppointment, 'endTime'> & {
   startTimeHours: string
 }
 
-const AddEditAppointmentForm = ({ appointment }: FormProps) => {
+const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
+  const isEditMode = !!appointment?._id
+
   const router = useRouter()
   const [selectedDate, setSelectedDate] = useState<string | null>(
     dayjs(appointment?.startTime).format('YYYY-MM-DD') || null
   )
   const [searchQuery, setSearchQuery] = useState(appointment?.doctor.position || '')
-  const [session, setSession] = useState<Session | null>(null)
   const [analyses, setAnalyzes] = useState<Analyses[]>(appointment?.analyzes || [])
 
   const [fileName, setFileName] = useState(appointment?.fileName || '')
   const fileInputRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    getSession().then((session) => {
-      setSession(session)
-    })
-  }, [])
 
   const { data: doctors } = useSWR<Doctor[]>(
     searchQuery ? `/api/searchTerms/doctor?search=${encodeURIComponent(searchQuery)}` : null,
@@ -110,10 +103,16 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
         _id: appointment._id,
         patient: session?.id ?? '',
         startTime: dayjs(selectedDate)
-          .add(Number(values.startTimeHours.slice(0, 2)), 'hour')
+          .add(
+            Number(values.startTimeHours ? values.startTimeHours.slice(0, 2) : dayjs(appointment.startTime).hour()),
+            'hour'
+          )
           .toISOString(),
         endTime: dayjs(selectedDate)
-          .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
+          .add(
+            Number(values.startTimeHours ? values.startTimeHours.slice(0, 2) : dayjs(appointment.startTime).hour()) + 1,
+            'hour'
+          )
           .toISOString(),
         analyzes: analyses.map((analyzes) => analyzes._id),
         fileName: fileName
@@ -183,6 +182,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
               setSearchQuery(option)
             }}
             defaultValue={searchQuery}
+            disabled={isEditMode}
           />
         </div>
 
@@ -195,7 +195,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
               setValue('doctor', option)
               setSearchQuery(option)
             }}
-            disabled={!searchQuery}
+            disabled={!searchQuery || isEditMode}
             defaultValue={appointment?.doctor.doctorName}
           />
         </div>
@@ -208,6 +208,7 @@ const AddEditAppointmentForm = ({ appointment }: FormProps) => {
                 setValue('startTime', dayjs(date).format('YYYY-MM-DD'))
                 setSelectedDate(dayjs(date).format('YYYY-MM-DD'))
               }}
+              showOutsideDays={false}
               calendarModalStyles='w-full'
               initialDate={
                 appointment?.startTime
