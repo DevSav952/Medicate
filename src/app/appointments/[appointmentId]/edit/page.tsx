@@ -7,10 +7,14 @@ import { useParams } from 'next/navigation'
 import { IAppointment } from '@/interfaces/Appointment.interface'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
+import { useEffect, useState } from 'react'
+import { getSession } from '@/lib/auth'
+import { Session } from '@/interfaces/Session.interface'
 
 export default function EditAppointmentsPage() {
   const params = useParams()
   const { appointmentId } = params
+  const [session, setSession] = useState<Session | null>(null)
 
   const { data: appointment } = useSWR<IAppointment>(`/api/appointment/${appointmentId}`, fetcher, {
     shouldRetryOnError: false,
@@ -20,10 +24,20 @@ export default function EditAppointmentsPage() {
     refreshWhenOffline: false
   })
 
+  useEffect(() => {
+    getSession().then((session) => {
+      if (session.role) {
+        setSession(session)
+      }
+    })
+  }, [])
+
   return (
     <>
       <PageHeading title='Редагувати прийом' />
-      <Container>{appointment && <AddEditAppointmentForm appointment={appointment} />}</Container>
+      <Container>
+        {appointment && session && <AddEditAppointmentForm appointment={appointment} session={session} />}
+      </Container>
     </>
   )
 }

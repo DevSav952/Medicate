@@ -11,12 +11,13 @@ interface InputProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
   value?: string
   checked?: boolean
+  disabled?: boolean
   obj?: object
   labelStyles?: string
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ type, placeholder, name, id, children, required, obj, onChange, value, checked, labelStyles }, ref) => {
+  ({ type, placeholder, name, id, children, required, obj, onChange, value, checked, disabled, labelStyles }, ref) => {
     return (
       <>
         <label className={twMerge('block font-regular mb-2', labelStyles)} htmlFor={id}>
@@ -33,6 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           onChange={onChange}
           checked={checked}
           ref={ref}
+          disabled={disabled}
           {...obj}
         />
       </>

@@ -18,7 +18,10 @@ export const createAppointment = async (appointment: CreateAppointment) => {
       endTime: appointment.endTime,
       description: appointment.description,
       analyzes: analyzes,
-      fileName: appointment.fileName
+      fileName: appointment.fileName,
+      medicine: appointment.medicine,
+      diagnosis: appointment.diagnosis,
+      treatment: appointment.treatment
     })
 
     const newAppointment = await doc.save()
@@ -45,7 +48,10 @@ export const updateAppointmentById = async (appointment: EditAppointment) => {
         endTime: appointment.endTime,
         description: appointment.description,
         analyzes: analyzes,
-        fileName: appointment.fileName
+        fileName: appointment.fileName,
+        medicine: appointment.medicine,
+        diagnosis: appointment.diagnosis,
+        treatment: appointment.treatment
       }
     )
 

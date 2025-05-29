@@ -35,16 +35,16 @@ const UpcomingAppointment = ({ appointmentData }: { appointmentData: IAppointmen
           </StyledLinkButton>
         </div>
       </div>
-      <Separator className='bg-[#D1D1D1]' />
 
+      <Separator className='bg-[#D1D1D1]' />
       <H4 className='mb-2'>Причина візиту</H4>
       <P>{appointmentData?.reason || '-'}</P>
-      <Separator className='bg-[#D1D1D1]' />
 
+      <Separator className='bg-[#D1D1D1]' />
       <H4 className='mb-2'>Додаткові деталі</H4>
       <P>{appointmentData?.description || '-'}</P>
-      <Separator className='bg-[#D1D1D1]' />
 
+      <Separator className='bg-[#D1D1D1]' />
       <H4 className='mb-2'>Аналізи</H4>
       <div className='flex flex-col gap-4'>
         {appointmentData?.analyzes && appointmentData.analyzes.length > 0 ? (
@@ -53,12 +53,49 @@ const UpcomingAppointment = ({ appointmentData }: { appointmentData: IAppointmen
           <P>-</P>
         )}
       </div>
-      <Separator className='bg-[#D1D1D1]' />
 
       {appointmentData?.fileName && (
         <>
+          <Separator className='bg-[#D1D1D1]' />
           <H4 className='mb-2'>Додаткові файли</H4>
           <AttachmentPreviewModal attachment={appointmentData.fileName} />
+        </>
+      )}
+
+      {appointmentData.treatment && (
+        <>
+          <Separator className='bg-[#D1D1D1]' />
+          <H4 className='mb-2'>Діагноз</H4>
+          <P>{appointmentData?.diagnosis || '-'}</P>{' '}
+        </>
+      )}
+
+      {appointmentData.medicine && (
+        <>
+          <Separator className='bg-[#D1D1D1]' />
+          <H4 className='mb-2'>Призначені препарати</H4>
+          <div className='flex flex-col gap-4'>
+            <div className='px-4 w-full grid gap-4 grid-cols-[100px_75px_1fr] sm:grid-cols-[100px_100px_1fr]'>
+              <P className='text-xs'>Препарат</P>
+              <P className='text-xs'>Приймати, днів</P>
+              <P className='text-xs'>Коментар</P>
+            </div>
+            {appointmentData?.medicine && appointmentData.medicine.length > 0 ? (
+              appointmentData.medicine.map((medicine) => (
+                <MedicineCard key={medicine.medicineName} medicine={medicine} />
+              ))
+            ) : (
+              <P>-</P>
+            )}
+          </div>
+        </>
+      )}
+
+      {appointmentData.treatment && (
+        <>
+          <Separator className='bg-[#D1D1D1]' />
+          <H4>Коментар лікаря</H4>
+          <P>{appointmentData?.treatment || '-'}</P>{' '}
         </>
       )}
     </>
@@ -96,7 +133,7 @@ const PastAppointment = ({ appointmentData }: { appointmentData: IAppointment })
           <P className='text-xs'>Коментар</P>
         </div>
         {appointmentData?.medicine && appointmentData.medicine.length > 0 ? (
-          appointmentData.medicine.map((medicine) => <MedicineCard key={medicine.name} medicine={medicine} />)
+          appointmentData.medicine.map((medicine) => <MedicineCard key={medicine.medicineName} medicine={medicine} />)
         ) : (
           <P>-</P>
         )}
@@ -141,7 +178,7 @@ const SingleAppointmentPage = () => {
           </div>
 
           <div className='flex gap-4 text-white'>
-            {dayjs(appointmentData?.startTime).isAfter(currentTime) && (
+            {dayjs(appointmentData?.endTime).isAfter(currentTime) && (
               <MdEdit
                 className='transition-all duration-300 hover:text-orange-400 cursor-pointer'
                 onClick={() => {

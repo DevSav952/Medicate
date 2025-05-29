@@ -24,6 +24,9 @@ import { twMerge } from 'tailwind-merge'
 import SnackBar from '@/components/ui/SnackBar/SnackBar'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
+import MedicineCard from '@/components/MedicineCard/MedicineCard'
+import { IMedicine } from '@/interfaces/Medicine.interface'
+import SelectMedicineModal from '@/components/modals/SelectMedicineModal/SelectMedicineModal'
 
 // @TODO: block this page for non auth users
 // @TODO: add validation for form
@@ -39,6 +42,7 @@ type AppointmentValues = Omit<CreateAppointment, 'endTime'> & {
 
 const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
   const isEditMode = !!appointment?._id
+  const isDoctor = session.role === 'doctor'
 
   const router = useRouter()
   const [selectedDate, setSelectedDate] = useState<string | null>(
@@ -46,6 +50,7 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
   )
   const [searchQuery, setSearchQuery] = useState(appointment?.doctor.position || '')
   const [analyses, setAnalyzes] = useState<Analyses[]>(appointment?.analyzes || [])
+  const [medicine, setMedicine] = useState<IMedicine[]>(appointment?.medicine || [])
 
   const [fileName, setFileName] = useState(appointment?.fileName || '')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -88,11 +93,14 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
   } = useForm<AppointmentValues>({
     mode: 'onSubmit',
     defaultValues: {
-      patient: session?.id || '',
+      patient: appointment?.patient._id || '',
       reason: appointment?.reason || '',
       startTime: appointment?.startTime || '',
       doctor: appointment?.doctor._id || '',
-      description: appointment?.description || ''
+      description: appointment?.description || '',
+      medicine: appointment?.medicine || [],
+      diagnosis: appointment?.diagnosis || '',
+      treatment: appointment?.treatment || ''
     }
   })
 
@@ -101,7 +109,7 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
       const editAppointment: EditAppointment = {
         ...values,
         _id: appointment._id,
-        patient: session?.id ?? '',
+        patient: appointment?.patient._id ?? '',
         startTime: dayjs(selectedDate)
           .add(
             Number(values.startTimeHours ? values.startTimeHours.slice(0, 2) : dayjs(appointment.startTime).hour()),
@@ -115,7 +123,8 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
           )
           .toISOString(),
         analyzes: analyses.map((analyzes) => analyzes._id),
-        fileName: fileName
+        fileName: fileName,
+        medicine: medicine
       }
 
       const result = await updateAppointmentById(editAppointment)
@@ -165,11 +174,49 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
     }
   }
 
+  const onMedicineDelete = (medicineName: string) => {
+    setMedicine(medicine.filter((item) => item.medicineName !== medicineName))
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
+        {isDoctor && (
+          <>
+            <div className='mt-1.5'>
+              <Input name='diagnosis' placeholder='Діагноз' id='diagnosis' obj={register('diagnosis')}>
+                Діагноз
+              </Input>
+            </div>
+            <div className='mt-1.5'>
+              <Textarea placeholder='Лікування' name='treatment' id='treatment' obj={register('treatment')} rows={5}>
+                Лікування
+              </Textarea>
+            </div>
+            <div className='mt-1.5'>
+              <H6>Ліки</H6>
+
+              {medicine && (
+                <div className='grid grid-cols-1 gap-4 my-4'>
+                  {medicine.map((medicine) => (
+                    <MedicineCard key={medicine.medicineName} medicine={medicine} onDelete={onMedicineDelete} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className={twMerge(analyses.length > 0 && 'mt-4')}>
+              <SelectMedicineModal
+                allowedAction={(medicine) => {
+                  setMedicine((state) => [...state, medicine])
+                }}
+              />
+            </div>
+          </>
+        )}
+
         <div className='mt-1.5'>
-          <Input name='reason' placeholder='Причина візиту' id='reason' obj={register('reason')}>
+          <Input name='reason' placeholder='Причина візиту' id='reason' obj={register('reason')} disabled={isDoctor}>
             Причина візиту
           </Input>
         </div>
@@ -209,6 +256,7 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
                 setSelectedDate(dayjs(date).format('YYYY-MM-DD'))
               }}
               showOutsideDays={false}
+              disabled={isDoctor}
               calendarModalStyles='w-full'
               initialDate={
                 appointment?.startTime
@@ -223,6 +271,7 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
               options={[...timeOptions]}
               onChange={(option) => setValue('startTimeHours', option)}
               defaultValue={dayjs(appointment?.startTime).format('HH:mm')}
+              disabled={isDoctor}
             />
           </div>
         </div>
@@ -232,7 +281,8 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
             name='description'
             id='description'
             obj={register('description')}
-            rows={5}>
+            rows={5}
+            disabled={isDoctor}>
             Причини прийому
           </Textarea>
         </div>

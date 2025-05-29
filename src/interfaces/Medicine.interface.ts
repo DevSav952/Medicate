@@ -1,5 +1,5 @@
 export interface IMedicine {
-  name: string
-  days: number
+  medicineName: string
+  dosing: string
   description: string
 }

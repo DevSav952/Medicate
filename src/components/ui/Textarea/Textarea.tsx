@@ -11,10 +11,12 @@ interface TextareaProps {
   obj?: object
   labelStyles?: string
   rows?: number
+  disabled?: boolean
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
 }
 
-export const Textarea = forwardRef<HTMLInputElement, TextareaProps>(
-  ({ placeholder, name, id, children, required, obj, value, labelStyles, rows, ...props }, ref) => {
+export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
+  ({ placeholder, name, id, children, required, obj, value, labelStyles, rows, onChange, disabled, ...props }, ref) => {
     return (
       <>
         <label className={twMerge('block font-regular mb-2', labelStyles)} htmlFor={id}>
@@ -28,6 +30,8 @@ export const Textarea = forwardRef<HTMLInputElement, TextareaProps>(
           id={id}
           value={value}
           rows={rows}
+          onChange={onChange}
+          disabled={disabled}
           {...props}
           {...obj}
         />

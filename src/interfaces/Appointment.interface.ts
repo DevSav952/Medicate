@@ -44,6 +44,11 @@ export interface CreateAppointment {
   description?: string
   analyzes?: string[]
   fileName?: string
+  // Doctors fields
+
+  medicine?: IMedicine[]
+  diagnosis?: string
+  treatment?: string
 }
 
 export type EditAppointment = CreateAppointment & { _id: string }
@@ -76,7 +81,11 @@ const appointmentSchema = new Schema({
     type: [Schema.Types.ObjectId],
     ref: 'Analyses'
   },
-  fileName: String
+  fileName: String,
+  // Doctors fields
+  medicine: Array,
+  diagnosis: String,
+  treatment: String
 })
 
 const Appointment = mongoose.models.Appointments || mongoose.model('Appointments', appointmentSchema)

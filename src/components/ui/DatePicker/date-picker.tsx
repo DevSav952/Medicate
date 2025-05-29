@@ -20,6 +20,7 @@ interface DatePickerProps {
   endYear?: number
   calendarModalStyles?: string
   showOutsideDays?: boolean
+  disabled?: boolean
   onChange?: (date: Date) => void
 }
 
@@ -44,6 +45,7 @@ export function DatePicker({
   initialDate,
   calendarModalStyles,
   showOutsideDays,
+  disabled,
   onChange
 }: DatePickerProps) {
   const [date, setDate] = React.useState<Date>(initialDate ? new Date(initialDate) : new Date())
@@ -78,7 +80,7 @@ export function DatePicker({
 
   return (
     <Popover>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild disabled={disabled}>
         <Button
           variant={'outline'}
           className={cn('w-full justify-start text-left font-normal', !date && 'text-muted-foreground')}>

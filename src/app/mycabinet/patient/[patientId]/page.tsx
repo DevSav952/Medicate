@@ -45,12 +45,12 @@ const AppointmentTab = () => {
   })
 
   const futureAppointments = useMemo(
-    () => appointments?.filter((appointment) => dayjs(appointment.startTime).isAfter(dayjs())) || [],
+    () => appointments?.filter((appointment) => dayjs(appointment.endTime).isAfter(dayjs())) || [],
     [appointments]
   )
 
   const pastAppointments = useMemo(
-    () => appointments?.filter((appointment) => dayjs(appointment.startTime).isBefore(dayjs())) || [],
+    () => appointments?.filter((appointment) => dayjs(appointment.endTime).isBefore(dayjs())) || [],
     [appointments]
   )
 
