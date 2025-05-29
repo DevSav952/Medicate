@@ -104,9 +104,9 @@ export default function Home() {
             </P>
             <StyledLinkButton
               variant='outline'
-              href='/'
+              href='/appointments/add'
               className='flex items-center justify-center text-blue-100 [&_svg]:fill-[#2a93c9] border-solid border-blue-100 hover:bg-blue-100 hover:text-white  hover:[&_svg]:fill-white'>
-              Записатись на прийом
+              Записатись на прийом
             </StyledLinkButton>
           </div>
 
@@ -153,7 +153,7 @@ export default function Home() {
 
           <StyledLinkButton
             variant='outline'
-            href='/'
+            href='/contacts'
             className='flex items-center justify-center w-[250px] text-xs text-blue-100 bg-white'>
             Зв'яжіться з нами
           </StyledLinkButton>
