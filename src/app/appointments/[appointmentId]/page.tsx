@@ -70,27 +70,6 @@ const UpcomingAppointment = ({ appointmentData }: { appointmentData: IAppointmen
         </>
       )}
 
-      {appointmentData.medicine && (
-        <>
-          <Separator className='bg-[#D1D1D1]' />
-          <H4 className='mb-2'>Призначені препарати</H4>
-          <div className='flex flex-col gap-4'>
-            <div className='px-4 w-full grid gap-4 grid-cols-[100px_75px_1fr] sm:grid-cols-[100px_100px_1fr]'>
-              <P className='text-xs'>Препарат</P>
-              <P className='text-xs'>Приймати, днів</P>
-              <P className='text-xs'>Коментар</P>
-            </div>
-            {appointmentData?.medicine && appointmentData.medicine.length > 0 ? (
-              appointmentData.medicine.map((medicine) => (
-                <MedicineCard key={medicine.medicineName} medicine={medicine} />
-              ))
-            ) : (
-              <P>-</P>
-            )}
-          </div>
-        </>
-      )}
-
       {appointmentData.treatment && (
         <>
           <Separator className='bg-[#D1D1D1]' />

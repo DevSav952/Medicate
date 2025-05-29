@@ -3,7 +3,7 @@ import { CreateAppointment, IAppointment, EditAppointment } from '@/interfaces/A
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/Textarea/Textarea'
 import dayjs from 'dayjs'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { SelectOption } from '@/interfaces/shared'
 import Dropdown from '@/components/ui/Dropdown/Dropdown'
 import { doctorSpecialties } from '@/mocks/shared'
@@ -27,6 +27,7 @@ import { useRouter } from 'next/navigation'
 import MedicineCard from '@/components/MedicineCard/MedicineCard'
 import { IMedicine } from '@/interfaces/Medicine.interface'
 import SelectMedicineModal from '@/components/modals/SelectMedicineModal/SelectMedicineModal'
+import { sendAppointmentEmail } from '@/lib/resend'
 
 // @TODO: block this page for non auth users
 // @TODO: add validation for form
@@ -159,6 +160,15 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
       const result = await createAppointment(newAppointment)
 
       if (result.success) {
+        await sendAppointmentEmail({
+          appointmentId: result.appointmentId,
+          patientName: session.userName ?? '',
+          appointmentDate: dayjs(selectedDate).format('YYYY-MM-DD'),
+          appointmentTime: values.startTimeHours,
+          doctorName: doctorOptions.find((option) => option.value === newAppointment.doctor)?.label ?? '',
+          patientEmail: session.email ?? ''
+        })
+
         toast.success('Візит успішно створено', {
           duration: 3000,
           className: 'border border-green-100 bg-green-100 text-[#fff]'
@@ -240,7 +250,7 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
             options={doctorOptions}
             onChange={(option) => {
               setValue('doctor', option)
-              setSearchQuery(option)
+              // setSearchQuery(option)
             }}
             disabled={!searchQuery || isEditMode}
             defaultValue={appointment?.doctor.doctorName}

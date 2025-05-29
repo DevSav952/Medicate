@@ -33,3 +33,11 @@ export interface SelectOption {
   label: string
   value: string
 }
+
+export interface AppointmentEmailProps {
+  appointmentId: string
+  patientName: string
+  appointmentDate: string
+  appointmentTime: string
+  doctorName: string
+}

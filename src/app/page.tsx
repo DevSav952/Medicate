@@ -15,7 +15,6 @@ import HeroSlider from '@/components/HeroSlider/HeroSlider'
 import { mockedDoctors } from '@/mocks/Doctors.mock'
 
 import telephone from '@/assets/contacts-icon-1.webp'
-import { FaCalendarAlt } from 'react-icons/fa'
 import logo from '@/assets/logo.png'
 import metromed from '@/assets/client-1.webp'
 import umaMedical from '@/assets/client-2.webp'
