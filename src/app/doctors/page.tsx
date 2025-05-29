@@ -5,7 +5,6 @@ import Image from 'next/image'
 import { mockedDoctors } from '@/mocks/Doctors.mock'
 import DoctorCard from '@/components/DoctorCard/DoctorCard'
 
-import teamImage from '@/assets/department-single-img5.jpg'
 import certificateOne from '@/assets/certificate-img1.webp'
 import certificateTwo from '@/assets/certificate-img2.webp'
 import certificateThree from '@/assets/certificate-img3.webp'

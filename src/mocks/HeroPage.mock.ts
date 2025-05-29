@@ -1,4 +1,3 @@
-import { Doctor } from '@/interfaces/Doctor.interface'
 import { IService } from '@/interfaces/HeroPage.interface'
 import { IDepartment } from '@/interfaces/HeroPage.interface'
 
