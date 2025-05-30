@@ -1,6 +1,5 @@
 'use client'
 
-import styles from './Map.module.scss'
 import { Loader } from '@googlemaps/js-api-loader'
 import { useRef, useEffect } from 'react'
 
