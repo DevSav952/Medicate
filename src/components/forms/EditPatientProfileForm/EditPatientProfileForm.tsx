@@ -90,7 +90,7 @@ const EditPatientProfileForm = ({ patient, handleClose }: EditPatientProfileForm
     const result = await updatePatientById({ _id: patient._id ?? '', ...values, image: fileName })
 
     if (result.success) {
-      await mutate(`/api/patient/${patient._id}`)
+      await mutate(`/api/myProfile/patient/${patient._id}`)
       handleClose()
     } else {
       toast.error('Помилка редагування пацієнта', {

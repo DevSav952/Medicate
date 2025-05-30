@@ -190,7 +190,7 @@ interface PatientProfileProps {
 const PatientProfile = ({ params }: PatientProfileProps) => {
   const { patientId } = params
 
-  const { data: patientProfile } = useSWR<Patient>(`/api/patient/${patientId}`, fetcher, {
+  const { data: patientProfile } = useSWR<Patient>(`/api/myProfile/patient/${patientId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

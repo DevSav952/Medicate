@@ -1,7 +1,7 @@
 'use client'
 
 import { P } from '@/components/ui/Typography/Typography'
-import { getPostWord } from '@/utils/getPostWord'
+import { getUkrainianPlural } from '@/utils/getUkrainianPlural'
 import { useState } from 'react'
 import { IconButton } from '@/components/ui/IconButton/IconButton'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
@@ -128,7 +128,7 @@ const BlogFilters = ({ length }: BlogItemProps) => {
       <div className='flex justify-between mb-6'>
         <div className='flex items-center justify-center'>
           <P className='font-light text-[#616262]'>
-            Знайдено {length} {getPostWord(length)}
+            Знайдено {length} {getUkrainianPlural(length, ['пост', 'пости', 'постів'])}
           </P>
         </div>
         <div className='flex gap-4'>

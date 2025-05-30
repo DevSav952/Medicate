@@ -17,32 +17,37 @@ export interface Patient {
   image?: string
 }
 
-const patientSchema = new Schema({
-  userName: {
-    type: String,
-    required: true
+const patientSchema = new Schema(
+  {
+    userName: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    passwordHash: {
+      type: String,
+      required: true
+    },
+    dateOfBirth: String,
+    phoneNumber: String,
+    bloodType: String,
+    diabetes: String,
+    rhFactor: String,
+    bloodTransfusion: String,
+    intoleranceToMedicines: String,
+    infectiousDiseases: String,
+    surgicalInterventions: String,
+    allergies: String,
+    image: String
   },
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
-  passwordHash: {
-    type: String,
-    required: true
-  },
-  dateOfBirth: String,
-  phoneNumber: String,
-  bloodType: String,
-  diabetes: String,
-  rhFactor: String,
-  bloodTransfusion: String,
-  intoleranceToMedicines: String,
-  infectiousDiseases: String,
-  surgicalInterventions: String,
-  allergies: String,
-  image: String
-})
+  {
+    timestamps: true
+  }
+)
 
 const Patient = mongoose.models.Patients || mongoose.model('Patients', patientSchema)
 export default Patient

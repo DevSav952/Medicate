@@ -2,9 +2,11 @@ import Image from 'next/image'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import { P, H6 } from '@/components/ui/Typography/Typography'
 import Link from 'next/link'
+import { BUCKET_URL } from '@/constants/bucket'
 
 import { FaMobileAlt } from 'react-icons/fa'
 import { FaEnvelope } from 'react-icons/fa'
+import noImage from '@/assets/no-image.jpg'
 
 interface DoctorCardProps {
   doctor: Doctor
@@ -13,7 +15,12 @@ interface DoctorCardProps {
 const DoctorCard = ({ doctor }: DoctorCardProps) => {
   return (
     <div className='transition-all duration-300 ease-in-out hover:shadow-doctor-card'>
-      <Image src={doctor.image} alt='doctor' />
+      {doctor.image ? (
+        <Image src={`${BUCKET_URL}/custom/avatars/${doctor.image}`} alt='doctor' unoptimized width={270} height={270} />
+      ) : (
+        <Image src={noImage} alt='doctor' width={270} height={270} />
+      )}
+
       <div className='pt-5 px-4 mb-3.5'>
         <P className='text-[#B5B9BB] text-[10px] uppercase tracking-[1px]'>{doctor.position}</P>
 

@@ -1,9 +1,14 @@
+'use client'
+
 import PageHeading from '@/components/PageHeading/PageHeading'
 import { Container } from '@/components/ui/Container/Container'
 import { H2, P } from '@/components/ui/Typography/Typography'
 import Image from 'next/image'
-import { mockedDoctors } from '@/mocks/Doctors.mock'
+import useSWR from 'swr'
+import { Doctor } from '@/interfaces/Doctor.interface'
+import { fetcher } from '@/utils/fetcher'
 import DoctorCard from '@/components/DoctorCard/DoctorCard'
+import { mockedDoctors } from '@/mocks/Doctors.mock'
 
 import certificateOne from '@/assets/certificate-img1.webp'
 import certificateTwo from '@/assets/certificate-img2.webp'
@@ -40,6 +45,14 @@ const certificates = [
 ]
 
 const DoctorsPage = () => {
+  const { data: doctors } = useSWR<Doctor[]>('/api/doctor', fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
   return (
     <>
       <PageHeading title='Лікарі' />
@@ -70,6 +83,8 @@ const DoctorsPage = () => {
           {mockedDoctors.map((item, i) => (
             <DoctorCard key={i} doctor={item} />
           ))}
+
+          {doctors?.map((item, i) => <DoctorCard key={i} doctor={item} />)}
         </section>
         <section className='pt-[50px] mb-9'>
           <H2 className='mb-5 text-center text-[26px] md:text-left xl:text-[26px]'>Наші нагороди</H2>

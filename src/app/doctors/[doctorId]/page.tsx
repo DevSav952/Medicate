@@ -1,17 +1,31 @@
+'use client'
+
 import PageHeading from '@/components/PageHeading/PageHeading'
 import { Container } from '@/components/ui/Container/Container'
 import Image from 'next/image'
-import { H2, H3, H6, P } from '@/components/ui/Typography/Typography'
+import { H3, H6, P } from '@/components/ui/Typography/Typography'
 import Link from 'next/link'
 import ReviewSlider from '@/components/ReviewSlider/ReviewSlider'
 import Accordion from '@/components/Accordion/Accordion'
 import { mockedReviews } from '@/mocks/Reviews.mocks'
-
-import doctorImage from '@/assets/team-2-770x460.jpg'
-import { FaLinkedinIn, FaTwitter, FaFacebookF, FaEnvelope } from 'react-icons/fa6'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
+import { Doctor } from '@/interfaces/Doctor.interface'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
+import { useParams } from 'next/navigation'
+import dayjs from 'dayjs'
+import { getExperience } from '@/utils/getExperience'
+import { getUkrainianPlural } from '@/utils/getUkrainianPlural'
+import { BUCKET_URL } from '@/constants/bucket'
 
-const DoctorInfo = () => {
+import { FaLinkedinIn, FaTwitter, FaFacebookF, FaEnvelope } from 'react-icons/fa6'
+import noImage from '@/assets/no-image.jpg'
+
+interface DoctorInfoProps {
+  doctor?: Doctor
+}
+
+const DoctorInfo = ({ doctor }: DoctorInfoProps) => {
   return (
     <div className='bg-white shadow-custom-right px-4 py-[30px]'>
       <H3 className='text-black text-[26px] mb-5'>Про лікаря</H3>
@@ -19,36 +33,32 @@ const DoctorInfo = () => {
         <li className='py-3 border-b border-solid border-[#e1e5e3]'>
           <P className='flex items-center justify-between text-[#64727d]'>
             <span>Ім'я:</span>
-            <span>Dr. Greg House</span>
+            <span>{doctor?.doctorName}</span>
           </P>
         </li>
         <li className='py-3 border-b border-solid border-[#e1e5e3]'>
           <P className='flex items-center justify-between text-[#64727d]'>
             <span>Спеціальність</span>
-            <span>Dr. Greg House</span>
-          </P>
-        </li>
-        <li className='py-3 border-b border-solid border-[#e1e5e3]'>
-          <P className='flex items-center justify-between text-[#64727d]'>
-            <span>Спеціалізація</span>
-            <span>Dr. Greg House</span>
+            <span>{doctor?.position}</span>
           </P>
         </li>
         <li className='py-3 border-b border-solid border-[#e1e5e3]'>
           <P className='flex items-center justify-between text-[#64727d]'>
             <span>Освіта</span>
-            <span>Dr. Greg House</span>
+            <span>ВНМУ ім. М.І. Пирогова</span>
           </P>
         </li>
         <li className='py-3'>
           <P className='flex items-center justify-between text-[#64727d]'>
             <span>Стаж роботи</span>
-            <span>Dr. Greg House</span>
+            <span>
+              {getUkrainianPlural(getExperience(dayjs(doctor?.createdAt).toISOString()), ['рік', 'роки', 'років'])}
+            </span>
           </P>
         </li>
       </ul>
       <div className='mt-[55px]'>
-        <StyledLinkButton href='/' className='w-full text-center bg-blue-100 text-white'>
+        <StyledLinkButton href='/appointments/add' className='w-full text-center bg-blue-100 text-white'>
           Записатися на прийом
         </StyledLinkButton>
       </div>
@@ -57,45 +67,87 @@ const DoctorInfo = () => {
 }
 
 const SingleDoctorPage = () => {
+  const params = useParams()
+  const { doctorId } = params
+
+  const { data: doctor } = useSWR<Doctor>(`/api/doctor/${doctorId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
   return (
     <>
-      <PageHeading title='Dr. Greg House' />
+      <PageHeading title={doctor?.doctorName} />
       <Container className='my-12 md:grid md:grid-cols-[3fr_2fr] md:gap-7 lg:grid-cols-[1fr_360px]'>
         <section>
-          <Image src={doctorImage} alt='Dr. Greg House' className='mb-10' />
-
+          {doctor?.image ? (
+            <Image
+              src={`${BUCKET_URL}/custom/avatars/${doctor.image}`}
+              alt='doctor'
+              unoptimized
+              className='w-full h-full max-h-[440px] mb-10 object-cover'
+              width={730}
+              height={440}
+            />
+          ) : (
+            <Image
+              src={noImage}
+              alt='doctor'
+              className='w-full h-full max-h-[440px] mb-10 object-cover'
+              width={730}
+              height={440}
+            />
+          )}
           <div>
-            <H2 className='mb-5 text-left text-[26px] xl:text-[26px]'>Dr. Greg House</H2>
             <div className='flex items-center justify-start'>
               <div className='border border-solid border-[#56b0d2] w-[65px]' />
             </div>
             <ul className='mt-6 mb-3 flex gap-5'>
               <li>
                 <Link href='https://www.linkedin.com/'>
-                  <FaLinkedinIn fill='#909aa3' size={18} />
+                  <FaLinkedinIn
+                    fill='#909aa3'
+                    size={18}
+                    className='transition-all duration-300 ease-in-out hover:fill-blue-100'
+                  />
                 </Link>
               </li>
               <li>
                 <Link href='https://x.com/'>
-                  <FaTwitter fill='#909aa3' size={18} />
+                  <FaTwitter
+                    fill='#909aa3'
+                    size={18}
+                    className='transition-all duration-300 ease-in-out hover:fill-blue-100'
+                  />
                 </Link>
               </li>
               <li>
                 <Link href='https://www.facebook.com/'>
-                  <FaFacebookF fill='#909aa3' size={18} />
+                  <FaFacebookF
+                    fill='#909aa3'
+                    size={18}
+                    className='transition-all duration-300 ease-in-out hover:fill-blue-100'
+                  />
                 </Link>
               </li>
               <li>
-                <Link href='mailto:JYb5l@example.com'>
-                  <FaEnvelope fill='#909aa3' size={18} />
+                <Link href={`mailto:${doctor?.email}`}>
+                  <FaEnvelope
+                    fill='#909aa3'
+                    size={18}
+                    className='transition-all duration-300 ease-in-out hover:fill-blue-100'
+                  />
                 </Link>
               </li>
             </ul>
             <P className='mt-6 mb-[48px] font-light'>
-              The Department of Pediatrics strives to improve the well-being of all children. We will be recognized by
-              UNMC, the region, and the nation as a center of excellence and innovation in health care, scholarship,
-              education, service, and advocacy. Our faculty members will continuously improve their abilities through
-              the support and opportunities provided by the Department and UNMC.
+              Кафедра педіатрії прагне поліпшити добробут усіх дітей. Ми будемо визнані UNMC, регіоном та країною як
+              центр передового досвіду та інновацій у галузі охорони здоров'я, науки, освіти, обслуговування та захисту
+              прав. Наші викладачі будуть постійно вдосконалювати свої здібності завдяки підтримці та можливостям, що
+              надаються кафедрою та UNMC.
             </P>
 
             <div className='mb-12 md:hidden'>
@@ -172,7 +224,7 @@ const SingleDoctorPage = () => {
           </div>
         </section>
         <section className='hidden md:block'>
-          <DoctorInfo />
+          <DoctorInfo doctor={doctor} />
         </section>
       </Container>
     </>

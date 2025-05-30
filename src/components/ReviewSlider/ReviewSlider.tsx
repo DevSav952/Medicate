@@ -21,7 +21,7 @@ const ReviewSlider = ({ reviews }: ReviewSliderProps) => {
         pagination={{
           el: '.custom-pagination',
           clickable: true,
-          renderBullet: (index, className) => {
+          renderBullet: (_, className) => {
             return `<span class="${className} review-slider-bullet"></span>`
           }
         }}
@@ -37,13 +37,13 @@ const ReviewSlider = ({ reviews }: ReviewSliderProps) => {
         {reviews.map((item) => {
           return (
             <SwiperSlide key={item._id}>
-              <div className='bg-blue-100 p-4 mb-12 h-[260px] flex flex-col justify-between'>
-                <P className='mb-5 text-white italic text-[20px] line-clamp-3'>{item.review}</P>
+              <div className='bg-white shadow-custom-right p-4 mb-12 h-[260px] flex flex-col justify-between'>
+                <P className='mb-5 text-[#42474C] italic text-[20px] line-clamp-3'>{item.review}</P>
                 <div className='flex'>
                   <Image src={item.userPhoto} alt='user' className='w-[87px] h-[87px] rounded-full mr-4' />
                   <div className='flex flex-col justify-center'>
-                    <P className='font-bold text-white'>{item.userName}</P>
-                    <P className='text-white text-sm font-light'>{item.userPosition}</P>
+                    <P className='font-bold text-[#42474C]'>{item.userName}</P>
+                    <P className='text-[#42474C] text-sm font-light'>{item.userPosition}</P>
                   </div>
                 </div>
               </div>

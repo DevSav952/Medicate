@@ -46,7 +46,7 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
     const result = await updateDoctorById({ _id: doctor._id ?? '', description: '', ...values, image: fileName })
 
     if (result.success) {
-      await mutate(`/api/doctor/${doctor._id}`)
+      await mutate(`/api/myProfile/doctor/${doctor._id}`)
       handleClose()
     } else {
       toast.error('Помилка редагування лікаря', {
