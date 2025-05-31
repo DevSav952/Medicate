@@ -154,7 +154,8 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
           .add(Number(values.startTimeHours.slice(0, 2)) + 1, 'hour')
           .toISOString(),
         analyzes: analyses.map((analyzes) => analyzes._id),
-        fileName: fileName
+        fileName: fileName,
+        reason: values.reason
       }
 
       const result = await createAppointment(newAppointment)

@@ -3,6 +3,7 @@
 import mongoose from 'mongoose'
 import connectMongoDB from './connectMongoDB'
 import Appointment, { CreateAppointment, EditAppointment } from '@/interfaces/Appointment.interface'
+import Payment, { CreatePayment } from '@/interfaces/Payment.interface'
 
 export const createAppointment = async (appointment: CreateAppointment) => {
   try {
@@ -25,6 +26,18 @@ export const createAppointment = async (appointment: CreateAppointment) => {
     })
 
     const newAppointment = await doc.save()
+
+    const payment: CreatePayment = {
+      appointment: newAppointment._id,
+      amount: 1000,
+      isPayed: false,
+      patient: appointment.patient
+    }
+
+    const paymentDoc = new Payment(payment)
+
+    await paymentDoc.save()
+
     return { success: true, appointmentId: newAppointment._id }
   } catch (error) {
     console.error('Error creating appointment:', error)

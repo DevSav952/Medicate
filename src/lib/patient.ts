@@ -7,7 +7,7 @@ import { getSession } from './auth'
 
 export const updatePatientById = async (patient: IPatient) => {
   try {
-    await connectMongoDB
+    await connectMongoDB()
 
     const updPatient = await Patient.findByIdAndUpdate(
       patient._id,

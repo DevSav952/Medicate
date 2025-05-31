@@ -7,7 +7,7 @@ import { getSession } from './auth'
 
 export const updateDoctorById = async (doctor: IDoctor) => {
   try {
-    await connectMongoDB
+    await connectMongoDB()
 
     revalidatePath(`mycabinet/patient/${doctor._id}`)
     const updDoctor = await Doctor.findByIdAndUpdate(

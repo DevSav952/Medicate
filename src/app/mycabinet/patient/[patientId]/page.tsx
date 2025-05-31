@@ -10,7 +10,6 @@ import dayjs from 'dayjs'
 import AppointmentCard from '@/components/AppointmentCard/AppointmentCard'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
-import { mockedPayments } from '@/mocks/Payment.mock'
 import PaymentCard from '@/components/PaymentCard/PaymentCard'
 import EditProfileModal from '@/components/modals/EditProfileModal/EditProfileModal'
 import useSWR from 'swr'
@@ -23,6 +22,7 @@ import { Analyses } from '@/interfaces/Analyses.interface'
 import { Button } from '@/components/ui/Button/Button'
 import { logout } from '@/lib/auth'
 import SnackBar from '@/components/ui/SnackBar/SnackBar'
+import { IPayment } from '@/interfaces/Payment.interface'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 
@@ -137,12 +137,23 @@ const AnalyzesTab = () => {
 }
 
 const BillingTab = () => {
-  const unPayedServices = useMemo(() => mockedPayments.filter((payment) => !payment.paymentMethod), [mockedPayments])
-  const payedServices = useMemo(() => mockedPayments.filter((payment) => !!payment.paymentMethod), [mockedPayments])
+  const params = useParams()
+  const { patientId } = params
+
+  const { data: payments } = useSWR<IPayment[]>(`/api/payments/patient/${patientId}`, fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
+  const unPayedServices = useMemo(() => payments?.filter((payment) => !payment.isPayed) ?? [], [payments])
+  const payedServices = useMemo(() => payments?.filter((payment) => !!payment.isPayed) ?? [], [payments])
 
   return (
     <>
-      {unPayedServices.length === 0 && payedServices.length === 0 && <P>Немає записів на прийом</P>}
+      {unPayedServices.length === 0 && payedServices.length === 0 && <P>Історія оплат відсутня</P>}
 
       {unPayedServices.length > 0 && (
         <div className='mt-6'>

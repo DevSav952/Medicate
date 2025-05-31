@@ -41,3 +41,11 @@ export interface AppointmentEmailProps {
   appointmentTime: string
   doctorName: string
 }
+
+export interface PaymentSuccessEmail {
+  patientName: string
+  appointmentDate: string
+  appointmentTime: string
+  doctorName: string
+  paymentAmount: number
+}
