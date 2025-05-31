@@ -101,17 +101,35 @@ const PaymentPage = ({ amount, appointment, payment, allowedAction }: PaymentPag
   }
 
   return (
-    <form onSubmit={handleSubmit} className='p-2'>
-      <div className='mb-4'>
-        {clientSecret && <CardElement />}
-        {errorMessage && <P className='text-red'>{errorMessage}</P>}
-      </div>
-      <Button
-        type='submit'
-        className='w-full text-white p-5 bg-black rounded-md font-bold disabled:opacity-50 disabled:animate-pulse'>
-        {!loading ? `Оплатити ₴${amount}` : 'Обробка платежу...'}
-      </Button>
-    </form>
+    <>
+      {!clientSecret || !stripe || !elements ? (
+        <div className='flex items-center justify-center'>
+          <div
+            className='inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite]'
+            role='status'>
+            <span className='!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]'>
+              Loading...
+            </span>
+          </div>
+        </div>
+      ) : (
+        <form onSubmit={handleSubmit} className='p-2 mt-2'>
+          <div className='mb-4'>
+            {clientSecret && (
+              <div className='bg-white p-6 shadow-custom-right'>
+                <CardElement />
+              </div>
+            )}
+            {errorMessage && <P className='text-red'>{errorMessage}</P>}
+          </div>
+          <Button
+            type='submit'
+            className='w-full text-white p-3 bg-black rounded-md font-bold disabled:opacity-50 disabled:animate-pulse mt-6'>
+            {!loading ? `Оплатити ₴${amount}` : 'Обробка платежу...'}
+          </Button>
+        </form>
+      )}
+    </>
   )
 }
 export default PaymentPage

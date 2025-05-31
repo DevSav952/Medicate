@@ -29,7 +29,7 @@ const PaymentModal = ({ appointment, payment }: PaymentModalProps) => {
         }}>
         Оплатити
       </Button>
-      <Modal isOpen={isOpen} handleClose={() => setOpen(false)}>
+      <Modal isOpen={isOpen} handleClose={() => setOpen(false)} className='bg-[#f7f7f7]'>
         <div className='w-full'>
           <Elements
             stripe={stripePromise}

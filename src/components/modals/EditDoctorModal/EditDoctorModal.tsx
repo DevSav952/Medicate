@@ -3,13 +3,10 @@
 import { IconButton } from '@/components/ui/IconButton/IconButton'
 import { Modal } from '@/components/ui/Modal/Modal'
 import { useState } from 'react'
-import { mockedDoctors } from '@/mocks/Doctors.mock'
 import EditDoctorProfileForm from '@/components/forms/EditDoctorProfileForm/EditDoctorProfileForm'
 import { Doctor } from '@/interfaces/Doctor.interface'
 
 import { MdEdit } from 'react-icons/md'
-
-const mockedDoctor = mockedDoctors[0]
 
 interface EditDoctorModalProps {
   doctor: Doctor

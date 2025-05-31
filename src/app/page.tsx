@@ -12,7 +12,7 @@ import {
 } from '@/mocks/HeroPage.mock'
 import { IService, IDepartment } from '@/interfaces/HeroPage.interface'
 import HeroSlider from '@/components/HeroSlider/HeroSlider'
-import { mockedDoctors } from '@/mocks/Doctors.mock'
+// import { mockedDoctors } from '@/mocks/Doctors.mock'
 
 import telephone from '@/assets/contacts-icon-1.webp'
 import logo from '@/assets/logo.png'
@@ -177,9 +177,9 @@ export default function Home() {
         </div>
 
         <div className='flex flex-col gap-10 md:grid md:grid-cols-4 md:gap-0 pt-5'>
-          {mockedDoctors.map((item, i) => (
+          {/* {mockedDoctors.map((item, i) => (
             <DoctorCard key={item._id} doctor={item} />
-          ))}
+          ))} */}
         </div>
 
         <div className='pt-8 pb-4 grid grid-cols-2 md:grid-cols-4'>
