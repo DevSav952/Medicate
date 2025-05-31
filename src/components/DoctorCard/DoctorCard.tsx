@@ -16,9 +16,16 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
   return (
     <div className='transition-all duration-300 ease-in-out hover:shadow-doctor-card'>
       {doctor.image ? (
-        <Image src={`${BUCKET_URL}/custom/avatars/${doctor.image}`} alt='doctor' unoptimized width={270} height={270} />
+        <Image
+          src={`${BUCKET_URL}/custom/avatars/${doctor.image}`}
+          alt='doctor'
+          unoptimized
+          width={270}
+          height={270}
+          className='w-full max-h-[350px] object-cover'
+        />
       ) : (
-        <Image src={noImage} alt='doctor' width={270} height={270} />
+        <Image src={noImage} alt='doctor' width={270} height={270} className='w-full max-h-[350px] object-cover' />
       )}
 
       <div className='pt-5 px-4 mb-3.5'>

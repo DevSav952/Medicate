@@ -1,3 +1,5 @@
+'use client'
+
 import { Container } from '@/components/ui/Container/Container'
 import { H3, H6, P } from '@/components/ui/Typography/Typography'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
@@ -12,7 +14,9 @@ import {
 } from '@/mocks/HeroPage.mock'
 import { IService, IDepartment } from '@/interfaces/HeroPage.interface'
 import HeroSlider from '@/components/HeroSlider/HeroSlider'
-// import { mockedDoctors } from '@/mocks/Doctors.mock'
+import useSWR from 'swr'
+import { fetcher } from '@/utils/fetcher'
+import { Doctor } from '@/interfaces/Doctor.interface'
 
 import telephone from '@/assets/contacts-icon-1.webp'
 import logo from '@/assets/logo.png'
@@ -67,6 +71,14 @@ const Departments = () => {
 }
 
 export default function Home() {
+  const { data: doctors } = useSWR<Doctor[]>('/api/hero-doctors', fetcher, {
+    shouldRetryOnError: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    refreshWhenHidden: false,
+    refreshWhenOffline: false
+  })
+
   return (
     <>
       <div>
@@ -177,9 +189,7 @@ export default function Home() {
         </div>
 
         <div className='flex flex-col gap-10 md:grid md:grid-cols-4 md:gap-0 pt-5'>
-          {/* {mockedDoctors.map((item, i) => (
-            <DoctorCard key={item._id} doctor={item} />
-          ))} */}
+          {doctors?.map((item, i) => <DoctorCard key={item._id} doctor={item} />)}
         </div>
 
         <div className='pt-8 pb-4 grid grid-cols-2 md:grid-cols-4'>

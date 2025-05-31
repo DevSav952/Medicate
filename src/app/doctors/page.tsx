@@ -8,7 +8,6 @@ import useSWR from 'swr'
 import { Doctor } from '@/interfaces/Doctor.interface'
 import { fetcher } from '@/utils/fetcher'
 import DoctorCard from '@/components/DoctorCard/DoctorCard'
-// import { mockedDoctors } from '@/mocks/Doctors.mock'
 
 import certificateOne from '@/assets/certificate-img1.webp'
 import certificateTwo from '@/assets/certificate-img2.webp'
@@ -80,10 +79,6 @@ const DoctorsPage = () => {
           </div>
         </section>
         <section className='py-4 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-[30px] lg:grid-cols-4'>
-          {/* {mockedDoctors.map((item, i) => (
-            <DoctorCard key={i} doctor={item} />
-          ))} */}
-
           {doctors?.map((item, i) => <DoctorCard key={i} doctor={item} />)}
         </section>
         <section className='pt-[50px] mb-9'>
