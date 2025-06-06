@@ -24,6 +24,14 @@ interface FormProps {
 
 type AnalysesValues = Omit<Analyses, '_id' | 'patientId' | 'fileName'>
 
+/**
+ * Validation:
+ * analysisName - required
+ * date - required
+ * description - optional
+ * fileName - optional
+ */
+
 const AddEditAnalysesForm = ({ analyses }: FormProps) => {
   const [fileName, setFileName] = useState(analyses?.fileName || '')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -105,14 +113,16 @@ const AddEditAnalysesForm = ({ analyses }: FormProps) => {
         </div>
 
         <div className='mb-4 w-full'>
-          <label className='block font-regular mb-2'>Оберіть дату прийому</label>
+          <label className='block font-regular mb-2'>Оберіть дату аналізу</label>
           <DatePicker
             onChange={(date) => {
               setValue('date', dayjs(date).format('YYYY-MM-DD'))
             }}
+            showOutsideDays={false}
             calendarModalStyles='w-full'
             initialDate={analyses?.date ? dayjs(analyses?.date).format('YYYY-MM-DD') : dayjs().format('YYYY-MM-DD')}
           />
+          {errors?.date && <P className='text-red text-sm my-1'>{errors.date.message}</P>}
         </div>
 
         <div className='mb-4'>

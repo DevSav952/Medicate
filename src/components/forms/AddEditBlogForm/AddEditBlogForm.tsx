@@ -30,6 +30,11 @@ interface AddEditBlogFormProps {
 
 type BlogValues = Omit<IBlogItem, '_id' | 'createdAt' | 'updatedAt'>
 
+/**
+ * Validation:
+ * All fields are required
+ */
+
 const AddEditBlogForm = ({ session, blog }: AddEditBlogFormProps) => {
   const isEditMode = !!blog?._id
 
@@ -46,6 +51,7 @@ const AddEditBlogForm = ({ session, blog }: AddEditBlogFormProps) => {
   const [fileName, setFileName] = useState(blog?.image)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isEditImage, setIsEditImage] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
 
   const [description, setDescription] = useState<string | undefined>('')
 
@@ -62,6 +68,10 @@ const AddEditBlogForm = ({ session, blog }: AddEditBlogFormProps) => {
   })
 
   const onSubmit: SubmitHandler<BlogValues> = async (values) => {
+    setIsSubmitted(true)
+
+    if (!fileName || !description) return
+
     if (isEditMode) {
       const file = await createMarkdownFile(description ?? '', replaceSpacesWithUnderscores(values.title))
 
@@ -212,12 +222,14 @@ const AddEditBlogForm = ({ session, blog }: AddEditBlogFormProps) => {
               />
             </div>
           )}
+          {isSubmitted && !fileName && <P className='text-red text-sm my-1'>Зображення не завантажено</P>}
         </div>
 
         <label className='block font-primary mb-2'>Текст статті</label>
         <div data-color-mode='light'>
           <MDEditor height={200} value={description} onChange={(value) => setDescription(value)} />
         </div>
+        {isSubmitted && !description && <P className='text-red text-sm my-1'>Блог має містити текст</P>}
 
         <Button className='mt-5 w-full' type='submit'>
           Зберегти

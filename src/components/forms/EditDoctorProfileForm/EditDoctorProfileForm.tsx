@@ -166,9 +166,20 @@ const EditDoctorProfileForm = ({ doctor, handleClose }: EditPatientProfileFormPr
         </div>
 
         <div className='mb-4'>
-          <PhoneInput type='text' name='phone' id='phone' obj={register('phone')}>
+          <PhoneInput
+            type='text'
+            name='phone'
+            id='phone'
+            obj={register('phone', {
+              required: 'Введіть номер телефону',
+              pattern: {
+                value: /^\+?\d{10,15}$/,
+                message: 'Некоректний номер телефону'
+              }
+            })}>
             Номер телефону
           </PhoneInput>
+          {errors?.phone && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.phone.message}</P>}
         </div>
       </div>
 

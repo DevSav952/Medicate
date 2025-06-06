@@ -83,9 +83,21 @@ const DoctorSignUpForm = ({ handleClose }: DoctorSignUpFormProps) => {
           <Dropdown options={doctorSpecialties} onChange={(value) => setValue('position', value)} />
         </div>
 
-        <PhoneInput type='text' name='phone' id='phone' labelStyles='mt-1.5' obj={register('phone')}>
+        <PhoneInput
+          type='text'
+          name='phone'
+          id='phone'
+          labelStyles='mt-1.5'
+          obj={register('phone', {
+            required: 'Введіть номер телефону',
+            pattern: {
+              value: /^\+?\d{10,15}$/,
+              message: 'Некоректний номер телефону'
+            }
+          })}>
           Номер телефону
         </PhoneInput>
+        {errors?.phone && <P className='text-red text-sm mb-1 dark:!text-red'>{errors.phone.message}</P>}
 
         <Input
           type='text'

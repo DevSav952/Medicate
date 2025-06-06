@@ -4,8 +4,8 @@ export interface Analyses {
   _id: string
   patientId: string
   analysisName: string
-  description?: string
   date: string
+  description?: string
   fileName?: string
 }
 

@@ -11,37 +11,38 @@ import { Button } from './button'
 import { Calendar } from './calendar'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
+// import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './select'
 import dayjs from 'dayjs'
 
 interface DatePickerProps {
-  startYear?: number
+  // startYear?: number
   initialDate?: string
-  endYear?: number
+  // endYear?: number
   calendarModalStyles?: string
   showOutsideDays?: boolean
   disabled?: boolean
   onChange?: (date: Date) => void
 }
 
-const MONTHS = [
-  'Січень',
-  'Лютий',
-  'Березень',
-  'Квітень',
-  'Травень',
-  'Червень',
-  'Липень',
-  'Серпень',
-  'Вересень',
-  'Жовтень',
-  'Листопад',
-  'Грудень'
-]
+// @Todo Clean-up code
+// const MONTHS = [
+//   'Січень',
+//   'Лютий',
+//   'Березень',
+//   'Квітень',
+//   'Травень',
+//   'Червень',
+//   'Липень',
+//   'Серпень',
+//   'Вересень',
+//   'Жовтень',
+//   'Листопад',
+//   'Грудень'
+// ]
 
 export function DatePicker({
-  startYear = getYear(new Date()),
-  endYear = getYear(new Date()) + 25,
+  // startYear = getYear(new Date()),
+  // endYear = getYear(new Date()) + 25,
   initialDate,
   calendarModalStyles,
   showOutsideDays,
@@ -56,21 +57,21 @@ export function DatePicker({
     }
   }, [date, onChange])
 
-  const months = React.useMemo(() => {
-    return dayjs(date).isSame(dayjs(), 'year') ? MONTHS.slice(getMonth(new Date()), MONTHS.length) : MONTHS
-  }, [date])
+  // const months = React.useMemo(() => {
+  //   return dayjs(date).isSame(dayjs(), 'year') ? MONTHS.slice(getMonth(new Date()), MONTHS.length) : MONTHS
+  // }, [date])
 
-  const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
+  // const years = Array.from({ length: endYear - startYear + 1 }, (_, i) => startYear + i)
 
-  const handleMonthChange = (month: string) => {
-    const newDate = setMonth(date, months.indexOf(month))
-    setDate(newDate)
-  }
+  // const handleMonthChange = (month: string) => {
+  //   const newDate = setMonth(date, months.indexOf(month))
+  //   setDate(newDate)
+  // }
 
-  const handleYearChange = (year: string) => {
-    const newDate = setYear(date, parseInt(year))
-    setDate(newDate)
-  }
+  // const handleYearChange = (year: string) => {
+  //   const newDate = setYear(date, parseInt(year))
+  //   setDate(newDate)
+  // }
 
   const handleSelect = (selectedData: Date | undefined) => {
     if (selectedData && dayjs(selectedData).isAfter(dayjs())) {
@@ -89,7 +90,7 @@ export function DatePicker({
         </Button>
       </PopoverTrigger>
       <PopoverContent className={cn('p-0 bg-white z-[120]', calendarModalStyles)}>
-        <div className='flex justify-between p-2'>
+        {/* <div className='flex justify-between p-2'>
           <Select onValueChange={handleMonthChange} value={months[getMonth(date)]}>
             <SelectTrigger className='w-[110px]'>
               <SelectValue placeholder='Month' />
@@ -114,7 +115,7 @@ export function DatePicker({
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </div> */}
 
         <Calendar
           mode='single'

@@ -1,6 +1,6 @@
 import { DatePicker } from '@/components/ui/DatePicker/date-picker'
 import { CreateAppointment, IAppointment, EditAppointment } from '@/interfaces/Appointment.interface'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Textarea } from '@/components/ui/Textarea/Textarea'
 import dayjs from 'dayjs'
 import { useMemo, useRef, useState } from 'react'
@@ -15,7 +15,7 @@ import { createAppointment, updateAppointmentById } from '@/lib/appointments'
 import { Input } from '@/components/ui/Input/Input'
 import { Analyses } from '@/interfaces/Analyses.interface'
 import SelectAnalyzesModal from '@/components/modals/SelectAnalyzesModal/SelectAnalyzesModal'
-import { H6 } from '@/components/ui/Typography/Typography'
+import { H6, P } from '@/components/ui/Typography/Typography'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
 import { Button } from '@/components/ui/Button/Button'
 import { saveFileToBucket } from '@/lib/bucket'
@@ -30,7 +30,6 @@ import SelectMedicineModal from '@/components/modals/SelectMedicineModal/SelectM
 import { sendAppointmentEmail } from '@/lib/resend'
 
 // @TODO: block this page for non auth users
-// @TODO: add validation for form
 
 interface FormProps {
   session: Session
@@ -40,6 +39,21 @@ interface FormProps {
 type AppointmentValues = Omit<CreateAppointment, 'endTime'> & {
   startTimeHours: string
 }
+
+/**
+ * Validation:
+ * doctor - required
+ * startTime - required
+ * endTime - required
+ * reason - required
+ * description - optional
+ * analyzes - optional
+ * fileName - optional
+ *
+ *  medicine - optional
+ *  diagnosis - optional
+ *  treatment - optional
+ */
 
 const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
   const isEditMode = !!appointment?._id
@@ -90,7 +104,8 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
     register,
     formState: { errors },
     handleSubmit,
-    setValue
+    setValue,
+    control
   } = useForm<AppointmentValues>({
     mode: 'onSubmit',
     defaultValues: {
@@ -227,9 +242,21 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
         )}
 
         <div className='mt-1.5'>
-          <Input name='reason' placeholder='Причина візиту' id='reason' obj={register('reason')} disabled={isDoctor}>
+          <Input
+            name='reason'
+            placeholder='Причина візиту'
+            id='reason'
+            obj={register('reason', {
+              required: {
+                value: true,
+                message: "Поле обов'язкове"
+              },
+              minLength: { value: 30, message: 'Причина візиту має бути не менше 30 символів' }
+            })}
+            disabled={isDoctor}>
             Причина візиту
           </Input>
+          {errors?.reason && <P className='text-red text-sm my-1'>{errors.reason.message}</P>}
         </div>
 
         <div className='mt-1.5 w-full'>
@@ -247,42 +274,73 @@ const AddEditAppointmentForm = ({ appointment, session }: FormProps) => {
         <div className='mt-1.5 w-full'>
           <label className='block font-regular mb-2'>Оберіть лікаря</label>
 
-          <Dropdown
-            options={doctorOptions}
-            onChange={(option) => {
-              setValue('doctor', option)
-              // setSearchQuery(option)
-            }}
-            disabled={!searchQuery || isEditMode}
-            defaultValue={appointment?.doctor.doctorName}
+          <Controller
+            name='doctor'
+            control={control}
+            rules={{ required: 'Оберіть лікаря' }}
+            render={({ field, fieldState }) => (
+              <>
+                <Dropdown
+                  options={doctorOptions}
+                  onChange={(option) => field.onChange(option)}
+                  disabled={!searchQuery || isEditMode}
+                  defaultValue={appointment?.doctor.doctorName}
+                />
+                {fieldState.error && <span style={{ color: 'red' }}>{fieldState.error.message}</span>}
+              </>
+            )}
           />
         </div>
 
         <div className='sm:flex sm:justify-between sm:gap-4'>
           <div className='mt-1.5 w-full'>
             <label className='block font-regular mb-2'>Оберіть дату прийому</label>
-            <DatePicker
-              onChange={(date) => {
-                setValue('startTime', dayjs(date).format('YYYY-MM-DD'))
-                setSelectedDate(dayjs(date).format('YYYY-MM-DD'))
-              }}
-              showOutsideDays={false}
-              disabled={isDoctor}
-              calendarModalStyles='w-full'
-              initialDate={
-                appointment?.startTime
-                  ? dayjs(appointment?.startTime).format('YYYY-MM-DD')
-                  : dayjs().format('YYYY-MM-DD')
-              }
+
+            <Controller
+              name='startTime'
+              control={control}
+              rules={{ required: 'Оберіть дату' }}
+              render={({ field, fieldState }) => (
+                <>
+                  <DatePicker
+                    onChange={(date) => {
+                      const formattedDate = dayjs(date).format('YYYY-MM-DD')
+                      field.onChange(formattedDate)
+                      setSelectedDate(formattedDate)
+                    }}
+                    showOutsideDays={false}
+                    disabled={isDoctor}
+                    calendarModalStyles='w-full'
+                    initialDate={
+                      field.value ??
+                      (appointment?.startTime
+                        ? dayjs(appointment?.startTime).format('YYYY-MM-DD')
+                        : dayjs().format('YYYY-MM-DD'))
+                    }
+                  />
+                  {fieldState.error && <span style={{ color: 'red' }}>{fieldState.error.message}</span>}
+                </>
+              )}
             />
           </div>
           <div className='mt-1.5 w-full'>
             <label className='block font-regular mb-2'>Оберіть час прийому</label>
-            <Dropdown
-              options={[...timeOptions]}
-              onChange={(option) => setValue('startTimeHours', option)}
-              defaultValue={dayjs(appointment?.startTime).format('HH:mm')}
-              disabled={isDoctor}
+
+            <Controller
+              name='startTimeHours'
+              control={control}
+              rules={{ required: 'Оберіть час' }}
+              render={({ field, fieldState }) => (
+                <>
+                  <Dropdown
+                    options={timeOptions}
+                    onChange={field.onChange}
+                    disabled={isDoctor}
+                    defaultValue={field.value ?? dayjs(appointment?.startTime).format('HH:mm')}
+                  />
+                  {fieldState.error && <span style={{ color: 'red' }}>{fieldState.error.message}</span>}
+                </>
+              )}
             />
           </div>
         </div>
