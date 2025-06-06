@@ -2,13 +2,14 @@
 
 import { Container } from '@/components/ui/Container/Container'
 import PageHeading from '@/components/PageHeading/PageHeading'
-import AddEditAppointmentForm from '@/components/forms/AddEditAppointmentForm/AddEditAppointmentForm'
+import AddEditBlogForm from '@/components/forms/AddEditBlogForm/AddEditBlogForm'
 import { useEffect, useState } from 'react'
 import { Session } from '@/interfaces/Session.interface'
 import { getSession } from '@/lib/auth'
+
 import { useRouter } from 'next/navigation'
 
-export default function AddAppointmentsPage() {
+const AddBlogPage = () => {
   const [session, setSession] = useState<Session | null>(null)
   const router = useRouter()
 
@@ -17,7 +18,7 @@ export default function AddAppointmentsPage() {
       setSession(session)
 
       const isDoctor = session?.role === 'doctor'
-      if (isDoctor) {
+      if (!isDoctor) {
         router.replace('/not-found')
       }
     })
@@ -25,8 +26,9 @@ export default function AddAppointmentsPage() {
 
   return (
     <>
-      <PageHeading title='Додати прийом' />
-      <Container>{session && <AddEditAppointmentForm session={session} />}</Container>
+      <PageHeading title='Додати блог' />
+      <Container>{session && <AddEditBlogForm session={session} />}</Container>
     </>
   )
 }
+export default AddBlogPage

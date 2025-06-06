@@ -20,7 +20,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ type, placeholder, name, id, children, required, obj, onChange, value, checked, disabled, labelStyles }, ref) => {
     return (
       <>
-        <label className={twMerge('block font-regular mb-2', labelStyles)} htmlFor={id}>
+        <label className={twMerge('font-primary block mb-2', labelStyles)} htmlFor={id}>
           {children}
         </label>
         <input

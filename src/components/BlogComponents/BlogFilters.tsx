@@ -2,13 +2,16 @@
 
 import { P } from '@/components/ui/Typography/Typography'
 import { getUkrainianPlural } from '@/utils/getUkrainianPlural'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IconButton } from '@/components/ui/IconButton/IconButton'
 import { useForm, SubmitHandler, Controller } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { Button } from '@/components/ui/Button/Button'
+import { getSession } from '@/lib/auth'
+import { Session } from '@/interfaces/Session.interface'
+import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 
-import { FaFilter } from 'react-icons/fa6'
+import { FaFilter, FaPlus } from 'react-icons/fa6'
 
 interface BlogItemProps {
   length: number
@@ -109,6 +112,7 @@ const CheckboxGroup = ({
 const BlogFilters = ({ length }: BlogItemProps) => {
   const [selectedType, setType] = useState<string | null>(null)
   const [isOpenFilters, setOpenFilters] = useState(false)
+  const [session, setSession] = useState<Session | null>(null)
 
   const { control, handleSubmit } = useForm<IFilters>({
     mode: 'onSubmit',
@@ -119,6 +123,10 @@ const BlogFilters = ({ length }: BlogItemProps) => {
     }
   })
 
+  useEffect(() => {
+    getSession().then((session) => setSession(session))
+  }, [isOpenFilters])
+
   const onSubmit: SubmitHandler<IFilters> = async (values) => {
     console.log('values', values)
   }
@@ -128,7 +136,7 @@ const BlogFilters = ({ length }: BlogItemProps) => {
       <div className='flex justify-between mb-6'>
         <div className='flex items-center justify-center'>
           <P className='font-light text-[#616262]'>
-            Знайдено {length} {getUkrainianPlural(length, ['пост', 'пости', 'постів'])}
+            Знайдено {getUkrainianPlural(length, ['пост', 'пости', 'постів'])}
           </P>
         </div>
         <div className='flex gap-4'>
@@ -144,17 +152,23 @@ const BlogFilters = ({ length }: BlogItemProps) => {
             ))}
           </select>
           <IconButton icon={<FaFilter fill='#fff' />} onClick={() => setOpenFilters(!isOpenFilters)} />
+
+          {session?.role === 'doctor' && (
+            <StyledLinkButton href='/blog/add' className='p-2.5 bg-[#0674d1] w-9'>
+              <FaPlus fill='#fff' size={16} />
+            </StyledLinkButton>
+          )}
         </div>
       </div>
       {isOpenFilters && (
         <div
-          className='fixed top-0 left-0 w-full h-screen z-10 bg-neutral-800 opacity-50'
+          className='fixed top-0 left-0 w-full h-screen z-[101] bg-neutral-800 opacity-50'
           onClick={() => setOpenFilters(!isOpenFilters)}
         />
       )}
       <div
         className={twMerge(
-          'bg-white fixed top-0 left-[-100%] h-[100dvh] w-[290px] px-2.5 z-[20] flex justify-between flex-col transition-all ease-in-out duration-300',
+          'bg-white fixed top-0 left-[-100%] h-[100dvh] w-[290px] px-2.5 z-[102] flex justify-between flex-col transition-all ease-in-out duration-300',
           isOpenFilters && 'py-2.5 px-5 left-0'
         )}>
         <div className='pt-6'>

@@ -8,7 +8,14 @@ const s3Client = new S3Client({
   }
 })
 
-const ALLOWED_FILE_TYPES = ['image/png', 'image/jpeg', 'application/pdf', 'image/svg+xml']
+const ALLOWED_FILE_TYPES = [
+  'image/png',
+  'image/jpeg',
+  'application/pdf',
+  'image/svg+xml',
+  'text/markdown',
+  'text/x-markdown'
+]
 
 export const saveFileToBucket = async (file: File, fileName: string, path: string) => {
   const fileBuffer = file
