@@ -16,7 +16,7 @@ export default function EditAppointmentsPage() {
   const { appointmentId } = params
   const [session, setSession] = useState<Session | null>(null)
 
-  const { data: appointment } = useSWR<IAppointment>(`/api/appointment/${appointmentId}`, fetcher, {
+  const { data: appointment, isLoading } = useSWR<IAppointment>(`/api/appointment/${appointmentId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -32,11 +32,19 @@ export default function EditAppointmentsPage() {
     })
   }, [])
 
+  const isDataLoading = !session?.id || isLoading
+
   return (
     <>
       <PageHeading title='Редагувати прийом' />
       <Container>
         {appointment && session && <AddEditAppointmentForm appointment={appointment} session={session} />}
+
+        {isDataLoading && (
+          <div className='flex items-center justify-center h-[60vh]'>
+            <div className='w-8 h-8 rounded-full border-4 border-[#81DAFB] border-t-transparent animate-spin'></div>
+          </div>
+        )}
       </Container>
     </>
   )

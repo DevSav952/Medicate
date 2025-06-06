@@ -19,6 +19,7 @@ import { BUCKET_URL } from '@/constants/bucket'
 import { Button } from '@/components/ui/Button/Button'
 import { logout } from '@/lib/auth'
 import SnackBar from '@/components/ui/SnackBar/SnackBar'
+import { SkeletonAvatar, SkeletonText } from '@/components/ui/Skeletons/Skeletons'
 
 import { FaUser } from 'react-icons/fa'
 
@@ -31,7 +32,7 @@ const AppointmentsTab = () => {
   const params = useParams()
   const { doctorId } = params
 
-  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/doctor/${doctorId}`, fetcher, {
+  const { data: appointments, isLoading } = useSWR<IAppointment[]>(`/api/appointments/doctor/${doctorId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -51,7 +52,15 @@ const AppointmentsTab = () => {
 
   return (
     <>
-      {futureAppointments.length === 0 && pastAppointments.length === 0 && <P>Немає записів на прийом</P>}
+      {futureAppointments.length === 0 && pastAppointments.length === 0 && !isLoading && <P>Немає записів на прийом</P>}
+
+      {isLoading && (
+        <div className='grid grid-cols-1 gap-4 mt-4'>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonText className='w-full h-[84px]' key={index} />
+          ))}
+        </div>
+      )}
 
       {futureAppointments.length > 0 && (
         <div className='mt-6'>
@@ -106,7 +115,7 @@ interface DoctorProfileProps {
 const DoctorProfile = ({ params }: DoctorProfileProps) => {
   const { doctorId } = params
 
-  const { data: doctorProfile } = useSWR<Doctor>(`/api/myProfile/doctor/${doctorId}`, fetcher, {
+  const { data: doctorProfile, isLoading } = useSWR<Doctor>(`/api/myProfile/doctor/${doctorId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -119,7 +128,9 @@ const DoctorProfile = ({ params }: DoctorProfileProps) => {
       <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
         {doctorProfile && <EditDoctorModal doctor={doctorProfile} />}
 
-        {doctorProfile?.image ? (
+        {isLoading ? (
+          <SkeletonAvatar />
+        ) : doctorProfile?.image ? (
           <Image
             src={`${BUCKET_URL}/custom/avatars/${doctorProfile.image}`}
             width={80}
@@ -133,21 +144,40 @@ const DoctorProfile = ({ params }: DoctorProfileProps) => {
             <FaUser size={24} fill='#fff' />
           </div>
         )}
-        <P className='px-4 line-clamp-2 text-lg font-bold mt-2'>{doctorProfile?.doctorName}</P>
+
+        {isLoading ? (
+          <SkeletonText className='px-4 mt-2 h-7 w-[180px]' />
+        ) : (
+          <P className='px-4 line-clamp-2 text-lg font-bold mt-2'>{doctorProfile?.doctorName}</P>
+        )}
         <div className='w-full'>
           <H2 className='text-lg mb-4 mt-6'>Особисті дані</H2>
           <ul className='flex flex-col gap-3 md:grid md:grid-cols-3 lg:grid-cols-1'>
             <li>
               <P className='mb-1 text-xs'>Cпеціалізація</P>
-              <H6 className='text-lg'>{doctorProfile?.position || '-'}</H6>
+              {isLoading ? (
+                <SkeletonText className='h-5 w-[180px] mt-2 mb-1' />
+              ) : (
+                <H6 className='text-lg'>{doctorProfile?.position || '-'}</H6>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>E-mail</P>
-              <H6 className='text-lg'>{doctorProfile?.email || '-'}</H6>
+
+              {isLoading ? (
+                <SkeletonText className='h-5 w-[180px] mt-2 mb-1' />
+              ) : (
+                <H6 className='text-lg'>{doctorProfile?.email || '-'}</H6>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Номер телефону</P>
-              <H6 className='text-lg'>{doctorProfile?.phone || '-'}</H6>
+
+              {isLoading ? (
+                <SkeletonText className='h-5 w-[180px] mt-2 mb-1' />
+              ) : (
+                <H6 className='text-lg'>{doctorProfile?.phone || '-'}</H6>
+              )}
             </li>
           </ul>
         </div>

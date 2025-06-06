@@ -9,6 +9,7 @@ import { BUCKET_URL } from '@/constants/bucket'
 import { H1 } from '@/components/ui/Typography/Typography'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 import { getSession } from '@/lib/auth'
+import { SkeletonText } from '@/components/ui/Skeletons/Skeletons'
 
 import { MdModeEdit } from 'react-icons/md'
 
@@ -63,7 +64,12 @@ interface SingleBlogPageParams {
 export default function SingleBlogPage({ params }: SingleBlogPageParams) {
   return (
     <>
-      <Suspense>
+      <Suspense
+        fallback={
+          <div className='flex items-center justify-center h-[60vh]'>
+            <div className='w-8 h-8 rounded-full border-4 border-[#81DAFB] border-t-transparent animate-spin'></div>
+          </div>
+        }>
         <Content blogId={params.blogId} />
       </Suspense>
     </>

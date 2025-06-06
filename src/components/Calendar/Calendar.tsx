@@ -16,13 +16,14 @@ import { IAppointment } from '@/interfaces/Appointment.interface'
 import useSWR from 'swr'
 import { fetcher } from '@/utils/fetcher'
 import EventInfoModal from '@/components/modals/EventInfoModal/EventInfoModal'
+import { SkeletonText } from '@/components/ui/Skeletons/Skeletons'
 
 const Calendar: React.FC = () => {
   const params = useParams()
   const { doctorId } = params
   const [selectedEvent, setSelectedEvent] = useState<IAppointment | null>(null)
 
-  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/doctor/${doctorId}`, fetcher, {
+  const { data: appointments, isLoading } = useSWR<IAppointment[]>(`/api/appointments/doctor/${doctorId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -61,13 +62,16 @@ const Calendar: React.FC = () => {
           <ul
             className={cn(
               'flex flex-col gap-4 mt-4 overflow-y-auto h-[170px]',
-              todayEvents.length <= 0 && 'h-full mt-0'
+              todayEvents.length === 0 && !isLoading && 'h-full mt-0'
             )}>
-            {todayEvents.length <= 0 && (
+            {todayEvents.length === 0 && !isLoading && (
               <div className='flex flex-col items-center justify-center h-full'>
                 <P className='italic text-center text-gray-400'>Немає прийомів</P>
               </div>
             )}
+
+            {isLoading &&
+              Array.from({ length: 2 }).map((_, index) => <SkeletonText className='w-full h-[84px]' key={index} />)}
 
             {todayEvents.length > 0 &&
               todayEvents.map((event: EventApi) => {

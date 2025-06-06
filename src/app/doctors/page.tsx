@@ -15,6 +15,7 @@ import certificateThree from '@/assets/certificate-img3.webp'
 import certificateFour from '@/assets/certificate-img4.webp'
 import certificateFive from '@/assets/certificate-img5.webp'
 import certificateSix from '@/assets/certificate-img6.webp'
+import { DoctorCardSkeleton } from '@/components/ui/Skeletons/Skeletons'
 
 const certificates = [
   {
@@ -44,7 +45,7 @@ const certificates = [
 ]
 
 const DoctorsPage = () => {
-  const { data: doctors } = useSWR<Doctor[]>('/api/doctor', fetcher, {
+  const { data: doctors, isLoading } = useSWR<Doctor[]>('/api/doctor', fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -80,6 +81,8 @@ const DoctorsPage = () => {
         </section>
         <section className='py-4 grid grid-cols-1 gap-10 md:grid-cols-2 md:gap-[30px] lg:grid-cols-4'>
           {doctors?.map((item, i) => <DoctorCard key={i} doctor={item} />)}
+
+          {isLoading && Array.from({ length: 4 }).map((_, index) => <DoctorCardSkeleton key={index} />)}
         </section>
         <section className='pt-[50px] mb-9'>
           <H2 className='mb-5 text-center text-[26px] md:text-left xl:text-[26px]'>Наші нагороди</H2>

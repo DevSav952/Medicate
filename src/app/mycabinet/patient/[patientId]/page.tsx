@@ -23,6 +23,7 @@ import { Button } from '@/components/ui/Button/Button'
 import { logout } from '@/lib/auth'
 import SnackBar from '@/components/ui/SnackBar/SnackBar'
 import { IPayment } from '@/interfaces/Payment.interface'
+import { SkeletonAvatar, SkeletonText } from '@/components/ui/Skeletons/Skeletons'
 
 import { FaUser, FaPlus } from 'react-icons/fa'
 
@@ -36,7 +37,7 @@ const AppointmentTab = () => {
   const params = useParams()
   const { patientId } = params
 
-  const { data: appointments } = useSWR<IAppointment[]>(`/api/appointments/patient/${patientId}`, fetcher, {
+  const { data: appointments, isLoading } = useSWR<IAppointment[]>(`/api/appointments/patient/${patientId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -63,7 +64,15 @@ const AppointmentTab = () => {
         </StyledLinkButton>
       </div>
 
-      {futureAppointments.length === 0 && pastAppointments.length === 0 && <P>Немає записів на прийом</P>}
+      {futureAppointments.length === 0 && pastAppointments.length === 0 && !isLoading && <P>Немає записів на прийом</P>}
+
+      {isLoading && (
+        <div className='grid grid-cols-1 gap-4 mt-4'>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonText className='w-full h-[84px]' key={index} />
+          ))}
+        </div>
+      )}
 
       {futureAppointments.length > 0 && (
         <div className='mt-6'>
@@ -100,7 +109,7 @@ const AnalyzesTab = () => {
   const params = useParams()
   const { patientId } = params
 
-  const { data: analyses } = useSWR<Analyses[]>(`/api/analyses/patient/${patientId}`, fetcher, {
+  const { data: analyses, isLoading } = useSWR<Analyses[]>(`/api/analyses/patient/${patientId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -117,7 +126,15 @@ const AnalyzesTab = () => {
         </StyledLinkButton>
       </div>
 
-      {(!analyses || analyses?.length === 0) && <P>Аналізи відсутні</P>}
+      {(!analyses || analyses?.length === 0) && !isLoading && <P>Аналізи відсутні</P>}
+
+      {isLoading && (
+        <div className='grid grid-cols-1 gap-4 mt-4'>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonText className='w-full h-[84px]' key={index} />
+          ))}
+        </div>
+      )}
 
       {analyses && analyses?.length > 0 && (
         <div className='mt-6'>
@@ -140,7 +157,7 @@ const BillingTab = () => {
   const params = useParams()
   const { patientId } = params
 
-  const { data: payments } = useSWR<IPayment[]>(`/api/payments/patient/${patientId}`, fetcher, {
+  const { data: payments, isLoading } = useSWR<IPayment[]>(`/api/payments/patient/${patientId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -153,7 +170,15 @@ const BillingTab = () => {
 
   return (
     <>
-      {unPayedServices.length === 0 && payedServices.length === 0 && <P>Історія оплат відсутня</P>}
+      {unPayedServices.length === 0 && payedServices.length === 0 && !isLoading && <P>Історія оплат відсутня</P>}
+
+      {isLoading && (
+        <div className='grid grid-cols-1 gap-4 mt-4'>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonText className='w-full h-[100px]' key={index} />
+          ))}
+        </div>
+      )}
 
       {unPayedServices.length > 0 && (
         <div className='mt-6'>
@@ -201,7 +226,7 @@ interface PatientProfileProps {
 const PatientProfile = ({ params }: PatientProfileProps) => {
   const { patientId } = params
 
-  const { data: patientProfile } = useSWR<Patient>(`/api/myProfile/patient/${patientId}`, fetcher, {
+  const { data: patientProfile, isLoading } = useSWR<Patient>(`/api/myProfile/patient/${patientId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -213,7 +238,10 @@ const PatientProfile = ({ params }: PatientProfileProps) => {
     <div className='shadow-custom-right bg-white py-[30px] px-4'>
       <div className='mt-12 flex flex-col items-center justify-center relative lg:mt-6'>
         {patientProfile && <EditProfileModal patient={patientProfile} />}
-        {patientProfile?.image ? (
+
+        {isLoading ? (
+          <SkeletonAvatar />
+        ) : patientProfile?.image ? (
           <Image
             src={`${BUCKET_URL}/custom/avatars/${patientProfile.image}`}
             width={80}
@@ -227,21 +255,42 @@ const PatientProfile = ({ params }: PatientProfileProps) => {
             <FaUser size={24} fill='#fff' />
           </div>
         )}
-        <P className='px-4 line-clamp-2 text-lg font-bold mt-2'>{patientProfile?.userName}</P>
+
+        {isLoading ? (
+          <SkeletonText className='px-4 mt-2 h-7 w-[180px]' />
+        ) : (
+          <P className='px-4 line-clamp-2 text-lg font-bold mt-2'>{patientProfile?.userName}</P>
+        )}
+
         <div className='w-full'>
           <H2 className='text-lg mb-4 mt-6'>Особисті дані</H2>
           <ul className='flex flex-col gap-3 md:grid md:grid-cols-3 lg:grid-cols-1'>
             <li>
               <P className='mb-1 text-xs'>Дата народження</P>
-              <H6 className='text-lg'>{patientProfile?.dateOfBirth || '-'}</H6>
+
+              {isLoading ? (
+                <SkeletonText className='h-5 w-[180px] mt-2 mb-1' />
+              ) : (
+                <H6 className='text-lg'>{patientProfile?.dateOfBirth || '-'}</H6>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>E-mail</P>
-              <H6 className='text-lg'>{patientProfile?.email}</H6>
+
+              {isLoading ? (
+                <SkeletonText className='h-5 w-[180px] mt-2 mb-1' />
+              ) : (
+                <H6 className='text-lg'>{patientProfile?.email}</H6>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Номер телефону</P>
-              <H6 className='text-lg'>{patientProfile?.phoneNumber || '-'}</H6>
+
+              {isLoading ? (
+                <SkeletonText className='h-5 w-[180px] mt-2 mb-1' />
+              ) : (
+                <H6 className='text-lg'>{patientProfile?.phoneNumber || '-'}</H6>
+              )}
             </li>
           </ul>
         </div>
@@ -250,37 +299,70 @@ const PatientProfile = ({ params }: PatientProfileProps) => {
           <ul className='grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-2'>
             <li>
               <P className='mb-1 text-xs'>Група крові</P>
-              <P className='font-medium'>{patientProfile?.bloodType || '-'}</P>
+
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[100px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.bloodType || '-'}</P>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Цукровий діабет</P>
-              <P className='font-medium'>{patientProfile?.diabetes || 'ні'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[100px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.diabetes || 'ні'}</P>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Резус-фактор</P>
-              <P className='font-medium'>{patientProfile?.rhFactor || '-'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[100px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.rhFactor || '-'}</P>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Переливання крові</P>
-              <P className='font-medium'>{patientProfile?.bloodTransfusion || 'ні'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[100px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.bloodTransfusion || 'ні'}</P>
+              )}
             </li>
           </ul>
           <ul className='flex flex-col gap-3 mt-6 md:grid md:grid-cols-2 lg:grid-cols-1'>
             <li>
               <P className='mb-1 text-xs'>Непереносимість ліків</P>
-              <P className='font-medium'>{patientProfile?.intoleranceToMedicines || 'ні'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[180px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.intoleranceToMedicines || 'ні'}</P>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Інфекційні захворювання</P>
-              <P className='font-medium'>{patientProfile?.infectiousDiseases || 'ні'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[180px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.infectiousDiseases || 'ні'}</P>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Хірургічні втручання</P>
-              <P className='font-medium'>{patientProfile?.surgicalInterventions || 'ні'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[180px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.surgicalInterventions || 'ні'}</P>
+              )}
             </li>
             <li>
               <P className='mb-1 text-xs'>Алергії</P>
-              <P className='font-medium'>{patientProfile?.allergies || 'ні'}</P>
+              {isLoading ? (
+                <SkeletonText className='h-4 w-[180px] mt-2 mb-1' />
+              ) : (
+                <P className='font-medium'>{patientProfile?.allergies || 'ні'}</P>
+              )}
             </li>
           </ul>
         </div>

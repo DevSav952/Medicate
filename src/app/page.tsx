@@ -24,6 +24,7 @@ import metromed from '@/assets/client-1.webp'
 import umaMedical from '@/assets/client-2.webp'
 import axshealth from '@/assets/client-3.webp'
 import amino from '@/assets/client-4.webp'
+import { DoctorCardSkeleton } from '@/components/ui/Skeletons/Skeletons'
 
 const ServiceItem = ({ item }: { item: IService }) => {
   return (
@@ -71,7 +72,7 @@ const Departments = () => {
 }
 
 export default function Home() {
-  const { data: doctors } = useSWR<Doctor[]>('/api/hero-doctors', fetcher, {
+  const { data: doctors, isLoading } = useSWR<Doctor[]>('/api/hero-doctors', fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -190,6 +191,8 @@ export default function Home() {
 
         <div className='flex flex-col gap-10 md:grid md:grid-cols-4 md:gap-0 pt-5'>
           {doctors?.map((item, i) => <DoctorCard key={item._id} doctor={item} />)}
+
+          {isLoading && Array.from({ length: 4 }).map((_, index) => <DoctorCardSkeleton key={index} />)}
         </div>
 
         <div className='pt-8 pb-4 grid grid-cols-2 md:grid-cols-4'>

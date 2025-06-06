@@ -28,7 +28,7 @@ const AddBlogPage = () => {
     })
   }, [])
 
-  const { data: blog } = useSWR<IBlogItem>(`/api/blog/${blogId}`, fetcher, {
+  const { data: blog, isLoading } = useSWR<IBlogItem>(`/api/blog/${blogId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -36,10 +36,18 @@ const AddBlogPage = () => {
     refreshWhenOffline: false
   })
 
+  const isDataLoading = !session?.id || isLoading
+
   return (
     <>
       <PageHeading title='Редагувати блог' />
       <Container>{session && blog && <AddEditBlogForm session={session} blog={blog} />}</Container>
+
+      {isDataLoading && (
+        <div className='flex items-center justify-center h-[40vh]'>
+          <div className='w-8 h-8 rounded-full border-4 border-[#81DAFB] border-t-transparent animate-spin'></div>
+        </div>
+      )}
     </>
   )
 }

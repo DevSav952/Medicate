@@ -6,7 +6,7 @@ import { IAppointment } from '@/interfaces/Appointment.interface'
 import useSWR from 'swr'
 import { Container } from '@/components/ui/Container/Container'
 import PageHeading from '@/components/PageHeading/PageHeading'
-import { H4, P } from '@/components/ui/Typography/Typography'
+import { H2, H4, P } from '@/components/ui/Typography/Typography'
 import dayjs from 'dayjs'
 import 'dayjs/locale/uk'
 import { Separator } from '@/components/ui/Separator/Separator'
@@ -14,6 +14,8 @@ import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkBut
 import MedicineCard from '@/components/MedicineCard/MedicineCard'
 import AnalysesCard from '@/components/AnalyzesCard/AnalyzesCard'
 import AttachmentPreviewModal from '@/components/modals/AttachmentPreviewModal/AttachmentPreviewModal'
+import { SkeletonText } from '@/components/ui/Skeletons/Skeletons'
+
 import { MdEdit } from 'react-icons/md'
 
 dayjs.locale('uk')
@@ -133,7 +135,7 @@ const SingleAppointmentPage = () => {
   const currentTime = dayjs()
   const router = useRouter()
 
-  const { data: appointmentData } = useSWR<IAppointment>(`/api/appointment/${appointmentId}`, fetcher, {
+  const { data: appointmentData, isLoading } = useSWR<IAppointment>(`/api/appointment/${appointmentId}`, fetcher, {
     shouldRetryOnError: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
@@ -143,21 +145,36 @@ const SingleAppointmentPage = () => {
 
   return (
     <>
-      <PageHeading title={`Візит до ${appointmentData?.doctor?.position}a `}>
+      <PageHeading title=''>
+        {isLoading ? (
+          <SkeletonText className='h-10 mb-2.5 mt-5.5 w-[270px] bg-white opacity-10' />
+        ) : (
+          <H2 className='text-white mt-4 mb-1'>{`Візит до ${appointmentData?.doctor?.position}a`}</H2>
+        )}
+
         <div className='flex items-center w-full justify-between'>
           <div>
-            <P className='text-white capitalize'>Лікар: {appointmentData?.doctor.doctorName}</P>
-            <P className='text-white'>
-              Дата візиту:{' '}
-              <span className='capitalize'>
-                {dayjs(appointmentData?.startTime).format('MMM DD, YYYY HH:mm')} -{' '}
-                {dayjs(appointmentData?.endTime).format('HH:mm')}
-              </span>
-            </P>
+            {isLoading ? (
+              <SkeletonText className='h-4 mb-1 w-[240px] bg-white opacity-10' />
+            ) : (
+              <P className='text-white capitalize'>Лікар: {appointmentData?.doctor.doctorName}</P>
+            )}
+
+            {isLoading ? (
+              <SkeletonText className='h-4 mb-1 w-[270px] bg-white opacity-10' />
+            ) : (
+              <P className='text-white'>
+                Дата візиту:{' '}
+                <span className='capitalize'>
+                  {dayjs(appointmentData?.startTime).format('MMM DD, YYYY HH:mm')} -{' '}
+                  {dayjs(appointmentData?.endTime).format('HH:mm')}
+                </span>
+              </P>
+            )}
           </div>
 
           <div className='flex gap-4 text-white'>
-            {dayjs(appointmentData?.endTime).isAfter(currentTime) && (
+            {dayjs(appointmentData?.endTime).isAfter(currentTime) && !isLoading && (
               <MdEdit
                 className='transition-all duration-300 hover:text-orange-400 cursor-pointer'
                 onClick={() => {
@@ -169,12 +186,18 @@ const SingleAppointmentPage = () => {
         </div>
       </PageHeading>
       <Container>
-        {dayjs(appointmentData?.endTime).isAfter(currentTime) && appointmentData && (
+        {dayjs(appointmentData?.endTime).isAfter(currentTime) && appointmentData && !isLoading && (
           <UpcomingAppointment appointmentData={appointmentData} />
         )}
 
-        {dayjs(appointmentData?.endTime).isBefore(currentTime) && appointmentData && (
+        {dayjs(appointmentData?.endTime).isBefore(currentTime) && appointmentData && !isLoading && (
           <PastAppointment appointmentData={appointmentData} />
+        )}
+
+        {isLoading && (
+          <div className='flex items-center justify-center h-[60vh]'>
+            <div className='w-8 h-8 rounded-full border-4 border-[#81DAFB] border-t-transparent animate-spin'></div>
+          </div>
         )}
       </Container>
     </>
