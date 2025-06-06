@@ -140,7 +140,7 @@ const BlogFilters = ({ length }: BlogItemProps) => {
           </P>
         </div>
         <div className='flex gap-4'>
-          <select
+          {/* <select
             id='sort'
             value={selectedType ?? ''}
             onChange={(e) => setType(e.target.value)}
@@ -151,7 +151,7 @@ const BlogFilters = ({ length }: BlogItemProps) => {
               </option>
             ))}
           </select>
-          <IconButton icon={<FaFilter fill='#fff' />} onClick={() => setOpenFilters(!isOpenFilters)} />
+          <IconButton icon={<FaFilter fill='#fff' />} onClick={() => setOpenFilters(!isOpenFilters)} /> */}
 
           {session?.role === 'doctor' && (
             <StyledLinkButton href='/blog/add' className='p-2.5 bg-[#0674d1] w-9'>

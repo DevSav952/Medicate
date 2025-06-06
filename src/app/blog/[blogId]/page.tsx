@@ -9,7 +9,6 @@ import { BUCKET_URL } from '@/constants/bucket'
 import { H1 } from '@/components/ui/Typography/Typography'
 import { StyledLinkButton } from '@/components/ui/StyledLinkButton/StyledLinkButton'
 import { getSession } from '@/lib/auth'
-import { SkeletonText } from '@/components/ui/Skeletons/Skeletons'
 
 import { MdModeEdit } from 'react-icons/md'
 
