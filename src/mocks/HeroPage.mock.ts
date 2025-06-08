@@ -42,12 +42,12 @@ export const mockedServicesData: IService[] = [
 export const mockedDepartments: IDepartment[] = [
   {
     icon: pulmanoryOne,
-    title: 'Пульманологія',
+    title: 'Нефрологія',
     description: 'Лікування ідеально відповідає вашим цілям.'
   },
   {
     icon: pulmanoryTwo,
-    title: 'Пульманологія',
+    title: 'Кардіологія',
     description: 'Лікування ідеально відповідає вашим цілям.'
   },
   {
@@ -90,12 +90,12 @@ export const mockedDepartments: IDepartment[] = [
 export const mockedDepartmentsOne: IDepartment[] = [
   {
     icon: pulmanoryOne,
-    title: 'Пульманологія',
+    title: 'Нефрологія',
     description: 'Лікування ідеально відповідає вашим цілям.'
   },
   {
     icon: pulmanoryTwo,
-    title: 'Пульманологія',
+    title: 'Кардіологія',
     description: 'Лікування ідеально відповідає вашим цілям.'
   },
   {
