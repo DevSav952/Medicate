@@ -1,7 +1,6 @@
 'use client'
 
 import PageHeading from '@/components/PageHeading/PageHeading'
-import { MBlogItem } from '@/mocks/BlogItem.mock'
 import BlogItem from '@/components/BlogComponents/BlogItem'
 import { Container } from '@/components/ui/Container/Container'
 import BlogFilters from '@/components/BlogComponents/BlogFilters'
